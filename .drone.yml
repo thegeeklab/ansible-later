@@ -3,13 +3,53 @@ kind: pipeline
 name: default
 
 steps:
-  - name: test
-    image: randomknowledge/docker-pyenv-tox
-    pull: true
+  - name: test2.7
+    image: python:2.7-alpine
+    pull: always
     environment:
       PY_COLORS: "1"
     commands:
-      - tox -q
+      - pip install tox -q
+      - tox -e $(tox -l | grep py27* | xargs | sed 's/ /,/g') -q
+    when:
+      event:
+        - push
+        - tag
+
+  - name: test3.5
+    image: python:3.5-alpine
+    pull: always
+    environment:
+      PY_COLORS: "1"
+    commands:
+      - pip install tox -q
+      - tox -e $(tox -l | grep py35* | xargs | sed 's/ /,/g') -q
+    when:
+      event:
+        - push
+        - tag
+
+  - name: test3.6
+    image: python:3.6-alpine
+    pull: always
+    environment:
+      PY_COLORS: "1"
+    commands:
+      - pip install tox -q
+      - tox -e $(tox -l | grep py36* | xargs | sed 's/ /,/g') -q
+    when:
+      event:
+        - push
+        - tag
+
+  - name: test3.7
+    image: python:3.7-alpine
+    pull: always
+    environment:
+      PY_COLORS: "1"
+    commands:
+      - pip install tox -q
+      - tox -e $(tox -l | grep py37* | xargs | sed 's/ /,/g') -q
     when:
       event:
         - push
@@ -24,6 +64,11 @@ steps:
       event:
         - push
         - tag
+    depends_on:
+      - test2.7
+      - test3.5
+      - test3.6
+      - test3.7
 
   - name: checksum
     image: alpine
@@ -37,6 +82,11 @@ steps:
       event:
         - push
         - tag
+    depends_on:
+      - test2.7
+      - test3.5
+      - test3.6
+      - test3.7
 
   - name: gpg-sign
     image: plugins/gpgsign:1
@@ -53,6 +103,11 @@ steps:
       event:
         - push
         - tag
+    depends_on:
+      - test2.7
+      - test3.5
+      - test3.6
+      - test3.7
 
   - name: publish
     image: plugins/github-release
@@ -65,6 +120,11 @@ steps:
     when:
       event:
         - tag
+    depends_on:
+      - test2.7
+      - test3.5
+      - test3.6
+      - test3.7
 
   - name: pypi_publish
     image: xoxys/drone-pypi:0.1.0
@@ -80,3 +140,7 @@ steps:
       event:
         - tag
     depends_on:
+      - test2.7
+      - test3.5
+      - test3.6
+      - test3.7
