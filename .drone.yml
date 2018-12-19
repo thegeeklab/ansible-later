@@ -4,56 +4,52 @@ name: default
 
 steps:
   - name: test2.7
-    image: python:2.7-alpine
+    image: python:2.7-stretch
     pull: always
     environment:
       PY_COLORS: "1"
     commands:
-      - apk add --no-cache openssl-dev libffi-dev build-base
       - pip install tox -q
-      - tox -e $(tox -l | grep py27* | xargs | sed 's/ /,/g') -q
+      - tox -e $(tox -l | grep py27 | xargs | sed 's/ /,/g') -q
     when:
       event:
         - push
         - tag
 
   - name: test3.5
-    image: python:3.5-alpine
+    image: python:3.5-stretch
     pull: always
     environment:
       PY_COLORS: "1"
     commands:
-      - apk add --no-cache openssl-dev libffi-dev build-base
       - pip install tox -q
-      - tox -e $(tox -l | grep py35* | xargs | sed 's/ /,/g') -q
+      - tox -e $(tox -l | grep py35 | xargs | sed 's/ /,/g') -q
     when:
       event:
         - push
         - tag
 
   - name: test3.6
-    image: python:3.6-alpine
+    image: python:3.6-stretch
     pull: always
     environment:
       PY_COLORS: "1"
     commands:
-      - apk add --no-cache openssl-dev libffi-dev build-base
       - pip install tox -q
-      - tox -e $(tox -l | grep py36* | xargs | sed 's/ /,/g') -q
+      - tox -e $(tox -l | grep py36 | xargs | sed 's/ /,/g') -q
     when:
       event:
         - push
         - tag
 
   - name: test3.7
-    image: python:3.7-alpine
+    image: python:3.7-stretch
     pull: always
     environment:
       PY_COLORS: "1"
     commands:
-      - apk add --no-cache openssl-dev libffi-dev build-base
       - pip install tox -q
-      - tox -e $(tox -l | grep py37* | xargs | sed 's/ /,/g') -q
+      - tox -e $(tox -l | grep py37 | xargs | sed 's/ /,/g') -q
     when:
       event:
         - push
