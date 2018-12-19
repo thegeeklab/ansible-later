@@ -1,0 +1,82 @@
+---
+kind: pipeline
+name: default
+
+steps:
+  - name: test
+    image: randomknowledge/docker-pyenv-tox
+    pull: true
+    environment:
+      PY_COLORS: "1"
+    commands:
+      - tox
+    when:
+      event:
+        - push
+        - tag
+
+  - name: build
+    image: python:3.7-alpine
+    pull: true
+    commands:
+      - python setup.py sdist bdist_wheel
+    when:
+      event:
+        - push
+        - tag
+
+  - name: checksum
+    image: alpine
+    pull: always
+    commands:
+      - apk add --no-cache coreutils
+      # exclude files
+      # - sha256sum -b files/!(*.out) > CHECKSUMFILE
+      - sha256sum -b dist/* > sha256sum.txt
+    when:
+      event:
+        - push
+        - tag
+
+  - name: gpg-sign
+    image: plugins/gpgsign:1
+    pull: always
+    settings:
+      key:
+        from_secret: gpgsign_key
+      passphrase:
+        from_secret: gpgsign_passphrase
+      detach_sign: true
+      files:
+        - dist/*
+    when:
+      event:
+        - push
+        - tag
+
+  - name: publish
+    image: plugins/github-release
+    settings:
+      api_key:
+        from_secret: github_token
+      files:
+        - dist/*
+        - sha256sum.txt
+    when:
+      event:
+        - tag
+
+  - name: pypi_publish
+    image: xoxys/drone-pypi:0.1.0
+    pull: always
+    settings:
+      username:
+        from_secret: pypi_username
+      password:
+        from_secret: pypi_password
+      repository: https://upload.pypi.org/legacy/
+      skip_build: true
+    when:
+      event:
+        - tag
+    depends_on:
