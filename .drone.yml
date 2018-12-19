@@ -9,7 +9,7 @@ steps:
     environment:
       PY_COLORS: "1"
     commands:
-      - apk add --no-cache build-base
+      - apk add --no-cache openssl-dev libffi-dev build-base
       - pip install tox -q
       - tox -e $(tox -l | grep py27* | xargs | sed 's/ /,/g') -q
     when:
@@ -23,7 +23,7 @@ steps:
     environment:
       PY_COLORS: "1"
     commands:
-      - apk add --no-cache build-base
+      - apk add --no-cache openssl-dev libffi-dev build-base
       - pip install tox -q
       - tox -e $(tox -l | grep py35* | xargs | sed 's/ /,/g') -q
     when:
@@ -37,7 +37,7 @@ steps:
     environment:
       PY_COLORS: "1"
     commands:
-      - apk add --no-cache build-base
+      - apk add --no-cache openssl-dev libffi-dev build-base
       - pip install tox -q
       - tox -e $(tox -l | grep py36* | xargs | sed 's/ /,/g') -q
     when:
@@ -51,7 +51,7 @@ steps:
     environment:
       PY_COLORS: "1"
     commands:
-      - apk add --no-cache build-base
+      - apk add --no-cache openssl-dev libffi-dev build-base
       - pip install tox -q
       - tox -e $(tox -l | grep py37* | xargs | sed 's/ /,/g') -q
     when:
