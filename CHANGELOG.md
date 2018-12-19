@@ -1,1 +1,3 @@
-# placeholder
+- BUGFIXES
+  - remove ansible-lint as dependency
+  - add ansible and six as new dependency
