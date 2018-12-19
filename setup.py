@@ -58,6 +58,8 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
+        "ansible",
+        "six",
         "pyyaml",
         "appdirs",
         "unidiff",
