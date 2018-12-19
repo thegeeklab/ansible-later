@@ -9,7 +9,7 @@ steps:
     environment:
       PY_COLORS: "1"
     commands:
-      - tox
+      - tox -q
     when:
       event:
         - push
