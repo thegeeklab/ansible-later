@@ -76,4 +76,5 @@ def main():
     return errors
 
 
-main()
+if __name__ == "__main__":
+    main()
