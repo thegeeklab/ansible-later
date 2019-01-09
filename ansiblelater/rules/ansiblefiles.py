@@ -54,7 +54,8 @@ def check_braces_spaces(candidate, settings):
 def check_named_task(candidate, settings):
     tasks, errors = get_normalized_tasks(candidate, settings)
     nameless_tasks = ['meta', 'debug', 'include_role', 'import_role',
-                      'include_tasks', 'import_tasks', 'block']
+                      'include_tasks', 'import_tasks', 'include_vars',
+                      'block']
     description = "module '%s' used without name attribute"
 
     if not errors:
