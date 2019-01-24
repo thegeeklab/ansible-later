@@ -21,9 +21,9 @@ def check_braces_spaces(candidate, settings):
             match = braces.findall(line)
             if match:
                 for item in match:
-                    matches.append(item)
+                    matches.append((item, lineno))
 
-        for item in matches:
+        for item, lineno in matches:
             error_count = 0
             string_length = len(item)
             strip_length = item.rstrip()
