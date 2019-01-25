@@ -209,3 +209,19 @@ def check_delegate_to_localhost(candidate, settings):
                 errors.append(Error(task["__line__"], description))
 
     return Result(candidate.path, errors)
+
+
+def check_uppercase_literal_bool(candidate, settings):
+    yamllines, errors = get_normalized_yaml(candidate, settings)
+    description = "literal bools should be written as 'True|False' instead of 'true|false'"
+
+    lineno = 1
+    uppercase_bool = re.compile(r"([=!]=|:)\s*(true|false)")
+
+    if not errors:
+        for line in yamllines:
+            lineno += 1
+            if uppercase_bool.findall(line):
+                errors.append(Error(lineno, description))
+
+    return Result(candidate.path, errors)
