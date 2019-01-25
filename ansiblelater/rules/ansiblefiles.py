@@ -3,6 +3,7 @@ import os
 
 from collections import defaultdict
 from ansiblelater import Result, Error
+from ansiblelater.utils import count_spaces
 from ansiblelater.utils.rulehelper import (get_normalized_tasks,
                                            get_normalized_yaml)
 
@@ -11,7 +12,7 @@ def check_braces_spaces(candidate, settings):
     yamllines, errors = get_normalized_yaml(candidate, settings)
     description = "no suitable numbers of spaces (required: 1)"
 
-    lineno = 0
+    lineno = 1
     matches = []
     braces = re.compile("{{(.*?)}}")
 
@@ -24,29 +25,9 @@ def check_braces_spaces(candidate, settings):
                     matches.append((item, lineno))
 
         for item, lineno in matches:
-            error_count = 0
-            string_length = len(item)
-            strip_length = item.rstrip()
+            leading, trailing = count_spaces(item)
 
-            if strip_length == 0 and not string_length == 1:
-                error_count += 1
-            else:
-                x = 0
-                leading_spaces = 0
-                while (x < string_length - 1 and item[x].isspace()):
-                    x += 1
-                    leading_spaces += 1
-
-                x = string_length - 1
-                trailing_spaces = 0
-                while (x > 0 and item[x].isspace()):
-                    x -= 1
-                    trailing_spaces += 1
-
-                if not leading_spaces == 1 or not trailing_spaces == 1:
-                    error_count += 1
-
-            if not error_count == 0:
+            if not leading == 1 or not trailing == 1:
                 errors.append(Error(lineno, description))
     return Result(candidate.path, errors)
 

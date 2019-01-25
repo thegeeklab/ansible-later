@@ -41,6 +41,23 @@ def info(message, settings, file=sys.stdout):
         print(stringc("INFO: %s" % message, 'green'), file=file)
 
 
+def count_spaces(c_string):
+    leading_spaces = 0
+    trailing_spaces = 0
+
+    for i, e in enumerate(c_string):
+        if not e.isspace():
+            break
+        leading_spaces += 1
+
+    for i, e in reversed(list(enumerate(c_string))):
+        if not e.isspace():
+            break
+        trailing_spaces += 1
+
+    return((leading_spaces, trailing_spaces))
+
+
 def get_property(prop):
     currentdir = os.path.dirname(os.path.realpath(__file__))
     parentdir = os.path.dirname(currentdir)
