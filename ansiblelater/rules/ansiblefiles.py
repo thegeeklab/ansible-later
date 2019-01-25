@@ -114,7 +114,8 @@ def check_install_use_latest(candidate, settings):
     tasks, errors = get_normalized_tasks(candidate, settings)
     package_managers = ['yum', 'apt', 'dnf', 'homebrew', 'pacman', 'openbsd_package', 'pkg5',
                         'portage', 'pkgutil', 'slackpkg', 'swdepot', 'zypper', 'bundler', 'pip',
-                        'pear', 'npm', 'gem', 'easy_install', 'bower', 'package']
+                        'pear', 'npm', 'yarn', 'gem', 'easy_install', 'bower', 'package', 'apk',
+                        'openbsd_pkg', 'pkgng', 'sorcery', 'xbps']
     description = "package installs should use state=present with or without a version"
 
     if not errors:
