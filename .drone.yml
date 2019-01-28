@@ -11,6 +11,8 @@ steps:
     commands:
       - pip install tox -q
       - tox -e $(tox -l | grep py27 | xargs | sed 's/ /,/g') -q
+    depends_on:
+      - clone
     when:
       event:
         - push
@@ -24,6 +26,8 @@ steps:
     commands:
       - pip install tox -q
       - tox -e $(tox -l | grep py35 | xargs | sed 's/ /,/g') -q
+    depends_on:
+      - clone
     when:
       event:
         - push
@@ -37,6 +41,8 @@ steps:
     commands:
       - pip install tox -q
       - tox -e $(tox -l | grep py36 | xargs | sed 's/ /,/g') -q
+    depends_on:
+      - clone
     when:
       event:
         - push
@@ -50,6 +56,8 @@ steps:
     commands:
       - pip install tox -q
       - tox -e $(tox -l | grep py37 | xargs | sed 's/ /,/g') -q
+    depends_on:
+      - clone
     when:
       event:
         - push
@@ -82,11 +90,6 @@ steps:
       event:
         - push
         - tag
-    depends_on:
-      - test2.7
-      - test3.5
-      - test3.6
-      - test3.7
 
   - name: gpg-sign
     image: plugins/gpgsign:1
@@ -103,11 +106,6 @@ steps:
       event:
         - push
         - tag
-    depends_on:
-      - test2.7
-      - test3.5
-      - test3.6
-      - test3.7
 
   - name: publish
     image: plugins/github-release
@@ -120,11 +118,6 @@ steps:
     when:
       event:
         - tag
-    depends_on:
-      - test2.7
-      - test3.5
-      - test3.6
-      - test3.7
 
   - name: pypi_publish
     image: xoxys/drone-pypi:0.1.0
@@ -139,11 +132,6 @@ steps:
     when:
       event:
         - tag
-    depends_on:
-      - test2.7
-      - test3.5
-      - test3.6
-      - test3.7
 
   - name: notify
     image: plugins/matrix
@@ -155,11 +143,6 @@ steps:
         from_secret: matrix_username
       password:
         from_secret: matrix_password
-    depends_on:
-      - test2.7
-      - test3.5
-      - test3.6
-      - test3.7
     when:
       status:
         - success
