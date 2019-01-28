@@ -205,7 +205,7 @@ def check_delegate_to_localhost(candidate, settings):
     return Result(candidate.path, errors)
 
 
-def check_uppercase_literal_bool(candidate, settings):
+def check_literal_bool_format(candidate, settings):
     yamllines, errors = get_normalized_yaml(candidate, settings)
     description = "literal bools should be written as 'True/False' or 'yes/no'"
 

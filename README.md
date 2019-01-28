@@ -8,7 +8,13 @@
 This is a fork of Will Thames [ansible-review](https://github.com/willthames/ansible-review) so credits goes to him
 for his work on ansible-review and ansible-lint.
 
-ansible-later is an acronym for **L**ovely **A**utomation **TE**sting f**R**mework.
+`ansible-later` is a best pratice scanner and linting tool. In most cases, if you write ansibel roles in a team,
+it helps to have a coding or best practice guideline in place. This will make ansible roles more readeble for all
+maintainers and can reduce the troubleshooting time.
+
+`ansible-later` does _**not**_ ensure that your role will work as expected.
+
+`ansible-later` is an acronym for **L**ovely **A**utomation **TE**sting f**R**mework.
 
 ## Table of Content
 
@@ -147,6 +153,7 @@ comes with a couple of built-in checks explained in the following table.
 | check_command_has_changes       | ANSIBLE0011 | Commands should be idempotent and only used with some checks.    |                                                                      |
 | check_empty_string_compare      | ANSIBLE0012 | Don't compare to "" - use `when: var` or `when: not var`         |                                                                      |
 | check_compare_to_literal_bool   | ANSIBLE0013 | Don't compare to True/False - use `when: var` or `when: not var` |                                                                      |
+| check_literal_bool_format       | ANSIBLE0014 | Literal bools should be written as `True/False` or `yes/no`      | forbidden values are `true|false|TRUE|FALSE|Yes|No|YES|NO`           |
 
 ### Build your own
 

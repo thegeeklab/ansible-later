@@ -21,7 +21,7 @@ from ansiblelater.rules.ansiblefiles import check_shell_instead_command
 from ansiblelater.rules.ansiblefiles import check_command_has_changes
 from ansiblelater.rules.ansiblefiles import check_empty_string_compare
 from ansiblelater.rules.ansiblefiles import check_compare_to_literal_bool
-from ansiblelater.rules.ansiblefiles import check_uppercase_literal_bool
+from ansiblelater.rules.ansiblefiles import check_literal_bool_format
 
 
 tasks_should_be_separated = Standard(dict(
@@ -127,6 +127,14 @@ dont_compare_to_literal_bool = Standard(dict(
     types=["playbook", "task", "handler", "template"]
 ))
 
+literal_bool_should_be_formatted = Standard(dict(
+    id="ANSIBLE0014",
+    name="Literal bools should start with a capital letter",
+    check=check_literal_bool_format,
+    version="0.1",
+    types=["playbook", "task", "handler"]
+))
+
 files_should_not_contain_unnecessarily_empty_lines = Standard(dict(
     id="LINT0001",
     name="YAML should not contain unnecessarily empty lines",
@@ -196,14 +204,6 @@ use_yaml_rather_than_key_value = Standard(dict(
     types=["playbook", "task", "handler"]
 ))
 
-literal_bool_should_start_with_uppercase = Standard(dict(
-    id="LINT0008",
-    name="Literal bools should start with a capital letter",
-    check=check_uppercase_literal_bool,
-    version="0.1",
-    types=["playbook", "task", "handler"]
-))
-
 
 ansible_min_version = '2.1'
 ansible_review_min_version = '0.1.0'
@@ -224,7 +224,7 @@ standards = [
     commands_should_be_idempotent,
     dont_compare_to_empty_string,
     dont_compare_to_literal_bool,
-    literal_bool_should_start_with_uppercase,
+    literal_bool_should_be_formatted,
     # Lint
     files_should_not_contain_unnecessarily_empty_lines,
     files_should_be_indented,
