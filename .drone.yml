@@ -10,7 +10,7 @@ steps:
       PY_COLORS: "1"
     commands:
       - pip install tox -q
-      - tox -e $(tox -l | grep py27 | xargs | sed 's/ /,/g') -p all -q
+      - tox -e $(tox -l | grep py27 | xargs | sed 's/ /,/g') -q
     when:
       event:
         - push
@@ -23,7 +23,7 @@ steps:
       PY_COLORS: "1"
     commands:
       - pip install tox -q
-      - tox -e $(tox -l | grep py35 | xargs | sed 's/ /,/g') -p all -q
+      - tox -e $(tox -l | grep py35 | xargs | sed 's/ /,/g') -q
     when:
       event:
         - push
@@ -36,7 +36,7 @@ steps:
       PY_COLORS: "1"
     commands:
       - pip install tox -q
-      - tox -e $(tox -l | grep py36 | xargs | sed 's/ /,/g') -p all -q
+      - tox -e $(tox -l | grep py36 | xargs | sed 's/ /,/g') -q
     when:
       event:
         - push
@@ -49,7 +49,7 @@ steps:
       PY_COLORS: "1"
     commands:
       - pip install tox -q
-      - tox -e $(tox -l | grep py37 | xargs | sed 's/ /,/g') -p all -q
+      - tox -e $(tox -l | grep py37 | xargs | sed 's/ /,/g') -q
     when:
       event:
         - push
