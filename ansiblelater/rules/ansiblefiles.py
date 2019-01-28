@@ -217,3 +217,17 @@ def check_literal_bool_format(candidate, settings):
                 errors.append(Error(i, description))
 
     return Result(candidate.path, errors)
+
+
+def check_become_user(candidate, settings):
+    tasks, errors = get_normalized_tasks(candidate, settings)
+    description = "the task has 'become:' enabled but 'become_user:' is missing"
+    true_value = [True, 'true', 'True', 'TRUE', 'yes', 'Yes', 'YES']
+
+    if not errors:
+        gen = (task for task in tasks if 'become' in task)
+        for task in gen:
+            if task["become"] in true_value and 'become_user' not in task.keys():
+                errors.append(Error(task["__line__"], description))
+
+    return Result(candidate.path, errors)

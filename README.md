@@ -154,6 +154,7 @@ comes with a couple of built-in checks explained in the following table.
 | check_empty_string_compare      | ANSIBLE0012 | Don't compare to "" - use `when: var` or `when: not var`         |                                                                      |
 | check_compare_to_literal_bool   | ANSIBLE0013 | Don't compare to True/False - use `when: var` or `when: not var` |                                                                      |
 | check_literal_bool_format       | ANSIBLE0014 | Literal bools should be written as `True/False` or `yes/no`      | forbidden values are `true false TRUE FALSE Yes No YES NO`           |
+| check_become_user               | ANSIBLE0015 | `become` should be always used combined with `become_user`       |                                                                      |
 
 ### Build your own
 

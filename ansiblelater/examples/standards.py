@@ -22,6 +22,7 @@ from ansiblelater.rules.ansiblefiles import check_command_has_changes
 from ansiblelater.rules.ansiblefiles import check_empty_string_compare
 from ansiblelater.rules.ansiblefiles import check_compare_to_literal_bool
 from ansiblelater.rules.ansiblefiles import check_literal_bool_format
+from ansiblelater.rules.ansiblefiles import check_become_user
 
 
 tasks_should_be_separated = Standard(dict(
@@ -132,6 +133,15 @@ literal_bool_should_be_formatted = Standard(dict(
     name="Literal bools should start with a capital letter",
     check=check_literal_bool_format,
     version="0.1",
+    types=[["playbook", "task", "handler", "rolevars",
+           "hostvars", "groupvars"]]
+))
+
+use_become_with_become_user = Standard(dict(
+    id="ANSIBLE0015",
+    name="become should be combined with become_user",
+    check=check_become_user,
+    version="0.1",
     types=["playbook", "task", "handler"]
 ))
 
@@ -225,6 +235,7 @@ standards = [
     dont_compare_to_empty_string,
     dont_compare_to_literal_bool,
     literal_bool_should_be_formatted,
+    use_become_with_become_user,
     # Lint
     files_should_not_contain_unnecessarily_empty_lines,
     files_should_be_indented,
