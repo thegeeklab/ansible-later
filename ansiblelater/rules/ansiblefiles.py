@@ -12,23 +12,21 @@ def check_braces_spaces(candidate, settings):
     yamllines, errors = get_normalized_yaml(candidate, settings)
     description = "no suitable numbers of spaces (required: 1)"
 
-    lineno = 1
     matches = []
     braces = re.compile("{{(.*?)}}")
 
     if not errors:
-        for line in yamllines:
-            lineno += 1
+        for i, line in yamllines:
             match = braces.findall(line)
             if match:
                 for item in match:
-                    matches.append((item, lineno))
+                    matches.append((i, item))
 
-        for item, lineno in matches:
-            leading, trailing = count_spaces(item)
+        for i, line in matches:
+            leading, trailing = count_spaces(line)
 
             if not leading == 1 or not trailing == 1:
-                errors.append(Error(lineno, description))
+                errors.append(Error(i, description))
     return Result(candidate.path, errors)
 
 
@@ -168,14 +166,12 @@ def check_empty_string_compare(candidate, settings):
     description = 'use `when: var` rather than `when: var != ""` (or ' \
                   'conversely `when: not var` rather than `when: var == ""`)'
 
-    lineno = 0
     empty_string_compare = re.compile("[=!]= ?[\"'][\"']")
 
     if not errors:
-        for line in yamllines:
-            lineno += 1
+        for i, line in yamllines:
             if empty_string_compare.findall(line):
-                errors.append(Error(lineno, description))
+                errors.append(Error(i, description))
 
     return Result(candidate.path, errors)
 
@@ -185,14 +181,12 @@ def check_compare_to_literal_bool(candidate, settings):
     description = "use `when: var` rather than `when: var == True` " \
                   "(or conversely `when: not var`)"
 
-    lineno = 0
     literal_bool_compare = re.compile("[=!]= ?(True|true|False|false)")
 
     if not errors:
-        for line in yamllines:
-            lineno += 1
+        for i, line in yamllines:
             if literal_bool_compare.findall(line):
-                errors.append(Error(lineno, description))
+                errors.append(Error(i, description))
 
     return Result(candidate.path, errors)
 
@@ -213,15 +207,13 @@ def check_delegate_to_localhost(candidate, settings):
 
 def check_uppercase_literal_bool(candidate, settings):
     yamllines, errors = get_normalized_yaml(candidate, settings)
-    description = "literal bools should be written as 'True|False' instead of 'true|false'"
+    description = "literal bools should be written as 'True/False' or 'yes/no'"
 
-    lineno = 1
-    uppercase_bool = re.compile(r"([=!]=|:)\s*(true|false)")
+    uppercase_bool = re.compile(r"([=!]=|:)\s*(true|false|TRUE|FALSE|Yes|No|YES|NO)\s*$")
 
     if not errors:
-        for line in yamllines:
-            lineno += 1
+        for i, line in yamllines:
             if uppercase_bool.findall(line):
-                errors.append(Error(lineno, description))
+                errors.append(Error(i, description))
 
     return Result(candidate.path, errors)

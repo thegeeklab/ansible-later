@@ -486,25 +486,25 @@ def parse_yaml_linenumbers(data, filename):
 
 
 def normalized_yaml(file, options):
-    # lines = []
+    lines = []
     removes = []
 
     try:
         with codecs.open(file, mode='rb', encoding='utf-8') as f:
-            lines = enumerate(f.readlines())
-        print(lines)
+            lines = list(enumerate(f.readlines(), start=1))
+
         for i, line in lines:
             if line.strip().startswith("#"):
-                removes.append(line)
+                removes.append((i, line))
             # remove document starter also
             if options.get("remove_markers") and line.strip() == "---":
-                removes.append(line)
+                removes.append((i, line))
             # remove empty lines
             if options.get("remove_empty") and not line.strip():
-                removes.append(line)
+                removes.append((i, line))
 
-        # for line in removes:
-        #     lines.remove(line)
+        for line in removes:
+            lines.remove(line)
     except (yaml.parser.ParserError, yaml.scanner.ScannerError) as e:
         raise LaterError("syntax error", e)
     return lines

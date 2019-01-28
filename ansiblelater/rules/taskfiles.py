@@ -15,18 +15,16 @@ def check_line_between_tasks(candidate, settings):
     description = "missing task separation (required: 1 empty line)"
 
     task_regex = re.compile(r"-\sname:.*")
-    lineno = 0
     prevline = "#file_start_marker"
 
     allowed_prevline = ["---", "tasks:", "pre_tasks:", "post_tasks:", "block:"]
 
     if not errors:
-        for line in lines:
-            lineno += 1
+        for i, line in lines:
             match = task_regex.search(line)
             if match and prevline:
                 if not any(item in prevline for item in allowed_prevline):
-                    errors.append(Error(lineno, description))
+                    errors.append(Error(i, description))
             prevline = line.strip()
 
     return Result(candidate.path, errors)
