@@ -144,3 +144,23 @@ steps:
       - test3.5
       - test3.6
       - test3.7
+
+  - name: notify
+    image: plugins/matrix
+    settings:
+      homeserver: https://matrix.rknet.org
+      roomid: MtidqQXWWAtQcByBhH:rknet.org
+      template: "Status: **{{ build.status }}**<br/> Build: [{{ repo.Owner }}/{{ repo.Name }}]({{ build.link }}) ({{ build.branch }}) by {{ build.author }}<br/> Message: {{ build.message }}"
+      username:
+        from_secret: matrix_username
+      password:
+        from_secret: matrix_password
+    depends_on:
+      - test2.7
+      - test3.5
+      - test3.6
+      - test3.7
+    when:
+      status:
+        - success
+        - failure
