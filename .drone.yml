@@ -11,8 +11,7 @@ steps:
     commands:
       - pip install tox -q
       - tox -e $(tox -l | grep py27 | xargs | sed 's/ /,/g') -q
-    depends_on:
-      - clone
+    depends_on: clone
     when:
       event:
         - push
@@ -26,8 +25,7 @@ steps:
     commands:
       - pip install tox -q
       - tox -e $(tox -l | grep py35 | xargs | sed 's/ /,/g') -q
-    depends_on:
-      - clone
+    depends_on: clone
     when:
       event:
         - push
@@ -41,8 +39,7 @@ steps:
     commands:
       - pip install tox -q
       - tox -e $(tox -l | grep py36 | xargs | sed 's/ /,/g') -q
-    depends_on:
-      - clone
+    depends_on: clone
     when:
       event:
         - push
@@ -56,8 +53,7 @@ steps:
     commands:
       - pip install tox -q
       - tox -e $(tox -l | grep py37 | xargs | sed 's/ /,/g') -q
-    depends_on:
-      - clone
+    depends_on: clone
     when:
       event:
         - push
@@ -90,8 +86,9 @@ steps:
       event:
         - push
         - tag
+    depends_on: build
 
-  - name: gpg-sign
+  - name: gpgsign
     image: plugins/gpgsign:1
     pull: always
     settings:
@@ -106,6 +103,7 @@ steps:
       event:
         - push
         - tag
+    depends_on: checksum
 
   - name: publish
     image: plugins/github-release
@@ -118,6 +116,7 @@ steps:
     when:
       event:
         - tag
+    depends_on: gpgsign
 
   - name: pypi_publish
     image: xoxys/drone-pypi:0.1.0
@@ -132,6 +131,7 @@ steps:
     when:
       event:
         - tag
+    depends_on: publish
 
   - name: notify
     image: plugins/matrix
@@ -147,3 +147,4 @@ steps:
       status:
         - success
         - failure
+    depends_on: pypi_publish
