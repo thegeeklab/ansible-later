@@ -82,16 +82,16 @@ class Result(object):
 class Candidate(object):
     def __init__(self, filename):
         self.path = filename
+        self.binary = False
+        self.vault = False
+
         try:
             self.version = find_version(filename)
-            self.binary = False
+            with codecs.open(filename, mode='rb', encoding='utf-8') as f:
+                if f.readline().startswith("$ANSIBLE_VAULT"):
+                    self.vault = True
         except UnicodeDecodeError:
             self.binary = True
-
-        self.vault = False
-        with codecs.open(filename, mode='rb', encoding='utf-8') as f:
-            if f.readline().startswith("$ANSIBLE_VAULT"):
-                self.vault = True
 
         self.filetype = type(self).__name__.lower()
         self.expected_version = True
