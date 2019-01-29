@@ -111,6 +111,8 @@ steps:
       files:
         - dist/*
         - sha256sum.txt
+      title: $${DRONE_TAG}
+      note: CHANGELOG.md
     depends_on:
       - gpgsign
     when:
