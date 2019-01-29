@@ -231,3 +231,24 @@ def check_become_user(candidate, settings):
                 errors.append(Error(task["__line__"], description))
 
     return Result(candidate.path, errors)
+
+
+def check_filter_separation(candidate, settings):
+    yamllines, errors = get_normalized_yaml(candidate, settings)
+    description = "no suitable numbers of spaces (required: 1)"
+
+    matches = []
+    braces = re.compile("{{(.*?)}}")
+    filters = re.compile(r"(?<=\|)([\s]{2,}[^\s}]+|[^\s]+)|([^\s{]+[\s]{2,}|[^\s]+)(?=\|)")
+
+    if not errors:
+        for i, line in yamllines:
+            match = braces.findall(line)
+            if match:
+                for item in match:
+                    matches.append((i, item))
+
+        for i, line in matches:
+            if filters.findall(line):
+                errors.append(Error(i, description))
+    return Result(candidate.path, errors)

@@ -23,6 +23,7 @@ from ansiblelater.rules.ansiblefiles import check_empty_string_compare
 from ansiblelater.rules.ansiblefiles import check_compare_to_literal_bool
 from ansiblelater.rules.ansiblefiles import check_literal_bool_format
 from ansiblelater.rules.ansiblefiles import check_become_user
+from ansiblelater.rules.ansiblefiles import check_filter_separation
 
 
 tasks_should_be_separated = Standard(dict(
@@ -133,8 +134,8 @@ literal_bool_should_be_formatted = Standard(dict(
     name="Literal bools should start with a capital letter",
     check=check_literal_bool_format,
     version="0.1",
-    types=[["playbook", "task", "handler", "rolevars",
-           "hostvars", "groupvars"]]
+    types=["playbook", "task", "handler", "rolevars",
+           "hostvars", "groupvars"]
 ))
 
 use_become_with_become_user = Standard(dict(
@@ -143,6 +144,15 @@ use_become_with_become_user = Standard(dict(
     check=check_become_user,
     version="0.1",
     types=["playbook", "task", "handler"]
+))
+
+use_spaces_around_filters = Standard(dict(
+    id="ANSIBLE0016",
+    name="jinja2 filters should be separated with spaces",
+    check=check_filter_separation,
+    version="0.1",
+    types=["playbook", "task", "handler", "rolevars",
+           "hostvars", "groupvars"]
 ))
 
 files_should_not_contain_unnecessarily_empty_lines = Standard(dict(
@@ -236,6 +246,7 @@ standards = [
     dont_compare_to_literal_bool,
     literal_bool_should_be_formatted,
     use_become_with_become_user,
+    use_spaces_around_filters,
     # Lint
     files_should_not_contain_unnecessarily_empty_lines,
     files_should_be_indented,
