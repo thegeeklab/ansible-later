@@ -85,6 +85,8 @@ celerybeat-schedule
 .venv
 venv/
 ENV/
+env/
+env27/
 
 # Spyder project settings
 .spyderproject
@@ -97,3 +99,5 @@ ENV/
 .on-save.json
 .vscode
 .pytest_cache
+
+pip-wheel-metadata
