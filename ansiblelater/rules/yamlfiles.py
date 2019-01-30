@@ -45,7 +45,7 @@ def check_native_yaml(candidate, settings):
 
 
 def check_yaml_empty_lines(candidate, settings):
-    options = "rules: {empty-lines: {max: 1, max-start: 0, max-end: 0}}"
+    options = "rules: {empty-lines: {max: 1, max-start: 0, max-end: 1}}"
     errors = run_yamllint(candidate, settings, options)
     return Result(candidate.path, errors)
 

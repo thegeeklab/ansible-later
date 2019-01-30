@@ -18,22 +18,20 @@ The project name is an acronym for **L**ovely **A**utomation **TE**sting f**R**m
 
 ## Table of Content
 
-- [ansible-later](#ansible-later)
-  - [Table of Content](#table-of-content)
-    - [Setup](#setup)
-      - [Using pip](#using-pip)
-      - [From source](#from-source)
-    - [Usage](#usage)
-      - [Configuration](#configuration)
-      - [Review a git repositories](#review-a-git-repositories)
-      - [Review a list of files](#review-a-list-of-files)
-      - [Buildin rules](#buildin-rules)
-    - [Build your own](#build-your-own)
-      - [The standards file](#the-standards-file)
-      - [Candidates](#candidates)
-      - [Minimal standards checks](#minimal-standards-checks)
-    - [License](#license)
-    - [Maintainers and Contributors](#maintainers-and-contributors)
+- [Setup](#setup)
+  - [Using pip](#using-pip)
+  - [From source](#from-source)
+- [Usage](#usage)
+  - [Configuration](#configuration)
+  - [Review a git repositories](#review-a-git-repositories)
+  - [Review a list of files](#review-a-list-of-files)
+  - [Buildin rules](#buildin-rules)
+- [Build your own](#build-your-own)
+  - [The standards file](#the-standards-file)
+  - [Candidates](#candidates)
+  - [Minimal standards checks](#minimal-standards-checks)
+- [License](#license)
+- [Maintainers and Contributors](#maintainers-and-contributors)
 
 ---
 
@@ -134,7 +132,7 @@ comes with a couple of built-in checks explained in the following table.
 
 | Rule                            | ID          | Description                                                       | Parameter                                                            |
 |---------------------------------|-------------|-------------------------------------------------------------------|----------------------------------------------------------------------|
-| check_yaml_empty_lines          | LINT0001    | YAML should not contain unnecessarily empty lines.                | {max: 1, max-start: 0, max-end: 0}                                   |
+| check_yaml_empty_lines          | LINT0001    | YAML should not contain unnecessarily empty lines.                | {max: 1, max-start: 0, max-end: 1}                                   |
 | check_yaml_indent               | LINT0002    | YAML should be correctly indented.                                | {spaces: 2, check-multi-line-strings: false, indent-sequences: true} |
 | check_yaml_hyphens              | LINT0003    | YAML should use consitent number of spaces after hyphens (-).     | {max-spaces-after: 1}                                                |
 | check_yaml_document_start       | LINT0004    | YAML should contain document start marker.                        | {document-start: {present: true}}                                    |

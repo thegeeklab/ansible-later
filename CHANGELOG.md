@@ -1,8 +1,2 @@
-- BUGFIX
-  - Error while vault file classification if file is a binary [#6](https://github.com/xoxys/ansible-later/issues/6)
-  - Wrong line number displayed when using normalized yaml [#3](https://github.com/xoxys/ansible-later/issues/3)
 - ENHANCEMENT
-  - Exclude include_vars from tasks that has to be named [#5](https://github.com/xoxys/ansible-later/issues/5)
-  - New rule: force `become` is not used without `become_user` [#4](https://github.com/xoxys/ansible-later/issues/4)
-  - New rule: bool values should be True/False or yes/no formatted [#2](https://github.com/xoxys/ansible-later/issues/2)
-  - New rule: jinja2 filters should be separated by spaces [#1](https://github.com/xoxys/ansible-later/issues/1)
+  - Dont be too restrictive and allow max. one empty line at the end of yaml files ()
