@@ -1,2 +1,2 @@
 - ENHANCEMENT
-  - Dont be too restrictive and allow max. one empty line at the end of yaml files ()
+  - Dont be too restrictive and allow max. one empty line at the end of yaml files ([#7](https://github.com/xoxys/ansible-later/issues/7))
