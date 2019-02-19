@@ -359,6 +359,7 @@ def _kv_to_dict(v):
 def normalize_task(task, filename, custom_modules=[]):
     '''Ensures tasks have an action key and strings are converted to python objects'''
     ansible_action_type = task.get('__ansible_action_type__', 'task')
+    ansible_action_meta = task.get('__ansible_action_meta__', dict())
     if '__ansible_action_type__' in task:
         del(task['__ansible_action_type__'])
 
@@ -397,6 +398,7 @@ def normalize_task(task, filename, custom_modules=[]):
 
     normalized[FILENAME_KEY] = filename
     normalized['__ansible_action_type__'] = ansible_action_type
+    normalized['__ansible_action_meta__'] = ansible_action_meta
     return normalized
 
 
@@ -432,9 +434,13 @@ def extract_from_list(blocks, candidates):
     results = list()
     for block in blocks:
         for candidate in candidates:
+            delete_meta_keys = [candidate, '__line__', '__file__', '__ansible_action_type__']
             if isinstance(block, dict) and candidate in block:
                 if isinstance(block[candidate], list):
-                    results.extend(add_action_type(block[candidate], candidate))
+                    meta_data = dict(block)
+                    for key in delete_meta_keys:
+                        del meta_data[key]
+                    results.extend(add_action_type(block[candidate], candidate, meta_data))
                 elif block[candidate] is not None:
                     raise RuntimeError(
                         "Key '%s' defined, but bad value: '%s'" %
@@ -442,10 +448,12 @@ def extract_from_list(blocks, candidates):
     return results
 
 
-def add_action_type(actions, action_type):
+def add_action_type(actions, action_type, action_meta=None):
     results = list()
     for action in actions:
         action['__ansible_action_type__'] = BLOCK_NAME_TO_ACTION_TYPE_MAP[action_type]
+        if action_meta:
+            action['__ansible_action_meta__'] = action_meta
         results.append(action)
     return results
 

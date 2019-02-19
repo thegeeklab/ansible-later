@@ -101,7 +101,8 @@ def check_command_instead_of_module(candidate, settings):
                     first_cmd_arg = task["action"]["__ansible_arguments__"][0]
 
                 executable = os.path.basename(first_cmd_arg)
-                if first_cmd_arg and executable in modules and task['action'].get('warn', True):
+                if (first_cmd_arg and executable in modules
+                        and task['action'].get('warn', True) and 'register' not in task):
                     errors.append(
                         Error(task["__line__"], description % (executable, modules[executable])))
 
@@ -154,8 +155,10 @@ def check_command_has_changes(candidate, settings):
     if not errors:
         for task in tasks:
             if task["action"]["__ansible_module__"] in commands:
-                if 'changed_when' not in task and 'when' not in task \
-                        and 'creates' not in task['action'] and 'removes' not in task['action']:
+                if ('changed_when' not in task and 'when' not in task
+                        and 'when' not in task['__ansible_action_meta__']
+                        and 'creates' not in task['action']
+                        and 'removes' not in task['action']):
                     errors.append(Error(task["__line__"], description))
 
     return Result(candidate.path, errors)
