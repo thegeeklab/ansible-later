@@ -1,2 +1,3 @@
-- ENHANCEMENT
-  - Dont be too restrictive and allow max. one empty line at the end of yaml files ([#7](https://github.com/xoxys/ansible-later/issues/7))
+- BUGFIX
+  - Controls like `when` used at block level will be added as metadata to each task inside this block [#9](https://github.com/xoxys/ansible-later/issues/9)
+  - Commands can be used in place of modules if the task use register [#8](https://github.com/xoxys/ansible-later/issues/8)

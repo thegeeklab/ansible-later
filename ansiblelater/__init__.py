@@ -1,6 +1,6 @@
 __author__ = "Robert Kaussow"
 __project__ = "ansible-later"
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 __license__ = "MIT"
 __maintainer__ = "Robert Kaussow"
 __email__ = "mail@geeklabor.de"
