@@ -90,19 +90,19 @@ steps:
     event:
     - tag
 
-# - name: publish-pypi
-#   pull: always
-#   image: plugins/pypi
-#   settings:
-#     password:
-#       from_secret: pypi_password
-#     repository: https://upload.pypi.org/legacy/
-#     skip_build: true
-#     username:
-#       from_secret: pypi_username
-#   when:
-#     event:
-#     - tag
+- name: publish-pypi
+  pull: always
+  image: plugins/pypi
+  settings:
+    password:
+      from_secret: pypi_password
+    repository: https://upload.pypi.org/legacy/
+    skip_build: true
+    username:
+      from_secret: pypi_username
+  when:
+    event:
+    - tag
 
 depends_on:
 - testing
