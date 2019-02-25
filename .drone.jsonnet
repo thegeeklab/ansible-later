@@ -19,10 +19,10 @@ local PipelineTesting = {
     arch: "amd64",
   },
   steps: [
-    PythonVersions(pyversion="2.7"),
-    PythonVersions(pyversion="3.5"),
-    PythonVersions(pyversion="3.6"),
-    PythonVersions(pyversion="3.7"),
+    PythonVersions(pyversion="2.7", py="27"),
+    PythonVersions(pyversion="3.5", py="35"),
+    PythonVersions(pyversion="3.6", py="36"),
+    PythonVersions(pyversion="3.7", py="37"),
   ],
 };
 
@@ -103,6 +103,7 @@ local PipelineNotifications = {
   },
   steps: [
     {
+      name: "matrix",
       image: "plugins/matrix",
       settings: {
         homeserver: "https://matrix.rknet.org",

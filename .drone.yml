@@ -21,7 +21,7 @@ steps:
   image: python:3.5
   commands:
   - pip install tox -q
-  - "tox -e $(tox -l | grep py27 | xargs | sed 's/ /,/g') -q"
+  - "tox -e $(tox -l | grep py35 | xargs | sed 's/ /,/g') -q"
   depends_on:
   - clone
 
@@ -30,7 +30,7 @@ steps:
   image: python:3.6
   commands:
   - pip install tox -q
-  - "tox -e $(tox -l | grep py27 | xargs | sed 's/ /,/g') -q"
+  - "tox -e $(tox -l | grep py36 | xargs | sed 's/ /,/g') -q"
   depends_on:
   - clone
 
@@ -39,7 +39,7 @@ steps:
   image: python:3.7
   commands:
   - pip install tox -q
-  - "tox -e $(tox -l | grep py27 | xargs | sed 's/ /,/g') -q"
+  - "tox -e $(tox -l | grep py37 | xargs | sed 's/ /,/g') -q"
   depends_on:
   - clone
 
@@ -116,7 +116,8 @@ platform:
   arch: amd64
 
 steps:
-- image: plugins/matrix
+- name: matrix
+  image: plugins/matrix
   settings:
     homeserver: https://matrix.rknet.org
     password:
