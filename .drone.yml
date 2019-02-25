@@ -1,153 +1,140 @@
 ---
 kind: pipeline
-name: default
+name: testing
+
+platform:
+  os: linux
+  arch: amd64
 
 steps:
-  - name: test2.7
-    image: python:2.7-stretch
-    pull: always
-    environment:
-      PY_COLORS: "1"
-    commands:
-      - pip install tox -q
-      - tox -e $(tox -l | grep py27 | xargs | sed 's/ /,/g') -q
-    when:
-      event:
-        - push
-        - tag
+- name: python2.7
+  pull: always
+  image: python:2.7
+  commands:
+  - pip install tox -q
+  - "tox -e $(tox -l | grep py27 | xargs | sed 's/ /,/g') -q"
+  depends_on:
+  - clone
 
-  - name: test3.5
-    image: python:3.5-stretch
-    pull: always
-    environment:
-      PY_COLORS: "1"
-    commands:
-      - pip install tox -q
-      - tox -e $(tox -l | grep py35 | xargs | sed 's/ /,/g') -q
-    when:
-      event:
-        - push
-        - tag
+- name: python3.5
+  pull: always
+  image: python:3.5
+  commands:
+  - pip install tox -q
+  - "tox -e $(tox -l | grep py27 | xargs | sed 's/ /,/g') -q"
+  depends_on:
+  - clone
 
-  - name: test3.6
-    image: python:3.6-stretch
-    pull: always
-    environment:
-      PY_COLORS: "1"
-    commands:
-      - pip install tox -q
-      - tox -e $(tox -l | grep py36 | xargs | sed 's/ /,/g') -q
-    when:
-      event:
-        - push
-        - tag
+- name: python3.6
+  pull: always
+  image: python:3.6
+  commands:
+  - pip install tox -q
+  - "tox -e $(tox -l | grep py27 | xargs | sed 's/ /,/g') -q"
+  depends_on:
+  - clone
 
-  - name: test3.7
-    image: python:3.7-stretch
-    pull: always
-    environment:
-      PY_COLORS: "1"
-    commands:
-      - pip install tox -q
-      - tox -e $(tox -l | grep py37 | xargs | sed 's/ /,/g') -q
-    when:
-      event:
-        - push
-        - tag
+- name: python3.7
+  pull: always
+  image: python:3.7
+  commands:
+  - pip install tox -q
+  - "tox -e $(tox -l | grep py27 | xargs | sed 's/ /,/g') -q"
+  depends_on:
+  - clone
 
-  - name: build
-    image: python:3.7-alpine
-    pull: true
-    commands:
-      - python setup.py sdist bdist_wheel
-    when:
-      event:
-        - push
-        - tag
-    depends_on:
-      - test2.7
-      - test3.5
-      - test3.6
-      - test3.7
+---
+kind: pipeline
+name: build
 
-  - name: checksum
-    image: alpine
-    pull: always
-    commands:
-      - apk add --no-cache coreutils
-      # exclude files
-      # - sha256sum -b files/!(*.out) > CHECKSUMFILE
-      - sha256sum -b dist/* > sha256sum.txt
-    depends_on:
-      - build
-    when:
-      event:
-        - push
-        - tag
+platform:
+  os: linux
+  arch: amd64
 
-  - name: gpgsign
-    image: plugins/gpgsign:1
-    pull: always
-    settings:
-      key:
-        from_secret: gpgsign_key
-      passphrase:
-        from_secret: gpgsign_passphrase
-      detach_sign: true
-      files:
-        - dist/*
-    depends_on:
-      - checksum
-    when:
-      event:
-        - push
-        - tag
+steps:
+- name: build
+  pull: always
+  image: python:3.7
+  commands:
+  - python setup.py sdist bdist_wheel
 
-  - name: publish
-    image: plugins/github-release
-    settings:
-      api_key:
-        from_secret: github_token
-      files:
-        - dist/*
-        - sha256sum.txt
-      title: $${DRONE_TAG}
-      note: CHANGELOG.md
-    depends_on:
-      - gpgsign
-    when:
-      event:
-        - tag
+- name: checksum
+  pull: always
+  image: alpine
+  commands:
+  - apk add --no-cache coreutils
+  - "sha256sum -b dist/* > sha256sum.txt"
 
-  - name: pypi_publish
-    image: xoxys/drone-pypi:0.1.0
-    pull: always
-    settings:
-      username:
-        from_secret: pypi_username
-      password:
-        from_secret: pypi_password
-      repository: https://upload.pypi.org/legacy/
-      skip_build: true
-    depends_on:
-      - publish
-    when:
-      event:
-        - tag
+- name: gpg-sign
+  pull: always
+  image: plugins/gpgsign:1
+  settings:
+    detach_sign: true
+    files:
+    - "dist/*"
+    key:
+      from_secret: gpgsign_key
+    passphrase:
+      from_secret: gpgsign_passphrase
 
-  - name: notify
-    image: plugins/matrix
-    settings:
-      homeserver: https://matrix.rknet.org
-      roomid: MtidqQXWWAtQcByBhH:rknet.org
-      template: "Status: **{{ build.status }}**<br/> Build: [{{ repo.Owner }}/{{ repo.Name }}]({{ build.link }}) ({{ build.branch }}) by {{ build.author }}<br/> Message: {{ build.message }}"
-      username:
-        from_secret: matrix_username
-      password:
-        from_secret: matrix_password
-    depends_on:
-      - pypi_publish
-    when:
-      status:
-        - success
-        - failure
+- name: publish-github
+  pull: always
+  image: plugins/github-release
+  settings:
+    api_key:
+      from_secret: github_token
+    files:
+    - "dist/*"
+    - sha256sum.txt
+  when:
+    event:
+    - tag
+
+# - name: publish-pypi
+#   pull: always
+#   image: plugins/pypi
+#   settings:
+#     password:
+#       from_secret: pypi_password
+#     repository: https://upload.pypi.org/legacy/
+#     skip_build: true
+#     username:
+#       from_secret: pypi_username
+#   when:
+#     event:
+#     - tag
+
+depends_on:
+- testing
+
+---
+kind: pipeline
+name: notifications
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- image: plugins/matrix
+  settings:
+    homeserver: https://matrix.rknet.org
+    password:
+      from_secret: matrix_password
+    roomid: MtidqQXWWAtQcByBhH:rknet.org
+    template: "Status: **{{ build.status }}**<br/> Build: [{{ repo.Owner }}/{{ repo.Name }}]({{ build.link }}) ({{ build.branch }}) by {{ build.author }}<br/> Message: {{ build.message }}"
+    username:
+      from_secret: matrix_username
+
+trigger:
+  event:
+  - push
+  - tag
+  status:
+  - success
+  - failure
+
+depends_on:
+- build
+
+...
