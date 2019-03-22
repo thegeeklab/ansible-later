@@ -1,34 +1,89 @@
-local PipelineEmvironment(pyversion="2.7", ansibleversion="2.4") = {
-    name: "ansible" + ansibleversion,
+local PythonVersions(pyversion="2.7", py="27") = {
+    name: "python" + pyversion + "-ansible",
     image: "python:" + pyversion,
     pull: "always",
+    environment: {
+      PY_COLORS: 1
+    },
     commands: [
-      "pip install -q ansible~=" +  ansibleversion,
-      "pip install -q -r tests/requirements.txt",
-      "pip install -q .",
-      "ansible-later -c tests/config/config.ini tests/data/yaml_success.yml"
+      "pip install tox -qq",
+      "tox -e $(tox -l | grep py" + py + " | xargs | sed 's/ /,/g') -q",
     ],
     depends_on: [
       "clone",
     ],
 };
 
-local PipelineTesting(pyversion="2.7") = {
+local PipelineTesting = {
   kind: "pipeline",
-  name: "python-" + pyversion,
+  name: "testing",
   platform: {
     os: "linux",
     arch: "amd64",
   },
   steps: [
-    PipelineEmvironment(pyversion, ansibleversion="2.4"),
-    PipelineEmvironment(pyversion, ansibleversion="2.5"),
-    PipelineEmvironment(pyversion, ansibleversion="2.6"),
-    PipelineEmvironment(pyversion, ansibleversion="2.7"),
+    PythonVersions(pyversion="2.7", py="27"),
+    PythonVersions(pyversion="3.5", py="35"),
+    PythonVersions(pyversion="3.6", py="36"),
+    PythonVersions(pyversion="3.7", py="37"),
+    {
+      name: "python-flake8",
+      image: "python:3.7",
+      pull: "always",
+      environment: {
+        PY_COLORS: 1
+      },
+      commands: [
+        "pip install -r test-requirements.txt -qq",
+        "pip install -qq .",
+        "flake8 ./ansiblelater",
+      ],
+      depends_on: [
+        "clone",
+      ],
+    },
+    {
+      name: "python-bandit",
+      image: "python:3.7",
+      pull: "always",
+      environment: {
+        PY_COLORS: 1
+      },
+      commands: [
+        "pip install -r test-requirements.txt -qq",
+        "pip install -qq .",
+        "bandit -r ./ansiblelater",
+      ],
+      depends_on: [
+        "clone",
+      ],
+    },
+    {
+      name: "codecov",
+      image: "python:3.7",
+      pull: "always",
+      environment: {
+        PY_COLORS: 1,
+        CODECOV_TOKEN: { "from_secret": "codecov_token" },
+      },
+      commands: [
+        "pip install codecov",
+        "codecov"
+      ],
+      depends_on: [
+        "python2.7-ansible",
+        "python3.5-ansible",
+        "python3.6-ansible",
+        "python3.7-ansible"
+      ],
+    }
   ],
+  trigger: {
+    ref: ["refs/heads/master", "refs/tags/**", "refs/pull/**"],
+  },
 };
 
-local PipelineBuild(depends_on=[]) = {
+local PipelineBuild = {
   kind: "pipeline",
   name: "build",
   platform: {
@@ -63,6 +118,11 @@ local PipelineBuild(depends_on=[]) = {
         detach_sign: true,
         files: [ "dist/*" ],
       },
+      when: {
+        event: {
+          exclude: ['pull_request'],
+        },
+      },
     },
     {
       name: "publish-github",
@@ -70,7 +130,10 @@ local PipelineBuild(depends_on=[]) = {
       pull: "always",
       settings: {
         api_key: { "from_secret": "github_token"},
+        overwrite: true,
         files: ["dist/*", "sha256sum.txt"],
+        title: "${DRONE_TAG}",
+        note: "CHANGELOG.md",
       },
       when: {
         event: [ "tag" ],
@@ -91,7 +154,12 @@ local PipelineBuild(depends_on=[]) = {
       },
     },
   ],
-  depends_on: depends_on,
+  depends_on: [
+    "testing",
+  ],
+  trigger: {
+    ref: ["refs/heads/master", "refs/tags/**", "refs/pull/**"],
+  },
 };
 
 local PipelineNotifications = {
@@ -118,20 +186,13 @@ local PipelineNotifications = {
     "build",
   ],
   trigger: {
-    status: [ "success", "failure", "skipped" ],
+    ref: ["refs/heads/master", "refs/tags/**"],
+    status: [ "success", "failure" ],
   },
 };
 
 [
-  PipelineTesting(pyversion="2.7"),
-  PipelineTesting(pyversion="3.5"),
-  PipelineTesting(pyversion="3.6"),
-  PipelineTesting(pyversion="3.7"),
-  PipelineBuild(depends_on=[
-    'python-2.7',
-    'python-3.5',
-    'python-3.6',
-    'python-3.7',
-  ]),
+  PipelineTesting,
+  PipelineBuild,
   PipelineNotifications,
 ]

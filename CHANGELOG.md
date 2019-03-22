@@ -1,3 +1,2 @@
-- BUGFIX
-  - Controls like `when` used at block level will be added as metadata to each task inside this block [#9](https://github.com/xoxys/ansible-later/issues/9)
-  - Commands can be used in place of modules if the task use register [#8](https://github.com/xoxys/ansible-later/issues/8)
+- ENHANCEMENT
+  - Respect `PY_COLORS` to get colorized output for nontty environments ([#10](https://github.com/xoxys/ansible-later/pull/10))

@@ -1,214 +1,101 @@
 ---
 kind: pipeline
-name: python-2.7
+name: testing
 
 platform:
   os: linux
   arch: amd64
 
 steps:
-- name: ansible2.4
+- name: python2.7-ansible
   pull: always
   image: python:2.7
   commands:
-  - pip install -q ansible~=2.4
-  - pip install -q -r tests/requirements.txt
-  - pip install -q .
-  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
+  - pip install tox -qq
+  - "tox -e $(tox -l | grep py27 | xargs | sed 's/ /,/g') -q"
+  environment:
+    PY_COLORS: 1
   depends_on:
   - clone
 
-- name: ansible2.5
-  pull: always
-  image: python:2.7
-  commands:
-  - pip install -q ansible~=2.5
-  - pip install -q -r tests/requirements.txt
-  - pip install -q .
-  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
-  depends_on:
-  - clone
-
-- name: ansible2.6
-  pull: always
-  image: python:2.7
-  commands:
-  - pip install -q ansible~=2.6
-  - pip install -q -r tests/requirements.txt
-  - pip install -q .
-  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
-  depends_on:
-  - clone
-
-- name: ansible2.7
-  pull: always
-  image: python:2.7
-  commands:
-  - pip install -q ansible~=2.7
-  - pip install -q -r tests/requirements.txt
-  - pip install -q .
-  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
-  depends_on:
-  - clone
-
----
-kind: pipeline
-name: python-3.5
-
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-- name: ansible2.4
+- name: python3.5-ansible
   pull: always
   image: python:3.5
   commands:
-  - pip install -q ansible~=2.4
-  - pip install -q -r tests/requirements.txt
-  - pip install -q .
-  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
+  - pip install tox -qq
+  - "tox -e $(tox -l | grep py35 | xargs | sed 's/ /,/g') -q"
+  environment:
+    PY_COLORS: 1
   depends_on:
   - clone
 
-- name: ansible2.5
-  pull: always
-  image: python:3.5
-  commands:
-  - pip install -q ansible~=2.5
-  - pip install -q -r tests/requirements.txt
-  - pip install -q .
-  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
-  depends_on:
-  - clone
-
-- name: ansible2.6
-  pull: always
-  image: python:3.5
-  commands:
-  - pip install -q ansible~=2.6
-  - pip install -q -r tests/requirements.txt
-  - pip install -q .
-  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
-  depends_on:
-  - clone
-
-- name: ansible2.7
-  pull: always
-  image: python:3.5
-  commands:
-  - pip install -q ansible~=2.7
-  - pip install -q -r tests/requirements.txt
-  - pip install -q .
-  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
-  depends_on:
-  - clone
-
----
-kind: pipeline
-name: python-3.6
-
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-- name: ansible2.4
+- name: python3.6-ansible
   pull: always
   image: python:3.6
   commands:
-  - pip install -q ansible~=2.4
-  - pip install -q -r tests/requirements.txt
-  - pip install -q .
-  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
+  - pip install tox -qq
+  - "tox -e $(tox -l | grep py36 | xargs | sed 's/ /,/g') -q"
+  environment:
+    PY_COLORS: 1
   depends_on:
   - clone
 
-- name: ansible2.5
-  pull: always
-  image: python:3.6
-  commands:
-  - pip install -q ansible~=2.5
-  - pip install -q -r tests/requirements.txt
-  - pip install -q .
-  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
-  depends_on:
-  - clone
-
-- name: ansible2.6
-  pull: always
-  image: python:3.6
-  commands:
-  - pip install -q ansible~=2.6
-  - pip install -q -r tests/requirements.txt
-  - pip install -q .
-  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
-  depends_on:
-  - clone
-
-- name: ansible2.7
-  pull: always
-  image: python:3.6
-  commands:
-  - pip install -q ansible~=2.7
-  - pip install -q -r tests/requirements.txt
-  - pip install -q .
-  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
-  depends_on:
-  - clone
-
----
-kind: pipeline
-name: python-3.7
-
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-- name: ansible2.4
+- name: python3.7-ansible
   pull: always
   image: python:3.7
   commands:
-  - pip install -q ansible~=2.4
-  - pip install -q -r tests/requirements.txt
-  - pip install -q .
-  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
+  - pip install tox -qq
+  - "tox -e $(tox -l | grep py37 | xargs | sed 's/ /,/g') -q"
+  environment:
+    PY_COLORS: 1
   depends_on:
   - clone
 
-- name: ansible2.5
+- name: python-flake8
   pull: always
   image: python:3.7
   commands:
-  - pip install -q ansible~=2.5
-  - pip install -q -r tests/requirements.txt
-  - pip install -q .
-  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
+  - pip install -r test-requirements.txt -qq
+  - pip install -qq .
+  - flake8 ./ansiblelater
+  environment:
+    PY_COLORS: 1
   depends_on:
   - clone
 
-- name: ansible2.6
+- name: python-bandit
   pull: always
   image: python:3.7
   commands:
-  - pip install -q ansible~=2.6
-  - pip install -q -r tests/requirements.txt
-  - pip install -q .
-  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
+  - pip install -r test-requirements.txt -qq
+  - pip install -qq .
+  - bandit -r ./ansiblelater
+  environment:
+    PY_COLORS: 1
   depends_on:
   - clone
 
-- name: ansible2.7
+- name: codecov
   pull: always
   image: python:3.7
   commands:
-  - pip install -q ansible~=2.7
-  - pip install -q -r tests/requirements.txt
-  - pip install -q .
-  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
+  - pip install codecov
+  - codecov
+  environment:
+    CODECOV_TOKEN:
+      from_secret: codecov_token
+    PY_COLORS: 1
   depends_on:
-  - clone
+  - python2.7-ansible
+  - python3.5-ansible
+  - python3.6-ansible
+  - python3.7-ansible
+
+trigger:
+  ref:
+  - refs/heads/master
+  - "refs/tags/**"
+  - "refs/pull/**"
 
 ---
 kind: pipeline
@@ -243,6 +130,10 @@ steps:
       from_secret: gpgsign_key
     passphrase:
       from_secret: gpgsign_passphrase
+  when:
+    event:
+      exclude:
+      - pull_request
 
 - name: publish-github
   pull: always
@@ -253,6 +144,9 @@ steps:
     files:
     - "dist/*"
     - sha256sum.txt
+    note: CHANGELOG.md
+    overwrite: true
+    title: "${DRONE_TAG}"
   when:
     event:
     - tag
@@ -271,11 +165,14 @@ steps:
     event:
     - tag
 
+trigger:
+  ref:
+  - refs/heads/master
+  - "refs/tags/**"
+  - "refs/pull/**"
+
 depends_on:
-- python-2.7
-- python-3.5
-- python-3.6
-- python-3.7
+- testing
 
 ---
 kind: pipeline
@@ -298,10 +195,12 @@ steps:
       from_secret: matrix_username
 
 trigger:
+  ref:
+  - refs/heads/master
+  - "refs/tags/**"
   status:
   - success
   - failure
-  - skipped
 
 depends_on:
 - build

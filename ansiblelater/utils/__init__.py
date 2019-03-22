@@ -3,7 +3,6 @@ from __future__ import print_function
 import importlib
 import logging
 import os
-import subprocess
 import sys
 import re
 import colorama
@@ -15,13 +14,6 @@ try:
     import ConfigParser as configparser
 except ImportError:
     import configparser
-
-# try:
-#     from ansible.utils.color import stringc
-# except ImportError:
-#     from ansible.color import stringc
-
-# from yamlhelper import *
 
 
 def should_do_markup():
@@ -121,18 +113,6 @@ def read_config(config_file):
     return Settings(config, config_file)
 
 
-def execute(cmd):
-    result = ExecuteResult()
-    encoding = 'UTF-8'
-    env = dict(os.environ)
-    env['PYTHONIOENCODING'] = encoding
-    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
-                            stderr=subprocess.STDOUT, env=env)
-    result.output = proc.communicate()[0].decode(encoding)
-    result.rc = proc.returncode
-    return result
-
-
 class Settings(object):
     def __init__(self, config, config_file):
         self.rulesdir = None
@@ -147,7 +127,3 @@ class Settings(object):
             self.custom_modules = [x.strip() for x in modules.split(',')]
 
         self.configfile = config_file
-
-
-class ExecuteResult(object):
-    pass

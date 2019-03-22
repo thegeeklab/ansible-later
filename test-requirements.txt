@@ -1,0 +1,8 @@
+flake8
+flake8-colors
+pep8-naming
+wheel
+pytest
+pytest-mock
+pytest-cov
+bandit
