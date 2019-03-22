@@ -1,32 +1,34 @@
-local PythonVersions(pyversion="2.7", py="27") = {
-    name: "python" + pyversion,
+local PipelineEmvironment(pyversion="2.7", ansibleversion="2.4") = {
+    name: "ansible" + ansibleversion,
     image: "python:" + pyversion,
     pull: "always",
     commands: [
-      "pip install tox -q",
-      "tox -e $(tox -l | grep py" + py + " | xargs | sed 's/ /,/g') -q",
+      "pip install -q ansible~=" +  ansibleversion,
+      "pip install -q -r tests/requirements.txt",
+      "pip install -q .",
+      "ansible-later -c tests/config/config.ini tests/data/yaml_success.yml"
     ],
     depends_on: [
       "clone",
     ],
 };
 
-local PipelineTesting = {
+local PipelineTesting(pyversion="2.7") = {
   kind: "pipeline",
-  name: "testing",
+  name: "python-" + pyversion,
   platform: {
     os: "linux",
     arch: "amd64",
   },
   steps: [
-    PythonVersions(pyversion="2.7", py="27"),
-    PythonVersions(pyversion="3.5", py="35"),
-    PythonVersions(pyversion="3.6", py="36"),
-    PythonVersions(pyversion="3.7", py="37"),
+    PipelineEmvironment(pyversion, ansibleversion="2.4"),
+    PipelineEmvironment(pyversion, ansibleversion="2.5"),
+    PipelineEmvironment(pyversion, ansibleversion="2.6"),
+    PipelineEmvironment(pyversion, ansibleversion="2.7"),
   ],
 };
 
-local PipelineBuild = {
+local PipelineBuild(depends_on=[]) = {
   kind: "pipeline",
   name: "build",
   platform: {
@@ -89,9 +91,7 @@ local PipelineBuild = {
       },
     },
   ],
-  depends_on: [
-    "testing",
-  ],
+  depends_on: depends_on,
 };
 
 local PipelineNotifications = {
@@ -123,7 +123,15 @@ local PipelineNotifications = {
 };
 
 [
-  PipelineTesting,
-  PipelineBuild,
+  PipelineTesting(pyversion="2.7"),
+  PipelineTesting(pyversion="3.5"),
+  PipelineTesting(pyversion="3.6"),
+  PipelineTesting(pyversion="3.7"),
+  PipelineBuild(depends_on=[
+    'python-2.7',
+    'python-3.5',
+    'python-3.6',
+    'python-3.7',
+  ]),
   PipelineNotifications,
 ]

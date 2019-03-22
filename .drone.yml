@@ -1,45 +1,212 @@
 ---
 kind: pipeline
-name: testing
+name: python-2.7
 
 platform:
   os: linux
   arch: amd64
 
 steps:
-- name: python2.7
+- name: ansible2.4
   pull: always
   image: python:2.7
   commands:
-  - pip install tox -q
-  - "tox -e $(tox -l | grep py27 | xargs | sed 's/ /,/g') -q"
+  - pip install -q ansible~=2.4
+  - pip install -q -r tests/requirements.txt
+  - pip install -q .
+  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
   depends_on:
   - clone
 
-- name: python3.5
+- name: ansible2.5
+  pull: always
+  image: python:2.7
+  commands:
+  - pip install -q ansible~=2.5
+  - pip install -q -r tests/requirements.txt
+  - pip install -q .
+  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
+  depends_on:
+  - clone
+
+- name: ansible2.6
+  pull: always
+  image: python:2.7
+  commands:
+  - pip install -q ansible~=2.6
+  - pip install -q -r tests/requirements.txt
+  - pip install -q .
+  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
+  depends_on:
+  - clone
+
+- name: ansible2.7
+  pull: always
+  image: python:2.7
+  commands:
+  - pip install -q ansible~=2.7
+  - pip install -q -r tests/requirements.txt
+  - pip install -q .
+  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
+  depends_on:
+  - clone
+
+---
+kind: pipeline
+name: python-3.5
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: ansible2.4
   pull: always
   image: python:3.5
   commands:
-  - pip install tox -q
-  - "tox -e $(tox -l | grep py35 | xargs | sed 's/ /,/g') -q"
+  - pip install -q ansible~=2.4
+  - pip install -q -r tests/requirements.txt
+  - pip install -q .
+  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
   depends_on:
   - clone
 
-- name: python3.6
+- name: ansible2.5
+  pull: always
+  image: python:3.5
+  commands:
+  - pip install -q ansible~=2.5
+  - pip install -q -r tests/requirements.txt
+  - pip install -q .
+  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
+  depends_on:
+  - clone
+
+- name: ansible2.6
+  pull: always
+  image: python:3.5
+  commands:
+  - pip install -q ansible~=2.6
+  - pip install -q -r tests/requirements.txt
+  - pip install -q .
+  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
+  depends_on:
+  - clone
+
+- name: ansible2.7
+  pull: always
+  image: python:3.5
+  commands:
+  - pip install -q ansible~=2.7
+  - pip install -q -r tests/requirements.txt
+  - pip install -q .
+  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
+  depends_on:
+  - clone
+
+---
+kind: pipeline
+name: python-3.6
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: ansible2.4
   pull: always
   image: python:3.6
   commands:
-  - pip install tox -q
-  - "tox -e $(tox -l | grep py36 | xargs | sed 's/ /,/g') -q"
+  - pip install -q ansible~=2.4
+  - pip install -q -r tests/requirements.txt
+  - pip install -q .
+  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
   depends_on:
   - clone
 
-- name: python3.7
+- name: ansible2.5
+  pull: always
+  image: python:3.6
+  commands:
+  - pip install -q ansible~=2.5
+  - pip install -q -r tests/requirements.txt
+  - pip install -q .
+  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
+  depends_on:
+  - clone
+
+- name: ansible2.6
+  pull: always
+  image: python:3.6
+  commands:
+  - pip install -q ansible~=2.6
+  - pip install -q -r tests/requirements.txt
+  - pip install -q .
+  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
+  depends_on:
+  - clone
+
+- name: ansible2.7
+  pull: always
+  image: python:3.6
+  commands:
+  - pip install -q ansible~=2.7
+  - pip install -q -r tests/requirements.txt
+  - pip install -q .
+  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
+  depends_on:
+  - clone
+
+---
+kind: pipeline
+name: python-3.7
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: ansible2.4
   pull: always
   image: python:3.7
   commands:
-  - pip install tox -q
-  - "tox -e $(tox -l | grep py37 | xargs | sed 's/ /,/g') -q"
+  - pip install -q ansible~=2.4
+  - pip install -q -r tests/requirements.txt
+  - pip install -q .
+  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
+  depends_on:
+  - clone
+
+- name: ansible2.5
+  pull: always
+  image: python:3.7
+  commands:
+  - pip install -q ansible~=2.5
+  - pip install -q -r tests/requirements.txt
+  - pip install -q .
+  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
+  depends_on:
+  - clone
+
+- name: ansible2.6
+  pull: always
+  image: python:3.7
+  commands:
+  - pip install -q ansible~=2.6
+  - pip install -q -r tests/requirements.txt
+  - pip install -q .
+  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
+  depends_on:
+  - clone
+
+- name: ansible2.7
+  pull: always
+  image: python:3.7
+  commands:
+  - pip install -q ansible~=2.7
+  - pip install -q -r tests/requirements.txt
+  - pip install -q .
+  - ansible-later -c tests/config/config.ini tests/data/yaml_success.yml
   depends_on:
   - clone
 
@@ -105,7 +272,10 @@ steps:
     - tag
 
 depends_on:
-- testing
+- python-2.7
+- python-3.5
+- python-3.6
+- python-3.7
 
 ---
 kind: pipeline

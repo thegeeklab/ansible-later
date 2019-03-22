@@ -1,0 +1,5 @@
+flake8
+pep8-naming
+wheel
+flake8-colors
+pytest
