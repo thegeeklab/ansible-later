@@ -131,6 +131,7 @@ trigger:
   status:
   - success
   - failure
+  - skipped
 
 depends_on:
 - build

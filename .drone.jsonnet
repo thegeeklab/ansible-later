@@ -118,7 +118,7 @@ local PipelineNotifications = {
     "build",
   ],
   trigger: {
-    status: [ "success", "failure" ],
+    status: [ "success", "failure", "skipped" ],
   },
 };
 
