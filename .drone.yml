@@ -128,9 +128,6 @@ steps:
       from_secret: matrix_username
 
 trigger:
-  event:
-  - push
-  - tag
   status:
   - success
   - failure

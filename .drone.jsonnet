@@ -118,7 +118,6 @@ local PipelineNotifications = {
     "build",
   ],
   trigger: {
-    event: [ "push", "tag" ],
     status: [ "success", "failure" ],
   },
 };
