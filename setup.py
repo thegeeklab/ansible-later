@@ -65,7 +65,8 @@ setup(
         "unidiff",
         "flake8",
         "yamllint",
-        "nested-lookup"
+        "nested-lookup",
+        "colorama"
     ],
     entry_points={
         'console_scripts': [

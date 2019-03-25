@@ -3,42 +3,51 @@ from __future__ import print_function
 import importlib
 import logging
 import os
-import subprocess
 import sys
 import re
+import colorama
 
 from distutils.version import LooseVersion
+from ansible.module_utils.parsing.convert_bool import boolean as to_bool
 
 try:
     import ConfigParser as configparser
 except ImportError:
     import configparser
 
-try:
-    from ansible.utils.color import stringc
-except ImportError:
-    from ansible.color import stringc
 
-# from yamlhelper import *
+def should_do_markup():
+    py_colors = os.environ.get('PY_COLORS', None)
+    if py_colors is not None:
+        return to_bool(py_colors, strict=False)
+
+    return sys.stdout.isatty() and os.environ.get('TERM') != 'dumb'
+
+
+colorama.init(autoreset=True, strip=not should_do_markup())
 
 
 def abort(message, file=sys.stderr):
-    print(stringc("FATAL: %s" % message, 'red'), file=file)
+    return color_text(colorama.Fore.RED, "FATAL: {}".format(message))
     sys.exit(1)
 
 
 def error(message, file=sys.stderr):
-    print(stringc("ERROR: %s" % message, 'red'), file=file)
+    return color_text(colorama.Fore.RED, "ERROR: {}".format(message))
 
 
 def warn(message, settings, file=sys.stdout):
     if settings.log_level <= logging.WARNING:
-        print(stringc("WARN: %s" % message, 'yellow'), file=file)
+        return color_text(colorama.Fore.YELLOW, "WARN: {}".format(message))
 
 
 def info(message, settings, file=sys.stdout):
     if settings.log_level <= logging.INFO:
-        print(stringc("INFO: %s" % message, 'green'), file=file)
+        return color_text(colorama.Fore.BLUE, "INFO: {}".format(message))
+
+
+def color_text(color, msg):
+    print('{}{}{}'.format(color, msg, colorama.Style.RESET_ALL))
 
 
 def count_spaces(c_string):
@@ -104,18 +113,6 @@ def read_config(config_file):
     return Settings(config, config_file)
 
 
-def execute(cmd):
-    result = ExecuteResult()
-    encoding = 'UTF-8'
-    env = dict(os.environ)
-    env['PYTHONIOENCODING'] = encoding
-    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
-                            stderr=subprocess.STDOUT, env=env)
-    result.output = proc.communicate()[0].decode(encoding)
-    result.rc = proc.returncode
-    return result
-
-
 class Settings(object):
     def __init__(self, config, config_file):
         self.rulesdir = None
@@ -130,7 +127,3 @@ class Settings(object):
             self.custom_modules = [x.strip() for x in modules.split(',')]
 
         self.configfile = config_file
-
-
-class ExecuteResult(object):
-    pass

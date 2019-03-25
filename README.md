@@ -4,6 +4,7 @@
 [![](https://img.shields.io/pypi/pyversions/ansible-later.svg)](https://pypi.org/project/ansible-later/)
 [![](https://img.shields.io/pypi/status/ansible-later.svg)](https://pypi.org/project/ansible-later/)
 [![](https://img.shields.io/pypi/v/ansible-later.svg)](https://pypi.org/project/ansible-later/)
+[![codecov](https://codecov.io/gh/xoxys/ansible-later/branch/master/graph/badge.svg)](https://codecov.io/gh/xoxys/ansible-later)
 
 This is a fork of Will Thames [ansible-review](https://github.com/willthames/ansible-review) so credits goes to him
 for his work on ansible-review and ansible-lint.
@@ -18,20 +19,22 @@ The project name is an acronym for **L**ovely **A**utomation **TE**sting f**R**m
 
 ## Table of Content
 
-- [Setup](#setup)
-  - [Using pip](#using-pip)
-  - [From source](#from-source)
-- [Usage](#usage)
-  - [Configuration](#configuration)
-  - [Review a git repositories](#review-a-git-repositories)
-  - [Review a list of files](#review-a-list-of-files)
-  - [Buildin rules](#buildin-rules)
-- [Build your own](#build-your-own)
-  - [The standards file](#the-standards-file)
-  - [Candidates](#candidates)
-  - [Minimal standards checks](#minimal-standards-checks)
-- [License](#license)
-- [Maintainers and Contributors](#maintainers-and-contributors)
+- [ansible-later](#ansible-later)
+  - [Table of Content](#table-of-content)
+    - [Setup](#setup)
+      - [Using pip](#using-pip)
+      - [From source](#from-source)
+    - [Usage](#usage)
+      - [Configuration](#configuration)
+      - [Review a git repositories](#review-a-git-repositories)
+      - [Review a list of files](#review-a-list-of-files)
+      - [Buildin rules](#buildin-rules)
+    - [Build your own](#build-your-own)
+      - [The standards file](#the-standards-file)
+      - [Candidates](#candidates)
+      - [Minimal standards checks](#minimal-standards-checks)
+    - [License](#license)
+    - [Maintainers and Contributors](#maintainers-and-contributors)
 
 ---
 
