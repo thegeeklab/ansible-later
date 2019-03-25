@@ -80,7 +80,8 @@ steps:
   image: python:3.7
   commands:
   - pip install codecov
-  - codecov
+  - "coverage combine .tox/py*/.coverage"
+  - codecov --required
   environment:
     CODECOV_TOKEN:
       from_secret: codecov_token

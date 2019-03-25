@@ -68,7 +68,8 @@ local PipelineTesting = {
       },
       commands: [
         "pip install codecov",
-        "codecov"
+        "coverage combine .tox/py*/.coverage",
+        "codecov --required"
       ],
       depends_on: [
         "python2.7-ansible",
