@@ -11,6 +11,7 @@ from ansiblelater.utils.rulehelper import run_yamllint
 
 
 def check_yaml_has_content(candidate, settings):
+    Testvar = "test"
     lines, errors = get_normalized_yaml(candidate, settings)
     description = "the file appears to have no useful content"
 

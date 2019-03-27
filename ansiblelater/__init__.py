@@ -1,3 +1,5 @@
+"""Default package."""
+
 __author__ = "Robert Kaussow"
 __project__ = "ansible-later"
 __version__ = "0.1.5"
@@ -6,18 +8,17 @@ __maintainer__ = "Robert Kaussow"
 __email__ = "mail@geeklabor.de"
 __status__ = "Production"
 
-
-import re
-import os
 import codecs
-import ansible
+import os
+import re
 from distutils.version import LooseVersion
-from ansiblelater.utils import info, warn, abort, error
-from ansiblelater.utils import read_standards
-from ansiblelater.utils import get_property
-from ansiblelater.utils import standards_latest
-from ansiblelater.utils import is_line_in_ranges
-from ansiblelater.utils import lines_ranges
+
+import ansible
+
+from ansiblelater.utils import (abort, error, get_property, info,
+                                is_line_in_ranges, lines_ranges,
+                                read_standards, standards_latest, warn)
+from .settings import Settings
 
 try:
     # Ansible 2.4 import of module loader
@@ -29,40 +30,87 @@ except ImportError:
         from ansible.utils import module_finder as module_loader
 
 
-class AnsibleReviewFormatter(object):
-    def format(self, match):
-        formatstr = u"{0}:{1}: [{2}] {3} {4}"
-        return formatstr.format(match.filename,
-                                match.linenumber,
-                                match.rule.id,
-                                match.message,
-                                match.line
-                                )
+config = Settings()
 
 
 class Standard(object):
+    """
+    Standard definition for all defined rules.
+
+    Later lookup the config file for a path to a rules directory
+    or fallback to default `ansiblelater/examples/*`.
+    """
+
     def __init__(self, standard_dict):
-        if 'id' not in standard_dict:
-            standard_dict.update(id='')
+        """
+        Initialize a new standard object and returns None.
+
+        :param standard_dict: Dictionary object containing all neseccary attributes
+        """
+        if "id" not in standard_dict:
+            standard_dict.update(id="")
         else:
-            standard_dict.update(id='[{}] '.format(standard_dict.get("id")))
+            standard_dict.update(id="[{}] ".format(standard_dict.get("id")))
+
         self.id = standard_dict.get("id")
         self.name = standard_dict.get("name")
         self.version = standard_dict.get("version")
         self.check = standard_dict.get("check")
         self.types = standard_dict.get("types")
 
-    def __repr__(self):
+    def __repr__(self): # noqa
         return "Standard: %s (version: %s, types: %s)" % (
                self.name, self.version, self.types)
 
 
+class Candidate(object):
+    """
+    Meta object for all files which later has to process.
+
+    Each file passed to later will be classified by type and
+    bundled with necessary meta informations for rule processing.
+    """
+
+    def __init__(self, filename):
+        self.path = filename
+        self.binary = False
+        self.vault = False
+
+        try:
+            self.version = find_version(filename)
+            with codecs.open(filename, mode="rb", encoding="utf-8") as f:
+                if f.readline().startswith("$ANSIBLE_VAULT"):
+                    self.vault = True
+        except UnicodeDecodeError:
+            self.binary = True
+
+        self.filetype = type(self).__name__.lower()
+        self.expected_version = True
+
+    def review(self, settings, lines=None):
+        return candidate_review(self, settings, lines)
+
+    def __repr__(self): # noqa
+        return "%s (%s)" % (type(self).__name__, self.path)
+
+    def __getitem__(self, item): # noqa
+        return self.__dict__.get(item)
+
+
 class Error(object):
+    """Default error object created if a rule failed."""
+
     def __init__(self, lineno, message):
+        """
+        Initialize a new error object and returns None.
+
+        :param lineno: Line number where the error from de rule occures
+        :param message: Detailed error description provided by the rule
+        """
         self.lineno = lineno
         self.message = message
 
-    def __repr__(self):
+    def __repr__(self): # noqa
         if self.lineno:
             return "%s: %s" % (self.lineno, self.message)
         else:
@@ -79,33 +127,6 @@ class Result(object):
                           for error in self.errors])
 
 
-class Candidate(object):
-    def __init__(self, filename):
-        self.path = filename
-        self.binary = False
-        self.vault = False
-
-        try:
-            self.version = find_version(filename)
-            with codecs.open(filename, mode='rb', encoding='utf-8') as f:
-                if f.readline().startswith("$ANSIBLE_VAULT"):
-                    self.vault = True
-        except UnicodeDecodeError:
-            self.binary = True
-
-        self.filetype = type(self).__name__.lower()
-        self.expected_version = True
-
-    def review(self, settings, lines=None):
-        return candidate_review(self, settings, lines)
-
-    def __repr__(self):
-        return "%s (%s)" % (type(self).__name__, self.path)
-
-    def __getitem__(self, item):
-        return self.__dict__.get(item)
-
-
 class RoleFile(Candidate):
     def __init__(self, filename):
         super(RoleFile, self).__init__(filename)
@@ -118,7 +139,7 @@ class RoleFile(Candidate):
                 if self.version:
                     break
             parentdir = os.path.dirname(parentdir)
-        role_modules = os.path.join(parentdir, 'library')
+        role_modules = os.path.join(parentdir, "library")
         if os.path.exists(role_modules):
             module_loader.add_directory(role_modules)
 
@@ -130,13 +151,13 @@ class Playbook(Candidate):
 class Task(RoleFile):
     def __init__(self, filename):
         super(Task, self).__init__(filename)
-        self.filetype = 'tasks'
+        self.filetype = "tasks"
 
 
 class Handler(RoleFile):
     def __init__(self, filename):
         super(Handler, self).__init__(filename)
-        self.filetype = 'handlers'
+        self.filetype = "handlers"
 
 
 class Vars(Candidate):
@@ -201,34 +222,34 @@ class Rolesfile(Unversioned):
 def classify(filename):
     parentdir = os.path.basename(os.path.dirname(filename))
 
-    if parentdir in ['tasks']:
+    if parentdir in ["tasks"]:
         return Task(filename)
-    if parentdir in ['handlers']:
+    if parentdir in ["handlers"]:
         return Handler(filename)
-    if parentdir in ['vars', 'defaults']:
+    if parentdir in ["vars", "defaults"]:
         return RoleVars(filename)
-    if 'group_vars' in filename.split(os.sep):
+    if "group_vars" in filename.split(os.sep):
         return GroupVars(filename)
-    if 'host_vars' in filename.split(os.sep):
+    if "host_vars" in filename.split(os.sep):
         return HostVars(filename)
-    if parentdir in ['meta']:
+    if parentdir in ["meta"]:
         return Meta(filename)
-    if parentdir in ['library', 'lookup_plugins', 'callback_plugins',
-                     'filter_plugins'] or filename.endswith('.py'):
+    if parentdir in ["library", "lookup_plugins", "callback_plugins",
+                     "filter_plugins"] or filename.endswith(".py"):
         return Code(filename)
-    if 'inventory' in filename or 'hosts' in filename or parentdir in ['inventory']:
+    if "inventory" in filename or "hosts" in filename or parentdir in ["inventory"]:
         return Inventory(filename)
-    if 'rolesfile' in filename or 'requirements' in filename:
+    if "rolesfile" in filename or "requirements" in filename:
         return Rolesfile(filename)
-    if 'Makefile' in filename:
+    if "Makefile" in filename:
         return Makefile(filename)
-    if 'templates' in filename.split(os.sep) or filename.endswith('.j2'):
+    if "templates" in filename.split(os.sep) or filename.endswith(".j2"):
         return Template(filename)
-    if 'files' in filename.split(os.sep):
+    if "files" in filename.split(os.sep):
         return File(filename)
-    if filename.endswith('.yml') or filename.endswith('.yaml'):
+    if filename.endswith(".yml") or filename.endswith(".yaml"):
         return Playbook(filename)
-    if 'README' in filename:
+    if "README" in filename:
         return Doc(filename)
     return None
 
@@ -236,13 +257,13 @@ def classify(filename):
 def candidate_review(candidate, settings, lines=None):
     errors = 0
     standards = read_standards(settings)
-    if getattr(standards, 'ansible_min_version', None) and \
+    if getattr(standards, "ansible_min_version", None) and \
             LooseVersion(standards.ansible_min_version) > LooseVersion(ansible.__version__):
         raise SystemExit("Standards require ansible version %s (current version %s). "
                          "Please upgrade ansible." %
                          (standards.ansible_min_version, ansible.__version__))
 
-    if getattr(standards, 'ansible_review_min_version', None) and \
+    if getattr(standards, "ansible_review_min_version", None) and \
             LooseVersion(standards.ansible_review_min_version) > LooseVersion(
                 get_property("__version__")):
         raise SystemExit("Standards require ansible-later version %s (current version %s). "
@@ -269,6 +290,7 @@ def candidate_review(candidate, settings, lines=None):
          settings)
 
     for standard in standards.standards:
+        print(type(standard))
         if type(candidate).__name__.lower() not in standard.types:
             continue
         if settings.standards_filter and standard.name not in settings.standards_filter:
@@ -305,9 +327,10 @@ def candidate_review(candidate, settings, lines=None):
 def find_version(filename, version_regex=r"^# Standards:\s*([\d.]+)"):
     version_re = re.compile(version_regex)
 
-    with codecs.open(filename, mode='rb', encoding='utf-8') as f:
+    with codecs.open(filename, mode="rb", encoding="utf-8") as f:
         for line in f:
             match = version_re.match(line)
             if match:
                 return match.group(1)
     return None
+
