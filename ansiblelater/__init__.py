@@ -14,11 +14,13 @@ import re
 from distutils.version import LooseVersion
 
 import ansible
+from appdirs import AppDirs
 
 from ansiblelater.utils import (abort, error, get_property, info,
                                 is_line_in_ranges, lines_ranges,
                                 read_standards, standards_latest, warn)
-from .settings import Settings
+
+
 
 try:
     # Ansible 2.4 import of module loader
@@ -29,8 +31,13 @@ except ImportError:
     except ImportError:
         from ansible.utils import module_finder as module_loader
 
+try:
+    import ConfigParser as configparser
+except ImportError:
+    import configparser
 
-config = Settings()
+
+
 
 
 class Standard(object):
@@ -333,4 +340,3 @@ def find_version(filename, version_regex=r"^# Standards:\s*([\d.]+)"):
             if match:
                 return match.group(1)
     return None
-

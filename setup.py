@@ -66,7 +66,8 @@ setup(
         "flake8",
         "yamllint",
         "nested-lookup",
-        "colorama"
+        "colorama",
+        "anyconfig",
     ],
     entry_points={
         'console_scripts': [

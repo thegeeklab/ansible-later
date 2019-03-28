@@ -4,33 +4,38 @@ import logging
 import optparse
 import os
 import sys
+
 from appdirs import AppDirs
 from pkg_resources import resource_filename
-from ansiblelater import classify
-from ansiblelater import config
-from ansiblelater.utils import info, warn, get_property
+
+from ansiblelater import classify, settings
+from ansiblelater.utils import get_property, info, warn
+
+from .settings import Settings
 
 
 def main():
     config_dir = AppDirs("ansible-later").user_config_dir
-    default_config_file = os.path.join(config_dir, "config.ini")
+    default_config_file = os.path.join(config_dir, "config.yml")
 
     parser = optparse.OptionParser("%prog playbook_file|role_file|inventory_file",
                                    version="%prog " + get_property("__version__"))
-    parser.add_option('-c', dest='configfile', default=default_config_file,
+    parser.add_option('-c', dest='config_file', default=default_config_file,
                       help="Location of configuration file: [%s]" % default_config_file)
-    parser.add_option('-d', dest='rulesdir',
+    parser.add_option('-d', dest='rules_dir',
                       help="Location of standards rules")
-    parser.add_option('-q', dest='log_level', action="store_const", default=logging.WARN,
+    parser.add_option('-q', dest='log_level', action="store_const",
                       const=logging.ERROR, help="Only output errors")
     parser.add_option('-s', dest='standards_filter', action='append',
                       help="limit standards to specific names")
-    parser.add_option('-v', dest='log_level', action="store_const", default=logging.WARN,
-                      const=logging.INFO, help="Show more verbose output")
+    parser.add_option('-v', '--verbose', dest='log_level', action="count",
+                        help="Show more verbose output")
 
     options, args = parser.parse_args(sys.argv[1:])
 
-    print(config.rulesdir)
+    settings = Settings(options)
+
+    # print(settings.rulesdir)
     # settings = read_config(options.configfile)
 
     # # Merge CLI options with config options. CLI options override config options.

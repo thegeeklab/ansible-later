@@ -1,5 +1,6 @@
 from __future__ import print_function
 
+import contextlib
 import importlib
 import logging
 import os
@@ -7,6 +8,7 @@ import sys
 import re
 import colorama
 
+import yaml
 from distutils.version import LooseVersion
 from ansible.module_utils.parsing.convert_bool import boolean as to_bool
 
@@ -112,3 +114,26 @@ def read_config(config_file):
 
     return Settings(config, config_file)
 
+
+def safe_load(string):
+    """
+    Parse the provided string returns a dict.
+    :param string: A string to be parsed.
+    :return: dict
+    """
+    try:
+        return yaml.safe_load(string) or {}
+    except yaml.scanner.ScannerError as e:
+        print(str(e))
+
+
+@contextlib.contextmanager
+def open_file(filename, mode='r'):
+    """
+    Open the provide file safely and returns a file type.
+    :param filename: A string containing an absolute path to the file to open.
+    :param mode: A string describing the way in which the file will be used.
+    :return: file type
+    """
+    with open(filename, mode) as stream:
+        yield stream
