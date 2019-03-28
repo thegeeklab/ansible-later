@@ -1,42 +1,60 @@
-import json
 import logging
 import os
+import six
 
 import anyconfig
+from appdirs import AppDirs
 from pkg_resources import resource_filename
 
-from ansiblelater import utils
+from ansiblelater import utils, logger
 
-try:
-    import ConfigParser as configparser
-except ImportError:
-    import configparser
+config_dir = AppDirs("ansible-later").user_config_dir
+default_config_file = os.path.join(config_dir, "config.yml")
+
+logger = logger.get_logger(__name__)
 
 
+class NewInitCaller(type):
+    def __call__(cls, *args, **kwargs):
+        obj = type.__call__(cls, *args, **kwargs)
+        obj.after_init()
+        return obj
+
+
+@six.add_metaclass(NewInitCaller)
 class Settings(object):
-    def __init__(self, args={}):
-        self.args = self._get_args(args)
+    def __init__(self, args={}, config_file=default_config_file):
+        self.args = args
+        self.config_file = config_file
         self.config = self._get_config()
 
-    def _get_args(self, args):
-        # Override correct log level from argparse
-        levels = [logging.WARNING, logging.INFO, logging.DEBUG]
-        if args.log_level:
-            args.log_level = levels[min(len(levels) - 1, args.log_level - 1)]
+    def set_args(self, args={}):
+        self.config_file = args.get("config_file") or default_config_file
 
-        args_dict = dict(filter(lambda item: item[1] is not None, args.__dict__.items()))
-        return args_dict
+        args.pop("config_file", None)
+        args = dict(filter(lambda item: item[1] is not None, args.items()))
+
+        args_dict = {}
+        for key, value in args.items():
+            args_dict = utils.add_dict_branch(args_dict, key.split("."), value)
+
+        self.args = args_dict
+        self.config = self._get_config()
+        self._validate()
 
     def _get_config(self):
         defaults = self._get_defaults()
-        config_file = self.args.get('config_file')
+        config_file = self.config_file
+        cli_options = self.args
 
         if config_file and os.path.exists(config_file):
             with utils.open_file(config_file) as stream:
                 s = stream.read()
                 anyconfig.merge(defaults, utils.safe_load(s), ac_merge=anyconfig.MS_DICTS)
 
-        print(json.dumps(defaults, indent=4, sort_keys=True))
+        if cli_options:
+            anyconfig.merge(defaults, cli_options, ac_merge=anyconfig.MS_DICTS)
+
         return defaults
 
     def _get_defaults(self):
@@ -44,13 +62,21 @@ class Settings(object):
 
         return {
             'rules': {
-                'standards': self.args.get('rules_dir', rules_dir),
-                'standards_filter': [],
+                'standards': rules_dir,
+                'filter': [],
             },
             'logging': {
-                'level': self.args.get('log_level', logging.WARN),
+                'level': logging.WARN,
             },
             'ansible': {
                 'custom_modules': [],
             }
         }
+
+    def after_init(self):
+        self.config = self._get_config()
+        self._validate()
+
+    def _validate(self):
+        logger.setLevel(self.config["logging"]["level"])
+

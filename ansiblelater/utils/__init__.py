@@ -17,41 +17,6 @@ try:
 except ImportError:
     import configparser
 
-
-def should_do_markup():
-    py_colors = os.environ.get('PY_COLORS', None)
-    if py_colors is not None:
-        return to_bool(py_colors, strict=False)
-
-    return sys.stdout.isatty() and os.environ.get('TERM') != 'dumb'
-
-
-colorama.init(autoreset=True, strip=not should_do_markup())
-
-
-def abort(message, file=sys.stderr):
-    return color_text(colorama.Fore.RED, "FATAL: {}".format(message))
-    sys.exit(1)
-
-
-def error(message, file=sys.stderr):
-    return color_text(colorama.Fore.RED, "ERROR: {}".format(message))
-
-
-def warn(message, settings, file=sys.stdout):
-    if settings.log_level <= logging.WARNING:
-        return color_text(colorama.Fore.YELLOW, "WARN: {}".format(message))
-
-
-def info(message, settings, file=sys.stdout):
-    if settings.log_level <= logging.INFO:
-        return color_text(colorama.Fore.BLUE, "INFO: {}".format(message))
-
-
-def color_text(color, msg):
-    print('{}{}{}'.format(color, msg, colorama.Style.RESET_ALL))
-
-
 def count_spaces(c_string):
     leading_spaces = 0
     trailing_spaces = 0
@@ -137,3 +102,13 @@ def open_file(filename, mode='r'):
     """
     with open(filename, mode) as stream:
         yield stream
+
+
+def add_dict_branch(tree, vector, value):
+    key = vector[0]
+    tree[key] = value \
+        if len(vector) == 1 \
+        else add_dict_branch(tree[key] if key in tree else {},
+                             vector[1:],
+                             value)
+    return tree

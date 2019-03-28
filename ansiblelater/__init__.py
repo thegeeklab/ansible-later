@@ -16,11 +16,11 @@ from distutils.version import LooseVersion
 import ansible
 from appdirs import AppDirs
 
-from ansiblelater.utils import (abort, error, get_property, info,
+from . import logger
+from .settings import Settings
+from ansiblelater.utils import (get_property,
                                 is_line_in_ranges, lines_ranges,
-                                read_standards, standards_latest, warn)
-
-
+                                read_standards, standards_latest)
 
 try:
     # Ansible 2.4 import of module loader
@@ -31,13 +31,8 @@ except ImportError:
     except ImportError:
         from ansible.utils import module_finder as module_loader
 
-try:
-    import ConfigParser as configparser
-except ImportError:
-    import configparser
-
-
-
+settings = Settings()
+logger = logger.get_logger(__name__, settings.config["logging"]["level"])
 
 
 class Standard(object):
@@ -281,16 +276,16 @@ def candidate_review(candidate, settings, lines=None):
         candidate.version = standards_latest(standards.standards)
         if candidate.expected_version:
             if isinstance(candidate, RoleFile):
-                warn("%s %s is in a role that contains a meta/main.yml without a declared "
-                     "standards version. "
-                     "Using latest standards version %s" %
-                     (type(candidate).__name__, candidate.path, candidate.version),
-                     settings)
+                logger.warn("%s %s is in a role that contains a meta/main.yml without a declared "
+                            "standards version. "
+                            "Using latest standards version %s" %
+                            (type(candidate).__name__, candidate.path, candidate.version),
+                            settings)
             else:
-                warn("%s %s does not present standards version. "
-                     "Using latest standards version %s" %
-                     (type(candidate).__name__, candidate.path, candidate.version),
-                     settings)
+                logger.warn("%s %s does not present standards version. "
+                            "Using latest standards version %s" %
+                            (type(candidate).__name__, candidate.path, candidate.version),
+                            settings)
 
     info("%s %s declares standards version %s" %
          (type(candidate).__name__, candidate.path, candidate.version),

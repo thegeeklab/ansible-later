@@ -1,56 +1,45 @@
 #!/usr/bin/env python
 
+import argparse
+import json
 import logging
-import optparse
 import os
 import sys
 
-from appdirs import AppDirs
-from pkg_resources import resource_filename
+from ansiblelater import __version__, settings, logger
+from ansiblelater.utils import get_property
 
-from ansiblelater import classify, settings
-from ansiblelater.utils import get_property, info, warn
-
-from .settings import Settings
+# from .settings import Settings
 
 
 def main():
-    config_dir = AppDirs("ansible-later").user_config_dir
-    default_config_file = os.path.join(config_dir, "config.yml")
-
-    parser = optparse.OptionParser("%prog playbook_file|role_file|inventory_file",
-                                   version="%prog " + get_property("__version__"))
-    parser.add_option('-c', dest='config_file', default=default_config_file,
-                      help="Location of configuration file: [%s]" % default_config_file)
-    parser.add_option('-d', dest='rules_dir',
-                      help="Location of standards rules")
-    parser.add_option('-q', dest='log_level', action="store_const",
-                      const=logging.ERROR, help="Only output errors")
-    parser.add_option('-s', dest='standards_filter', action='append',
-                      help="limit standards to specific names")
-    parser.add_option('-v', '--verbose', dest='log_level', action="count",
+    parser = argparse.ArgumentParser(
+        description="Validate ansible files against best pratice guideline")
+    parser.add_argument('-c', dest='config_file',
+                        help="Location of configuration file: [%s]" % settings.config_file)
+    parser.add_argument('-d', dest='rules.standards',
+                        help="Location of standards rules")
+    parser.add_argument('-q', dest='logging.level', action="store_const",
+                        const=logging.ERROR, help="Only output errors")
+    parser.add_argument('-s', dest='rules.filter', action='append',
+                        help="limit standards to specific names")
+    parser.add_argument('-v', '--verbose', dest='logging.level', action="count",
                         help="Show more verbose output")
+    parser.add_argument('--version', action='version', version='%(prog)s {}'.format(__version__))
 
-    options, args = parser.parse_args(sys.argv[1:])
+    args = parser.parse_args().__dict__
 
-    settings = Settings(options)
+    # Override correct log level from argparse
+    levels = [logging.WARNING, logging.INFO, logging.DEBUG]
+    if args.get("logging.level"):
+        args["logging.level"] = levels[min(len(levels) - 1, args["logging.level"] - 1)]
 
-    # print(settings.rulesdir)
-    # settings = read_config(options.configfile)
+    settings.set_args(args)
 
-    # # Merge CLI options with config options. CLI options override config options.
-    # for key, value in options.__dict__.items():
-    #     if value:
-    #         setattr(settings, key, value)
+    # print(json.dumps(settings.config, indent=4, sort_keys=True))
+    # print(settings.config["logging"]["level"])
 
-    # if os.path.exists(settings.configfile):
-    #     info("Using configuration file: %s" % settings.configfile, settings)
-    # else:
-    #     warn("No configuration file found at %s" % settings.configfile, settings, file=sys.stderr)
-    #     if not settings.rulesdir:
-    #         rules_dir = os.path.join(resource_filename('ansiblelater', 'examples'))
-    #         warn("Using example standards found at %s" % rules_dir, settings, file=sys.stderr)
-    #         settings.rulesdir = rules_dir
+
 
     # if len(args) == 0:
     #     candidates = []
