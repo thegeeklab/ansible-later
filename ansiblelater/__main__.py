@@ -4,42 +4,30 @@ import argparse
 import json
 import logging
 import os
-import sys
 
-from ansiblelater import __version__, settings, logger
-from ansiblelater.utils import get_property
-
-# from .settings import Settings
+from ansiblelater import __version__
+from ansiblelater.command import base
 
 
 def main():
     parser = argparse.ArgumentParser(
         description="Validate ansible files against best pratice guideline")
-    parser.add_argument('-c', dest='config_file',
-                        help="Location of configuration file: [%s]" % settings.config_file)
-    parser.add_argument('-d', dest='rules.standards',
+    parser.add_argument("-c", dest="config_file",
+                        help="Location of configuration file")
+    parser.add_argument("-d", dest="rules.standards",
                         help="Location of standards rules")
-    parser.add_argument('-q', dest='logging.level', action="store_const",
+    parser.add_argument("-q", dest="logging.level", action="store_const",
                         const=logging.ERROR, help="Only output errors")
-    parser.add_argument('-s', dest='rules.filter', action='append',
+    parser.add_argument("-s", dest="rules.filter", action="append",
                         help="limit standards to specific names")
-    parser.add_argument('-v', '--verbose', dest='logging.level', action="count",
+    parser.add_argument("-v", "--verbose", dest="logging.level", action="count",
                         help="Show more verbose output")
-    parser.add_argument('--version', action='version', version='%(prog)s {}'.format(__version__))
+    parser.add_argument("--version", action="version", version="%(prog)s {}".format(__version__))
 
     args = parser.parse_args().__dict__
 
-    # Override correct log level from argparse
-    levels = [logging.WARNING, logging.INFO, logging.DEBUG]
-    if args.get("logging.level"):
-        args["logging.level"] = levels[min(len(levels) - 1, args["logging.level"] - 1)]
-
-    settings.set_args(args)
-
-    # print(json.dumps(settings.config, indent=4, sort_keys=True))
-    # print(settings.config["logging"]["level"])
-
-
+    settings = base.get_settings(args)
+    print(json.dumps(settings.config, indent=4, sort_keys=True))
 
     # if len(args) == 0:
     #     candidates = []

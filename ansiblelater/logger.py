@@ -1,33 +1,40 @@
+"""Global logging helpers."""
+
 import logging
 import os
 import sys
 
 import colorama
-from pythonjsonlogger import jsonlogger
 from ansible.module_utils.parsing.convert_bool import boolean as to_bool
+from pythonjsonlogger import jsonlogger
 
 
-def should_do_markup():
-    py_colors = os.environ.get('PY_COLORS', None)
+def _should_do_markup():
+
+    py_colors = os.environ.get("PY_COLORS", None)
     if py_colors is not None:
         return to_bool(py_colors, strict=False)
 
-    return sys.stdout.isatty() and os.environ.get('TERM') != 'dumb'
+    return sys.stdout.isatty() and os.environ.get("TERM") != "dumb"
 
 
-colorama.init(autoreset=True, strip=not should_do_markup())
+colorama.init(autoreset=True, strip=not _should_do_markup())
 
 
 class LogFilter(object):
-    """
-    A custom log filter which excludes log messages above the logged
-    level.
-    """
+    """A custom log filter which excludes log messages above the logged level."""
 
     def __init__(self, level):
+        """
+        Initialize a new custom log filter.
+
+        :param level: Log level limit
+        :returns: None
+
+        """
         self.__level = level
 
-    def filter(self, logRecord):  # pragma: no cover
+    def filter(self, logRecord):  # noqa
         # https://docs.python.org/3/library/logging.html#logrecord-attributes
         return logRecord.levelno <= self.__level
 
@@ -35,17 +42,15 @@ class LogFilter(object):
 def get_logger(name=None, level=logging.DEBUG, json=False):
     """
     Build a logger with the given name and returns the logger.
-    :param name: The name for the logger. This is usually the module
-                 name, ``__name__``.
-    :return: logger object
-    """
 
+    :param name: The name for the logger. This is usually the module name, `__name__`.
+    :param level: Initialize the new logger with given log level.
+    :param json: Boolean flag to enable json formatted log output.
+    :return: logger object
+
+    """
     logger = logging.getLogger(name)
     logger.setLevel(level)
-    #handler = logging.StreamHandler()
-    #formatter = jsonlogger.JsonFormatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-    #formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-    #handler.setFormatter(formatter)
     logger.addHandler(_get_error_handler(json=json))
     logger.addHandler(_get_warn_handler(json=json))
     logger.addHandler(_get_info_handler(json=json))
@@ -58,10 +63,10 @@ def _get_error_handler(json=False):
     handler = logging.StreamHandler(sys.stderr)
     handler.setLevel(logging.ERROR)
     handler.addFilter(LogFilter(logging.ERROR))
-    handler.setFormatter(logging.Formatter(error('%(message)s')))
+    handler.setFormatter(logging.Formatter(error("%(message)s")))
 
     if json:
-        handler.setFormatter(jsonlogger.JsonFormatter('%(message)s'))
+        handler.setFormatter(jsonlogger.JsonFormatter("%(message)s"))
 
     return handler
 
@@ -70,10 +75,10 @@ def _get_warn_handler(json=False):
     handler = logging.StreamHandler(sys.stdout)
     handler.setLevel(logging.WARN)
     handler.addFilter(LogFilter(logging.WARN))
-    handler.setFormatter(logging.Formatter(warn('%(message)s')))
+    handler.setFormatter(logging.Formatter(warn("%(message)s")))
 
     if json:
-        handler.setFormatter(jsonlogger.JsonFormatter('%(message)s'))
+        handler.setFormatter(jsonlogger.JsonFormatter("%(message)s"))
 
     return handler
 
@@ -82,30 +87,41 @@ def _get_info_handler(json=False):
     handler = logging.StreamHandler(sys.stderr)
     handler.setLevel(logging.INFO)
     handler.addFilter(LogFilter(logging.INFO))
-    handler.setFormatter(logging.Formatter(info('%(message)s')))
+    handler.setFormatter(logging.Formatter(info("%(message)s")))
 
     if json:
-        handler.setFormatter(jsonlogger.JsonFormatter('%(message)s'))
+        handler.setFormatter(jsonlogger.JsonFormatter("%(message)s"))
 
     return handler
 
 
-def abort(message, file=sys.stderr):
+def abort(message):
+    """Format abort messages and return string."""
     return color_text(colorama.Fore.RED, "FATAL: {}".format(message))
-    sys.exit(1)
 
 
 def error(message):
+    """Format error messages and return string."""
     return color_text(colorama.Fore.RED, "ERROR: {}".format(message))
 
 
 def warn(message):
+    """Format warn messages and return string."""
     return color_text(colorama.Fore.YELLOW, "WARN: {}".format(message))
 
 
 def info(message):
+    """Format info messages and return string."""
     return color_text(colorama.Fore.BLUE, "INFO: {}".format(message))
 
 
 def color_text(color, msg):
-    return '{}{}{}'.format(color, msg, colorama.Style.RESET_ALL)
+    """
+    Colorize strings.
+
+    :param color: colorama color settings
+    :param msg: string to colorize
+    :returns: string
+
+    """
+    return "{}{}{}".format(color, msg, colorama.Style.RESET_ALL)

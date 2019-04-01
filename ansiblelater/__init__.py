@@ -14,13 +14,12 @@ import re
 from distutils.version import LooseVersion
 
 import ansible
-from appdirs import AppDirs
 
-from . import logger
-from .settings import Settings
-from ansiblelater.utils import (get_property,
-                                is_line_in_ranges, lines_ranges,
+from ansiblelater.utils import (get_property, is_line_in_ranges, lines_ranges,
                                 read_standards, standards_latest)
+from ansiblelater.exceptions import (  # noqa
+    LaterError, LaterAnsibleError
+)
 
 try:
     # Ansible 2.4 import of module loader
@@ -31,16 +30,13 @@ except ImportError:
     except ImportError:
         from ansible.utils import module_finder as module_loader
 
-settings = Settings()
-logger = logger.get_logger(__name__, settings.config["logging"]["level"])
-
 
 class Standard(object):
     """
     Standard definition for all defined rules.
 
     Later lookup the config file for a path to a rules directory
-    or fallback to default `ansiblelater/examples/*`.
+    or fallback to default `ansiblelater/data/*`.
     """
 
     def __init__(self, standard_dict):
@@ -48,6 +44,7 @@ class Standard(object):
         Initialize a new standard object and returns None.
 
         :param standard_dict: Dictionary object containing all neseccary attributes
+
         """
         if "id" not in standard_dict:
             standard_dict.update(id="")
@@ -108,6 +105,7 @@ class Error(object):
 
         :param lineno: Line number where the error from de rule occures
         :param message: Detailed error description provided by the rule
+
         """
         self.lineno = lineno
         self.message = message
@@ -208,7 +206,6 @@ class Doc(Unversioned):
     pass
 
 
-# For ease of checking files for tabs
 class Makefile(Unversioned):
     pass
 

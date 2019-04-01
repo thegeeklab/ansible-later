@@ -11,7 +11,7 @@ from .yamlhelper import normalize_task
 from .yamlhelper import action_tasks
 from .yamlhelper import parse_yaml_linenumbers
 from .yamlhelper import normalized_yaml
-from .exceptions import LaterError, LaterAnsibleError
+from ansiblelater import LaterError, LaterAnsibleError
 
 
 def get_tasks(candidate, settings):
