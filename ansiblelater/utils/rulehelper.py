@@ -6,12 +6,12 @@ from yamllint import linter
 from yamllint.config import YamlLintConfig
 # Workaround for import errors with ansble 2.1 and 2.3
 from ansible.parsing.dataloader import DataLoader
-from ansiblelater import Error
+from ansiblelater.command.review import Error
 from .yamlhelper import normalize_task
 from .yamlhelper import action_tasks
 from .yamlhelper import parse_yaml_linenumbers
 from .yamlhelper import normalized_yaml
-from ansiblelater import LaterError, LaterAnsibleError
+from ansiblelater.exceptions import LaterError, LaterAnsibleError
 
 
 def get_tasks(candidate, settings):

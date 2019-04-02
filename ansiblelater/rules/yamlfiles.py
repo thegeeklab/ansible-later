@@ -2,8 +2,7 @@ import codecs
 import yaml
 import os
 
-from ansiblelater import Result
-from ansiblelater import Error
+from ansiblelater.command.review import Result, Error
 from ansiblelater.utils.rulehelper import get_action_tasks
 from ansiblelater.utils.rulehelper import get_normalized_yaml
 from ansiblelater.utils.rulehelper import get_normalized_task

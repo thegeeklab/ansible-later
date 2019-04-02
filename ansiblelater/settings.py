@@ -13,8 +13,6 @@ from ansiblelater import logger, utils
 config_dir = AppDirs("ansible-later").user_config_dir
 default_config_file = os.path.join(config_dir, "config.yml")
 
-logger = logger.get_logger(__name__)
-
 
 class Settings(object):
     """
@@ -56,6 +54,8 @@ class Settings(object):
             tmp_dict["logging"]["level"] = levels[
                 min(len(levels) - 1, tmp_dict["logging"]["level"] - 1)]
 
+        tmp_dict["rules"]["files"] = self._get_files(tmp_dict)
+
         return tmp_dict
 
     def _get_config(self):
@@ -92,6 +92,17 @@ class Settings(object):
 
         return defaults
 
+    def _get_files(self, args):
+        if len(args["rules"]["files"]) == 0:
+            filelist = []
+            for root, dirs, files in os.walk("."):
+                for filename in files:
+                    filelist.append(os.path.join(root, filename))
+        else:
+            filelist = args["rules"]["files"]
+
+        return filelist
+
     def _validate(self, config):
         try:
             anyconfig.validate(config, self.schema, ac_schema_safe=False)
@@ -101,4 +112,4 @@ class Settings(object):
                 validator=e.validator,
                 schema=format_as_index(list(e.relative_schema_path)[:-1])
             )
-            logger.error("{schema}: {msg}".format(schema=schema_error, msg=e.message))
+            utils.sysexit_with_message("{schema}: {msg}".format(schema=schema_error, msg=e.message))

@@ -54,6 +54,7 @@ def get_logger(name=None, level=logging.DEBUG, json=False):
     logger.addHandler(_get_error_handler(json=json))
     logger.addHandler(_get_warn_handler(json=json))
     logger.addHandler(_get_info_handler(json=json))
+    logger.addHandler(_get_critical_handler(json=json))
     logger.propagate = False
 
     return logger
@@ -95,8 +96,20 @@ def _get_info_handler(json=False):
     return handler
 
 
-def abort(message):
-    """Format abort messages and return string."""
+def _get_critical_handler(json=False):
+    handler = logging.StreamHandler(sys.stderr)
+    handler.setLevel(logging.CRITICAL)
+    handler.addFilter(LogFilter(logging.CRITICAL))
+    handler.setFormatter(logging.Formatter(critical("%(message)s")))
+
+    if json:
+        handler.setFormatter(jsonlogger.JsonFormatter("%(message)s"))
+
+    return handler
+
+
+def critical(message):
+    """Format critical messages and return string."""
     return color_text(colorama.Fore.RED, "FATAL: {}".format(message))
 
 

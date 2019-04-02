@@ -28,7 +28,7 @@ import six
 import ansible.parsing.mod_args
 from ansible import constants
 from ansible.errors import AnsibleError
-from ansiblelater import LaterAnsibleError, LaterError
+from ansiblelater.exceptions import LaterAnsibleError, LaterError
 
 try:
     # Try to import the Ansible 2 module first, it's the future-proof one

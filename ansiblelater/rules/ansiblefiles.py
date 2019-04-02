@@ -2,7 +2,7 @@ import re
 import os
 
 from collections import defaultdict
-from ansiblelater import Result, Error
+from ansiblelater.command.review import Result, Error
 from ansiblelater.utils import count_spaces
 from ansiblelater.utils.rulehelper import (get_normalized_tasks,
                                            get_normalized_yaml)

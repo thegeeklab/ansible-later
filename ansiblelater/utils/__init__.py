@@ -10,12 +10,17 @@ import colorama
 
 import yaml
 from distutils.version import LooseVersion
+from ansiblelater import logger
 from ansible.module_utils.parsing.convert_bool import boolean as to_bool
 
 try:
     import ConfigParser as configparser
 except ImportError:
     import configparser
+
+
+LOG = logger.get_logger(__name__)
+
 
 def count_spaces(c_string):
     leading_spaces = 0
@@ -62,16 +67,6 @@ def is_line_in_ranges(line, ranges):
     return not ranges or any([line in r for r in ranges])
 
 
-def read_standards(settings):
-    if not settings.rulesdir:
-        abort("Standards directory is not set on command line or in configuration file - aborting")
-    sys.path.append(os.path.abspath(os.path.expanduser(settings.rulesdir)))
-    try:
-        standards = importlib.import_module('standards')
-    except ImportError as e:
-        abort("Could not import standards from directory %s: %s" % (settings.rulesdir, str(e)))
-    return standards
-
 
 def read_config(config_file):
     config = configparser.RawConfigParser({'standards': None})
@@ -112,3 +107,12 @@ def add_dict_branch(tree, vector, value):
                              vector[1:],
                              value)
     return tree
+
+
+def sysexit(code=1):
+    sys.exit(code)
+
+
+def sysexit_with_message(msg, code=1):
+    LOG.critical(msg)
+    sysexit(code)

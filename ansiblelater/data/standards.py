@@ -1,4 +1,4 @@
-from ansiblelater import Standard
+from ansiblelater.standard import Standard
 
 from ansiblelater.rules.yamlfiles import check_yaml_empty_lines
 from ansiblelater.rules.yamlfiles import check_yaml_indent
