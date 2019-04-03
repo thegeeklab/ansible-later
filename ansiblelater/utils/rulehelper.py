@@ -51,7 +51,7 @@ def get_normalized_task(task, candidate, settings):
     normalized = None
     errors = []
     try:
-        normalized = normalize_task(task, candidate.path, settings.custom_modules)
+        normalized = normalize_task(task, candidate.path, settings["ansible"]["custom_modules"])
     except LaterError as ex:
         e = ex.original
         errors.append(Error(e.problem_mark.line + 1, "syntax error: %s" % (e.problem)))
@@ -77,7 +77,7 @@ def get_normalized_tasks(candidate, settings):
                 if 'skip_ansible_lint' in (task.get('tags') or []):
                     # No need to normalize_task if we are skipping it.
                     continue
-                normalized.append(normalize_task(task, candidate.path, settings.custom_modules))
+                normalized.append(normalize_task(task, candidate.path, settings["ansible"]["custom_modules"]))
 
     except LaterError as ex:
         e = ex.original

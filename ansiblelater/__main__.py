@@ -6,6 +6,7 @@ import logging
 
 from ansiblelater import __version__
 from ansiblelater import LOG
+from ansiblelater import logger
 from ansiblelater.command import base
 from ansiblelater.command import candidates
 
@@ -29,12 +30,15 @@ def main():
     args = parser.parse_args().__dict__
 
     settings = base.get_settings(args)
+    config = settings.config
     # print(json.dumps(settings.config, indent=4, sort_keys=True))
-    LOG.setLevel(settings.config["logging"]["level"])
-    files = settings.config["rules"]["files"]
-    standards = base.get_standards(settings.config["rules"]["standards"])
 
-    errors = []
+    logger.update_logger(LOG, config["logging"]["level"], config["logging"]["json"])
+
+    files = config["rules"]["files"]
+    standards = base.get_standards(config["rules"]["standards"])
+
+    errors = 0
     for filename in files:
         lines = None
         candidate = candidates.classify(filename, settings, standards)

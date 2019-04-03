@@ -3,11 +3,13 @@
 import os
 import sys
 
+from six import iteritems
+
 
 class Error(object):
     """Default error object created if a rule failed."""
 
-    def __init__(self, lineno, message):
+    def __init__(self, lineno, message, error_type=None, **kwargs):
         """
         Initialize a new error object and returns None.
 
@@ -17,12 +19,21 @@ class Error(object):
         """
         self.lineno = lineno
         self.message = message
+        self.kwargs = kwargs
+        for (key, value) in iteritems(kwargs):
+            setattr(self, key, value)
 
     def __repr__(self): # noqa
         if self.lineno:
             return "%s: %s" % (self.lineno, self.message)
         else:
             return " %s" % (self.message)
+
+    def to_dict(self):
+        result = dict(lineno=self.lineno, message=self.message)
+        for (key, value) in iteritems(self.kwargs):
+            result[key] = value
+        return result
 
 
 class Result(object):

@@ -83,6 +83,7 @@ class Settings(object):
             },
             "logging": {
                 "level": logging.WARN,
+                "json": False
             },
             "ansible": {
                 "custom_modules": [],

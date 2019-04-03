@@ -8,6 +8,9 @@ import colorama
 from ansible.module_utils.parsing.convert_bool import boolean as to_bool
 from pythonjsonlogger import jsonlogger
 
+CONSOLE_FORMAT = "%(levelname)s: %(message)s"
+JSON_FORMAT = "(levelname) (message) (asctime)"
+
 
 def _should_do_markup():
 
@@ -19,6 +22,19 @@ def _should_do_markup():
 
 
 colorama.init(autoreset=True, strip=not _should_do_markup())
+
+
+def OverwriteMakeRecord(self, name, level, fn, lno, msg, args, exc_info, func=None, extra=None):
+    """
+    A factory method which can be overridden in subclasses to create
+    specialized LogRecords.
+    """
+    rv = logging.LogRecord(name, level, fn, lno, msg, args, exc_info, func)
+    if extra is not None:
+        for key in extra:
+            rv.__dict__[key] = extra[key]
+    print("xxx", rv.__dict__)
+    return rv
 
 
 class LogFilter(object):
@@ -50,6 +66,7 @@ def get_logger(name=None, level=logging.DEBUG, json=False):
 
     """
     logger = logging.getLogger(name)
+    logger.makeRecord(OverwriteMakeRecord)
     logger.setLevel(level)
     logger.addHandler(_get_error_handler(json=json))
     logger.addHandler(_get_warn_handler(json=json))
@@ -60,14 +77,25 @@ def get_logger(name=None, level=logging.DEBUG, json=False):
     return logger
 
 
+def update_logger(logger, level=None, json=None):
+    for handler in logger.handlers[:]:
+        logger.removeHandler(handler)
+
+    logger.setLevel(level)
+    logger.addHandler(_get_error_handler(json=json))
+    logger.addHandler(_get_warn_handler(json=json))
+    logger.addHandler(_get_info_handler(json=json))
+    logger.addHandler(_get_critical_handler(json=json))
+
+
 def _get_error_handler(json=False):
     handler = logging.StreamHandler(sys.stderr)
     handler.setLevel(logging.ERROR)
     handler.addFilter(LogFilter(logging.ERROR))
-    handler.setFormatter(logging.Formatter(error("%(message)s")))
+    handler.setFormatter(logging.Formatter(error(CONSOLE_FORMAT)))
 
     if json:
-        handler.setFormatter(jsonlogger.JsonFormatter("%(message)s"))
+        handler.setFormatter(jsonlogger.JsonFormatter(JSON_FORMAT))
 
     return handler
 
@@ -76,10 +104,10 @@ def _get_warn_handler(json=False):
     handler = logging.StreamHandler(sys.stdout)
     handler.setLevel(logging.WARN)
     handler.addFilter(LogFilter(logging.WARN))
-    handler.setFormatter(logging.Formatter(warn("%(message)s")))
+    handler.setFormatter(logging.Formatter(warn(CONSOLE_FORMAT)))
 
     if json:
-        handler.setFormatter(jsonlogger.JsonFormatter("%(message)s"))
+        handler.setFormatter(jsonlogger.JsonFormatter(JSON_FORMAT))
 
     return handler
 
@@ -91,7 +119,7 @@ def _get_info_handler(json=False):
     handler.setFormatter(logging.Formatter(info("%(message)s")))
 
     if json:
-        handler.setFormatter(jsonlogger.JsonFormatter("%(message)s"))
+        handler.setFormatter(jsonlogger.JsonFormatter(JSON_FORMAT))
 
     return handler
 
@@ -100,32 +128,32 @@ def _get_critical_handler(json=False):
     handler = logging.StreamHandler(sys.stderr)
     handler.setLevel(logging.CRITICAL)
     handler.addFilter(LogFilter(logging.CRITICAL))
-    handler.setFormatter(logging.Formatter(critical("%(message)s")))
+    handler.setFormatter(logging.Formatter(critical(CONSOLE_FORMAT)))
 
     if json:
-        handler.setFormatter(jsonlogger.JsonFormatter("%(message)s"))
+        handler.setFormatter(jsonlogger.JsonFormatter(JSON_FORMAT))
 
     return handler
 
 
 def critical(message):
     """Format critical messages and return string."""
-    return color_text(colorama.Fore.RED, "FATAL: {}".format(message))
+    return color_text(colorama.Fore.RED, "{}".format(message))
 
 
 def error(message):
     """Format error messages and return string."""
-    return color_text(colorama.Fore.RED, "ERROR: {}".format(message))
+    return color_text(colorama.Fore.RED, "{}".format(message))
 
 
 def warn(message):
     """Format warn messages and return string."""
-    return color_text(colorama.Fore.YELLOW, "WARN: {}".format(message))
+    return color_text(colorama.Fore.YELLOW, "{}".format(message))
 
 
 def info(message):
     """Format info messages and return string."""
-    return color_text(colorama.Fore.BLUE, "INFO: {}".format(message))
+    return color_text(colorama.Fore.BLUE, "{}".format(message))
 
 
 def color_text(color, msg):
