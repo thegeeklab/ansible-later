@@ -5,11 +5,12 @@ import os
 import sys
 
 import colorama
+from six import iteritems
 from ansible.module_utils.parsing.convert_bool import boolean as to_bool
 from pythonjsonlogger import jsonlogger
 
 CONSOLE_FORMAT = "%(levelname)s: %(message)s"
-JSON_FORMAT = "(levelname) (message) (asctime)"
+JSON_FORMAT = "(levelname) (asctime)"
 
 
 def _should_do_markup():
@@ -23,18 +24,23 @@ def _should_do_markup():
 
 colorama.init(autoreset=True, strip=not _should_do_markup())
 
+clashing_keywords = {key for key in dir(logging.LogRecord(None, None, "", 0, "", (), None, None)) if "__" not in key}
+additional_clashing_keywords = {
+    "message",
+    "asctime"
+}
+clashing_keywords = clashing_keywords.union(additional_clashing_keywords)
 
-def OverwriteMakeRecord(self, name, level, fn, lno, msg, args, exc_info, func=None, extra=None):
-    """
-    A factory method which can be overridden in subclasses to create
-    specialized LogRecords.
-    """
-    rv = logging.LogRecord(name, level, fn, lno, msg, args, exc_info, func)
-    if extra is not None:
-        for key in extra:
-            rv.__dict__[key] = extra[key]
-    print("xxx", rv.__dict__)
-    return rv
+
+def flag_extra(kwargs):
+    """Ensure kwargs not conflict with the logging module."""
+    assert isinstance(kwargs, dict)
+
+    flagged = dict()
+    for key, value in iteritems(kwargs):
+        flagged["later_" + key] = value
+
+    return flagged
 
 
 class LogFilter(object):
@@ -66,7 +72,6 @@ def get_logger(name=None, level=logging.DEBUG, json=False):
 
     """
     logger = logging.getLogger(name)
-    logger.makeRecord(OverwriteMakeRecord)
     logger.setLevel(level)
     logger.addHandler(_get_error_handler(json=json))
     logger.addHandler(_get_warn_handler(json=json))

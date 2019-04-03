@@ -12,6 +12,7 @@ import ansible
 
 from ansiblelater import LOG
 from ansiblelater import utils
+from ansiblelater.logger import flag_extra
 from ansiblelater.command.review import Error
 from ansiblelater.exceptions import (  # noqa
     LaterError, LaterAnsibleError
@@ -127,19 +128,19 @@ class Candidate(object):
 
                 if not standard.version:
                     LOG.warn("{id}Best practice '{name}' not met:\n{path}:{error}".format(
-                        id=standard.id, name=standard.name, path=self.path, error=err), extra=err_labels)
+                        id=standard.id, name=standard.name, path=self.path, error=err), extra=flag_extra(err_labels))
                 elif LooseVersion(standard.version) > LooseVersion(self.version):
                     LOG.warn("{id}Future standard '{name}' not met:\n{path}:{error}".format(
-                        id=standard.id, name=standard.name, path=self.path, error=err), extra=err_labels)
+                        id=standard.id, name=standard.name, path=self.path, error=err), extra=flag_extra(err_labels))
                 else:
                     LOG.error("{id}Standard '{name}' not met:\n{path}:{error}".format(
-                        id=standard.id, name=standard.name, path=self.path, error=err), extra=err_labels)
+                        id=standard.id, name=standard.name, path=self.path, error=err), extra=flag_extra(err_labels))
                     errors = errors + 1
             if not result.errors:
                 if not standard.version:
-                    LOG.info("Best practice '%s' met" % standard.name, extra=labels)
+                    LOG.info("Best practice '%s' met" % standard.name, extra=flag_extra(labels))
                 elif LooseVersion(standard.version) > LooseVersion(self.version):
-                    LOG.info("Future standard '%s' met" % standard.name, extra=labels)
+                    LOG.info("Future standard '%s' met" % standard.name, extra=flag_extra(labels))
                 else:
                     LOG.info("Standard '%s' met" % standard.name)
 

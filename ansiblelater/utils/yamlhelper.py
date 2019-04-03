@@ -490,6 +490,8 @@ def parse_yaml_linenumbers(data, filename):
         data = loader.get_single_data()
     except (yaml.parser.ParserError, yaml.scanner.ScannerError) as e:
         raise LaterError("syntax error", e)
+    except (yaml.composer.ComposerError) as e:
+        raise LaterError("syntax error", e)
     return data
 
 
