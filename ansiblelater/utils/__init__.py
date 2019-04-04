@@ -1,22 +1,19 @@
 from __future__ import print_function
 
 import contextlib
-import importlib
-import logging
 import os
-import sys
 import re
-import colorama
+import sys
+from distutils.version import LooseVersion
 
 import yaml
-from distutils.version import LooseVersion
+
 from ansiblelater import logger
-from ansible.module_utils.parsing.convert_bool import boolean as to_bool
 
 try:
-    import ConfigParser as configparser
+    import ConfigParser as configparser # noqa
 except ImportError:
-    import configparser
+    import configparser # noqa
 
 
 LOG = logger.get_logger(__name__)
@@ -67,19 +64,13 @@ def is_line_in_ranges(line, ranges):
     return not ranges or any([line in r for r in ranges])
 
 
-
-def read_config(config_file):
-    config = configparser.RawConfigParser({'standards': None})
-    config.read(config_file)
-
-    return Settings(config, config_file)
-
-
 def safe_load(string):
     """
     Parse the provided string returns a dict.
+
     :param string: A string to be parsed.
-    :return: dict
+    :returns: dict
+
     """
     try:
         return yaml.safe_load(string) or {}
@@ -88,12 +79,14 @@ def safe_load(string):
 
 
 @contextlib.contextmanager
-def open_file(filename, mode='r'):
+def open_file(filename, mode="r"):
     """
     Open the provide file safely and returns a file type.
+
     :param filename: A string containing an absolute path to the file to open.
     :param mode: A string describing the way in which the file will be used.
-    :return: file type
+    :returns: file type
+
     """
     with open(filename, mode) as stream:
         yield stream

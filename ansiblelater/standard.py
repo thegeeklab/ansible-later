@@ -28,4 +28,3 @@ class Standard(object):
     def __repr__(self): # noqa
         return "Standard: %s (version: %s, types: %s)" % (
                self.name, self.version, self.types)
-

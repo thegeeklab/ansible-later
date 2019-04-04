@@ -5,18 +5,12 @@ import codecs
 import copy
 import os
 import re
-import sys
 from distutils.version import LooseVersion
 
-import ansible
-
-from ansiblelater import LOG
-from ansiblelater import utils
-from ansiblelater.logger import flag_extra
+from ansiblelater import LOG, utils
 from ansiblelater.command.review import Error
-from ansiblelater.exceptions import (  # noqa
-    LaterError, LaterAnsibleError
-)
+from ansiblelater.exceptions import LaterAnsibleError, LaterError  # noqa
+from ansiblelater.logger import flag_extra
 
 try:
     # Ansible 2.4 import of module loader
@@ -78,13 +72,13 @@ class Candidate(object):
             if self.expected_version:
                 if isinstance(self, RoleFile):
                     LOG.warn("%s %s is in a role that contains a meta/main.yml without a declared "
-                                "standards version. "
-                                "Using latest standards version %s" %
-                                (type(self).__name__, self.path, version))
+                             "standards version. "
+                             "Using latest standards version %s" %
+                             (type(self).__name__, self.path, version))
                 else:
                     LOG.warn("%s %s does not present standards version. "
-                                "Using latest standards version %s" %
-                                (type(self).__name__, self.path, version))
+                             "Using latest standards version %s" %
+                             (type(self).__name__, self.path, version))
 
             LOG.info("%s %s declares standards version %s" %
                      (type(self).__name__, self.path, version))
@@ -114,8 +108,8 @@ class Candidate(object):
             result = standard.check(self, settings.config)
 
             if not result:
-                utils.sysexit_with_message("Standard '%s' returns an empty result object." %
-                    (standard.check.__name__))
+                utils.sysexit_with_message("Standard '{}' returns an empty result object.".format(
+                    standard.check.__name__))
 
             labels = {"tag": "review", "standard": standard.name, "file": self.path, "passed": True}
 
@@ -128,13 +122,16 @@ class Candidate(object):
 
                 if not standard.version:
                     LOG.warn("{id}Best practice '{name}' not met:\n{path}:{error}".format(
-                        id=standard.id, name=standard.name, path=self.path, error=err), extra=flag_extra(err_labels))
+                        id=standard.id, name=standard.name, path=self.path, error=err),
+                        extra=flag_extra(err_labels))
                 elif LooseVersion(standard.version) > LooseVersion(self.version):
                     LOG.warn("{id}Future standard '{name}' not met:\n{path}:{error}".format(
-                        id=standard.id, name=standard.name, path=self.path, error=err), extra=flag_extra(err_labels))
+                        id=standard.id, name=standard.name, path=self.path, error=err),
+                        extra=flag_extra(err_labels))
                 else:
                     LOG.error("{id}Standard '{name}' not met:\n{path}:{error}".format(
-                        id=standard.id, name=standard.name, path=self.path, error=err), extra=flag_extra(err_labels))
+                        id=standard.id, name=standard.name, path=self.path, error=err),
+                        extra=flag_extra(err_labels))
                     errors = errors + 1
             if not result.errors:
                 if not standard.version:

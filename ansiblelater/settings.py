@@ -1,14 +1,16 @@
 """Global settings object definition."""
 
+import copy
 import logging
 import os
 
 import anyconfig
 from appdirs import AppDirs
+from globmatch import glob_match
 from jsonschema._utils import format_as_index
 from pkg_resources import resource_filename
 
-from ansiblelater import logger, utils
+from ansiblelater import utils
 
 config_dir = AppDirs("ansible-later").user_config_dir
 default_config_file = os.path.join(config_dir, "config.yml")
@@ -37,6 +39,7 @@ class Settings(object):
         self.args = self._set_args(args)
         self.config = self._get_config()
         self.schema = None
+        self._update_filelist()
 
     def _set_args(self, args):
         self.config_file = args.get("config_file") or default_config_file
@@ -80,6 +83,8 @@ class Settings(object):
             "rules": {
                 "standards": rules_dir,
                 "filter": [],
+                "ignore_dotfiles": True,
+                "exclude_files": []
             },
             "logging": {
                 "level": logging.WARN,
@@ -98,7 +103,7 @@ class Settings(object):
             filelist = []
             for root, dirs, files in os.walk("."):
                 for filename in files:
-                    filelist.append(os.path.join(root, filename))
+                    filelist.append(os.path.relpath(os.path.normpath(os.path.join(root, filename))))
         else:
             filelist = args["rules"]["files"]
 
@@ -114,3 +119,16 @@ class Settings(object):
                 schema=format_as_index(list(e.relative_schema_path)[:-1])
             )
             utils.sysexit_with_message("{schema}: {msg}".format(schema=schema_error, msg=e.message))
+
+    def _update_filelist(self):
+        files = self.config["rules"]["files"]
+        excludes = self.config["rules"]["exclude_files"]
+        ignore_dotfiles = self.config["rules"]["ignore_dotfiles"]
+
+        if ignore_dotfiles:
+            excludes.append(".")
+
+        valid = copy.copy(files)
+        for item in valid:
+            if glob_match(item, excludes):
+                files.remove(item)

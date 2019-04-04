@@ -1,14 +1,10 @@
 #!/usr/bin/env python
 
 import argparse
-import json
 import logging
 
-from ansiblelater import __version__
-from ansiblelater import LOG
-from ansiblelater import logger
-from ansiblelater.command import base
-from ansiblelater.command import candidates
+from ansiblelater import LOG, __version__, logger
+from ansiblelater.command import base, candidates
 
 
 def main():

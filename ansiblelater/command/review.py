@@ -1,8 +1,5 @@
 """Review candidates."""
 
-import os
-import sys
-
 from six import iteritems
 
 
@@ -44,5 +41,3 @@ class Result(object):
     def message(self):
         return "\n".join(["{0}:{1}".format(self.candidate, error)
                           for error in self.errors])
-
-

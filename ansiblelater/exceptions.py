@@ -7,10 +7,7 @@ class LaterError(Exception):
     """Generic exception for later."""
 
     def __init__(self, msg, original):
-        """
-        Initialize new exception.
-
-        """
+        """Initialize new exception."""
         super(LaterError, self).__init__(msg + (": %s" % original))
         self.original = original
 

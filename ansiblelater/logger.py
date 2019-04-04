@@ -5,12 +5,12 @@ import os
 import sys
 
 import colorama
-from six import iteritems
 from ansible.module_utils.parsing.convert_bool import boolean as to_bool
 from pythonjsonlogger import jsonlogger
+from six import iteritems
 
 CONSOLE_FORMAT = "%(levelname)s: %(message)s"
-JSON_FORMAT = "(levelname) (asctime)"
+JSON_FORMAT = "(asctime) (levelname) (message)"
 
 
 def _should_do_markup():
@@ -23,13 +23,6 @@ def _should_do_markup():
 
 
 colorama.init(autoreset=True, strip=not _should_do_markup())
-
-clashing_keywords = {key for key in dir(logging.LogRecord(None, None, "", 0, "", (), None, None)) if "__" not in key}
-additional_clashing_keywords = {
-    "message",
-    "asctime"
-}
-clashing_keywords = clashing_keywords.union(additional_clashing_keywords)
 
 
 def flag_extra(kwargs):
