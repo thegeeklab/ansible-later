@@ -1,16 +1,15 @@
 import codecs
-import yaml
 import os
 
-from ansiblelater.command.review import Result, Error
-from ansiblelater.utils.rulehelper import get_action_tasks
-from ansiblelater.utils.rulehelper import get_normalized_yaml
-from ansiblelater.utils.rulehelper import get_normalized_task
-from ansiblelater.utils.rulehelper import run_yamllint
+import yaml
+
+from ansiblelater.command.review import Error, Result
+from ansiblelater.utils.rulehelper import (get_action_tasks,
+                                           get_normalized_task,
+                                           get_normalized_yaml, run_yamllint)
 
 
 def check_yaml_has_content(candidate, settings):
-    Testvar = "test"
     lines, errors = get_normalized_yaml(candidate, settings)
     description = "the file appears to have no useful content"
 
@@ -31,16 +30,16 @@ def check_native_yaml(candidate, settings):
                 errors.extend(error)
                 break
 
-            action = normal_form['action']['__ansible_module__']
-            arguments = normal_form['action']['__ansible_arguments__']
-            # Cope with `set_fact` where task['set_fact'] is None
+            action = normal_form["action"]["__ansible_module__"]
+            arguments = normal_form["action"]["__ansible_arguments__"]
+            # Cope with `set_fact` where task["set_fact"] is None
             if not task.get(action):
                 continue
             if isinstance(task[action], dict):
                 continue
             # strip additional newlines off task[action]
             if task[action].strip().split() != arguments:
-                errors.append(Error(task['__line__'], description))
+                errors.append(Error(task["__line__"], description))
     return Result(candidate.path, errors)
 
 
@@ -82,7 +81,7 @@ def check_yaml_file(candidate, settings):
         errors.append(
             Error(None, "file does not have a .yml extension"))
     elif os.path.isfile(filename) and os.path.splitext(filename)[1][1:] == "yml":
-        with codecs.open(filename, mode='rb', encoding='utf-8') as f:
+        with codecs.open(filename, mode="rb", encoding="utf-8") as f:
             try:
                 yaml.safe_load(f)
             except Exception as e:

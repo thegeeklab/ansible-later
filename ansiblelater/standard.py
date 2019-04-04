@@ -1,3 +1,6 @@
+"""Standard definition."""
+
+
 class Standard(object):
     """
     Standard definition for all defined rules.

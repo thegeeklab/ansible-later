@@ -1,8 +1,8 @@
-import re
 import os
-
+import re
 from collections import defaultdict
-from ansiblelater.command.review import Result, Error
+
+from ansiblelater.command.review import Error, Result
 from ansiblelater.utils import count_spaces
 from ansiblelater.utils.rulehelper import (get_normalized_tasks,
                                            get_normalized_yaml)
@@ -32,16 +32,16 @@ def check_braces_spaces(candidate, settings):
 
 def check_named_task(candidate, settings):
     tasks, errors = get_normalized_tasks(candidate, settings)
-    nameless_tasks = ['meta', 'debug', 'include_role', 'import_role',
-                      'include_tasks', 'import_tasks', 'include_vars',
-                      'block']
+    nameless_tasks = ["meta", "debug", "include_role", "import_role",
+                      "include_tasks", "import_tasks", "include_vars",
+                      "block"]
     description = "module '%s' used without name attribute"
 
     if not errors:
         for task in tasks:
             module = task["action"]["__ansible_module__"]
-            if 'name' not in task and module not in nameless_tasks:
-                errors.append(Error(task['__line__'], description % module))
+            if "name" not in task and module not in nameless_tasks:
+                errors.append(Error(task["__line__"], description % module))
 
     return Result(candidate.path, errors)
 
@@ -53,8 +53,8 @@ def check_name_format(candidate, settings):
 
     if not errors:
         for task in tasks:
-            if 'name' in task:
-                namelines[task['name']].append(task['__line__'])
+            if "name" in task:
+                namelines[task["name"]].append(task["__line__"])
         for (name, lines) in namelines.items():
             if not name[0].isupper():
                 errors.append(Error(lines[-1], description % name))
@@ -70,8 +70,8 @@ def check_unique_named_task(candidate, settings):
 
     if not errors:
         for task in tasks:
-            if 'name' in task:
-                namelines[task['name']].append(task['__line__'])
+            if "name" in task:
+                namelines[task["name"]].append(task["__line__"])
         for (name, lines) in namelines.items():
             if len(lines) > 1:
                 errors.append(Error(lines[-1], description % name))
@@ -81,28 +81,28 @@ def check_unique_named_task(candidate, settings):
 
 def check_command_instead_of_module(candidate, settings):
     tasks, errors = get_normalized_tasks(candidate, settings)
-    commands = ['command', 'shell', 'raw']
+    commands = ["command", "shell", "raw"]
     modules = {
-        'git': 'git', 'hg': 'hg', 'curl': 'get_url or uri', 'wget': 'get_url or uri',
-        'svn': 'subversion', 'service': 'service', 'mount': 'mount',
-        'rpm': 'yum or rpm_key', 'yum': 'yum', 'apt-get': 'apt-get',
-        'unzip': 'unarchive', 'tar': 'unarchive', 'chkconfig': 'service',
-        'rsync': 'synchronize', 'supervisorctl': 'supervisorctl', 'systemctl': 'systemd',
-        'sed': 'template or lineinfile'
+        "git": "git", "hg": "hg", "curl": "get_url or uri", "wget": "get_url or uri",
+        "svn": "subversion", "service": "service", "mount": "mount",
+        "rpm": "yum or rpm_key", "yum": "yum", "apt-get": "apt-get",
+        "unzip": "unarchive", "tar": "unarchive", "chkconfig": "service",
+        "rsync": "synchronize", "supervisorctl": "supervisorctl", "systemctl": "systemd",
+        "sed": "template or lineinfile"
     }
     description = "%s command used in place of %s module"
 
     if not errors:
         for task in tasks:
             if task["action"]["__ansible_module__"] in commands:
-                if 'cmd' in task['action']:
+                if "cmd" in task["action"]:
                     first_cmd_arg = task["action"]["cmd"].split()[0]
                 else:
                     first_cmd_arg = task["action"]["__ansible_arguments__"][0]
 
                 executable = os.path.basename(first_cmd_arg)
                 if (first_cmd_arg and executable in modules
-                        and task['action'].get('warn', True) and 'register' not in task):
+                        and task["action"].get("warn", True) and "register" not in task):
                     errors.append(
                         Error(task["__line__"], description % (executable, modules[executable])))
 
@@ -111,10 +111,10 @@ def check_command_instead_of_module(candidate, settings):
 
 def check_install_use_latest(candidate, settings):
     tasks, errors = get_normalized_tasks(candidate, settings)
-    package_managers = ['yum', 'apt', 'dnf', 'homebrew', 'pacman', 'openbsd_package', 'pkg5',
-                        'portage', 'pkgutil', 'slackpkg', 'swdepot', 'zypper', 'bundler', 'pip',
-                        'pear', 'npm', 'yarn', 'gem', 'easy_install', 'bower', 'package', 'apk',
-                        'openbsd_pkg', 'pkgng', 'sorcery', 'xbps']
+    package_managers = ["yum", "apt", "dnf", "homebrew", "pacman", "openbsd_package", "pkg5",
+                        "portage", "pkgutil", "slackpkg", "swdepot", "zypper", "bundler", "pip",
+                        "pear", "npm", "yarn", "gem", "easy_install", "bower", "package", "apk",
+                        "openbsd_pkg", "pkgng", "sorcery", "xbps"]
     description = "package installs should use state=present with or without a version"
 
     if not errors:
@@ -132,14 +132,14 @@ def check_shell_instead_command(candidate, settings):
 
     if not errors:
         for task in tasks:
-            if task["action"]["__ansible_module__"] == 'shell':
-                if 'cmd' in task['action']:
+            if task["action"]["__ansible_module__"] == "shell":
+                if "cmd" in task["action"]:
                     cmd = task["action"].get("cmd", [])
                 else:
-                    cmd = ' '.join(task["action"].get("__ansible_arguments__", []))
+                    cmd = " ".join(task["action"].get("__ansible_arguments__", []))
 
                 unjinja = re.sub(r"\{\{[^\}]*\}\}", "JINJA_VAR", cmd)
-                if not any([ch in unjinja for ch in '&|<>;$\n*[]{}?']):
+                if not any([ch in unjinja for ch in "&|<>;$\n*[]{}?"]):
                     errors.append(Error(task["__line__"], description))
 
     return Result(candidate.path, errors)
@@ -147,7 +147,7 @@ def check_shell_instead_command(candidate, settings):
 
 def check_command_has_changes(candidate, settings):
     tasks, errors = get_normalized_tasks(candidate, settings)
-    commands = ['command', 'shell', 'raw']
+    commands = ["command", "shell", "raw"]
     description = "commands should either read information (and thus set changed_when) or not " \
                   "do something if it has already been done (using creates/removes) " \
                   "or only do it if another check has a particular result (when)"
@@ -155,10 +155,10 @@ def check_command_has_changes(candidate, settings):
     if not errors:
         for task in tasks:
             if task["action"]["__ansible_module__"] in commands:
-                if ('changed_when' not in task and 'when' not in task
-                        and 'when' not in task['__ansible_action_meta__']
-                        and 'creates' not in task['action']
-                        and 'removes' not in task['action']):
+                if ("changed_when" not in task and "when" not in task
+                        and "when" not in task["__ansible_action_meta__"]
+                        and "creates" not in task["action"]
+                        and "removes" not in task["action"]):
                     errors.append(Error(task["__line__"], description))
 
     return Result(candidate.path, errors)
@@ -166,8 +166,8 @@ def check_command_has_changes(candidate, settings):
 
 def check_empty_string_compare(candidate, settings):
     yamllines, errors = get_normalized_yaml(candidate, settings)
-    description = 'use `when: var` rather than `when: var != ""` (or ' \
-                  'conversely `when: not var` rather than `when: var == ""`)'
+    description = "use `when: var` rather than `when: var != ""` (or " \
+                  "conversely `when: not var` rather than `when: var == ""`)"
 
     empty_string_compare = re.compile("[=!]= ?[\"'][\"']")
 
@@ -202,7 +202,7 @@ def check_delegate_to_localhost(candidate, settings):
 
     if not errors:
         for task in tasks:
-            if task.get('delegate_to') == 'localhost':
+            if task.get("delegate_to") == "localhost":
                 errors.append(Error(task["__line__"], description))
 
     return Result(candidate.path, errors)
@@ -225,12 +225,12 @@ def check_literal_bool_format(candidate, settings):
 def check_become_user(candidate, settings):
     tasks, errors = get_normalized_tasks(candidate, settings)
     description = "the task has 'become:' enabled but 'become_user:' is missing"
-    true_value = [True, 'true', 'True', 'TRUE', 'yes', 'Yes', 'YES']
+    true_value = [True, "true", "True", "TRUE", "yes", "Yes", "YES"]
 
     if not errors:
-        gen = (task for task in tasks if 'become' in task)
+        gen = (task for task in tasks if "become" in task)
         for task in gen:
-            if task["become"] in true_value and 'become_user' not in task.keys():
+            if task["become"] in true_value and "become_user" not in task.keys():
                 errors.append(Error(task["__line__"], description))
 
     return Result(candidate.path, errors)

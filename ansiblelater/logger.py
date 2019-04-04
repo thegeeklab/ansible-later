@@ -76,6 +76,7 @@ def get_logger(name=None, level=logging.DEBUG, json=False):
 
 
 def update_logger(logger, level=None, json=None):
+    """Update logger configuration to change logging settings."""
     for handler in logger.handlers[:]:
         logger.removeHandler(handler)
 

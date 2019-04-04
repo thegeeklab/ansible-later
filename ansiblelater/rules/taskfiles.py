@@ -1,5 +1,6 @@
-import re
+"""Checks related to ansible task files."""
 
+import re
 from collections import defaultdict
 
 from ansiblelater.command.review import Error, Result

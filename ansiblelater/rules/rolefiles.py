@@ -23,7 +23,7 @@ def check_scm_in_src(candidate, settings):
 
     if not errors:
         for role in roles:
-            if '+' in role.get('src'):
-                errors.append(Error(role['__line__'], description))
+            if "+" in role.get("src"):
+                errors.append(Error(role["__line__"], description))
 
     return Result(candidate.path, errors)

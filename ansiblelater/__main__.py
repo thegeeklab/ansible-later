@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+"""Main program."""
 
 import argparse
 import logging
@@ -8,6 +9,7 @@ from ansiblelater.command import base, candidates
 
 
 def main():
+    """Run main program."""
     parser = argparse.ArgumentParser(
         description="Validate ansible files against best pratice guideline")
     parser.add_argument("-c", "--config", dest="config_file",
