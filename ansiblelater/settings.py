@@ -42,6 +42,7 @@ class Settings(object):
         self._update_filelist()
 
     def _set_args(self, args):
+        defaults = self._get_defaults()
         self.config_file = args.get("config_file") or default_config_file
 
         args.pop("config_file", None)
@@ -52,10 +53,12 @@ class Settings(object):
             tmp_dict = utils.add_dict_branch(tmp_dict, key.split("."), value)
 
         # Override correct log level from argparse
-        levels = [logging.WARNING, logging.INFO, logging.DEBUG]
+        levels = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+        log_level = levels.index(logging.getLevelName(defaults["logging"]["level"]))
         if tmp_dict.get("logging"):
-            tmp_dict["logging"]["level"] = levels[
-                min(len(levels) - 1, tmp_dict["logging"]["level"] - 1)]
+            for adjustment in tmp_dict["logging"]["level"]:
+                log_level = min(len(levels) - 1, max(log_level + adjustment, 0))
+            tmp_dict["logging"]["level"] = logging.getLevelName(levels[log_level])
 
         tmp_dict["rules"]["files"] = self._get_files(tmp_dict)
 
@@ -87,7 +90,7 @@ class Settings(object):
                 "exclude_files": []
             },
             "logging": {
-                "level": logging.WARN,
+                "level": logging.getLevelName("WARNING"),
                 "json": False
             },
             "ansible": {

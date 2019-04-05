@@ -79,7 +79,7 @@ class Candidate(object):
                     LOG.warn("%s %s does not present standards version. "
                              "Using latest standards version %s" %
                              (type(self).__name__, self.path, version))
-
+        else:
             LOG.info("%s %s declares standards version %s" %
                      (type(self).__name__, self.path, version))
 
@@ -96,7 +96,6 @@ class Candidate(object):
         else:
             target_standards = standards
 
-        # print(target_standards)
         return target_standards
 
     def review(self, settings, lines=None):
@@ -142,13 +141,13 @@ class Candidate(object):
                         path=self.path,
                         error=err), extra=flag_extra(err_labels))
                     errors = errors + 1
-            if not result.errors:
-                if not standard.version:
-                    LOG.info("Best practice '%s' met" % standard.name, extra=flag_extra(labels))
-                elif LooseVersion(standard.version) > LooseVersion(self.version):
-                    LOG.info("Future standard '%s' met" % standard.name, extra=flag_extra(labels))
-                else:
-                    LOG.info("Standard '%s' met" % standard.name)
+            # if not result.errors:
+            #     if not standard.version:
+            #         LOG.info("Best practice '%s' met" % standard.name, extra=flag_extra(labels))
+            #     elif LooseVersion(standard.version) > LooseVersion(self.version):
+            #         LOG.info("Future standard '%s' met" % standard.name, extra=flag_extra(labels))
+            #     else:
+            #         LOG.info("Standard '%s' met" % standard.name)
 
         return errors
 
@@ -272,7 +271,6 @@ def classify(filename, settings={}, standards=[]):
                      "filter_plugins"] or filename.endswith(".py"):
         return Code(filename, settings, standards)
     if "inventory" in basename or "hosts" in basename or parentdir in ["inventory"]:
-        print("hosts" in filename)
         return Inventory(filename, settings, standards)
     if "rolesfile" in basename or "requirements" in basename:
         return Rolesfile(filename, settings, standards)

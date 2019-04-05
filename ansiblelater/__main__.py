@@ -2,7 +2,7 @@
 """Main program."""
 
 import argparse
-import logging
+import json
 
 from ansiblelater import LOG, __version__, logger
 from ansiblelater.command import base, candidates
@@ -16,11 +16,11 @@ def main():
                         help="Location of configuration file")
     parser.add_argument("-r", "--rules", dest="rules.standards",
                         help="Location of standards rules")
-    parser.add_argument("-q", "--quiet", dest="logging.level", action="store_const",
-                        const=logging.ERROR, help="Only output errors")
+    parser.add_argument("-q", "--quiet", dest="logging.level", action="append_const",
+                        const=1, help="Only output errors")
     parser.add_argument("-s", "--standards", dest="rules.filter", action="append",
                         help="limit standards to specific names")
-    parser.add_argument("-v", dest="logging.level", action="count",
+    parser.add_argument("-v", dest="logging.level", action="append_const", const=-1,
                         help="Show more verbose output")
     parser.add_argument("rules.files", nargs="*")
     parser.add_argument("--version", action="version", version="%(prog)s {}".format(__version__))
@@ -29,7 +29,7 @@ def main():
 
     settings = base.get_settings(args)
     config = settings.config
-    # print(json.dumps(settings.config, indent=4, sort_keys=True))
+    print(json.dumps(settings.config["logging"], indent=4, sort_keys=True))
 
     logger.update_logger(LOG, config["logging"]["level"], config["logging"]["json"])
 
