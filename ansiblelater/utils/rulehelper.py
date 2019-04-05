@@ -5,7 +5,7 @@ import yaml
 from yamllint import linter
 from yamllint.config import YamlLintConfig
 
-from ansiblelater.command.review import Error
+from ansiblelater.command.candidates import Error
 from ansiblelater.exceptions import LaterAnsibleError, LaterError
 
 from .yamlhelper import (action_tasks, normalize_task, normalized_yaml,

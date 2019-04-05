@@ -439,7 +439,7 @@ def extract_from_list(blocks, candidates):
                 if isinstance(block[candidate], list):
                     meta_data = dict(block)
                     for key in delete_meta_keys:
-                        del meta_data[key]
+                        meta_data.pop(key, None)
                     results.extend(add_action_type(block[candidate], candidate, meta_data))
                 elif block[candidate] is not None:
                     raise RuntimeError(
@@ -491,6 +491,7 @@ def parse_yaml_linenumbers(data, filename):
     except (yaml.parser.ParserError, yaml.scanner.ScannerError) as e:
         raise LaterError("syntax error", e)
     except (yaml.composer.ComposerError) as e:
+        e.problem = "{} {}".format(e.context, e.problem)
         raise LaterError("syntax error", e)
     return data
 

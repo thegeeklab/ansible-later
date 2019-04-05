@@ -3,7 +3,7 @@ import os
 
 import yaml
 
-from ansiblelater.command.review import Error, Result
+from ansiblelater.command.candidates import Error, Result
 from ansiblelater.utils.rulehelper import (get_action_tasks,
                                            get_normalized_task,
                                            get_normalized_yaml, run_yamllint)

@@ -1,6 +1,6 @@
 from nested_lookup import nested_lookup
 
-from ansiblelater.command.review import Error, Result
+from ansiblelater.command.candidates import Error, Result
 from ansiblelater.utils.rulehelper import get_raw_yaml, get_tasks
 
 

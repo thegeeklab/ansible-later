@@ -29,7 +29,7 @@ def main():
 
     settings = base.get_settings(args)
     config = settings.config
-    print(json.dumps(settings.config["logging"], indent=4, sort_keys=True))
+    # print(json.dumps(settings.config["logging"], indent=4, sort_keys=True))
 
     logger.update_logger(LOG, config["logging"]["level"], config["logging"]["json"])
 
@@ -54,7 +54,7 @@ def main():
             errors = errors + candidate.review(settings, lines)
         else:
             LOG.info("Couldn't classify file %s" % filename)
-    # return errors
+    return errors
 
 
 if __name__ == "__main__":
