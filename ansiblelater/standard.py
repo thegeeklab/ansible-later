@@ -16,11 +16,6 @@ class Standard(object):
         :param standard_dict: Dictionary object containing all neseccary attributes
 
         """
-        # if "id" not in standard_dict:
-        #     standard_dict.update(id="")
-        # else:
-        #     standard_dict.update(id="[{}] ".format(standard_dict.get("id")))
-
         self.id = standard_dict.get("id", "")
         self.name = standard_dict.get("name")
         self.version = standard_dict.get("version")

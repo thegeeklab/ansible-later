@@ -113,6 +113,9 @@ class Candidate(object):
 
             labels = {"tag": "review", "standard": standard.name, "file": self.path, "passed": True}
 
+            if standard.id and standard.id.strip():
+                labels["id"] = standard.id
+
             for err in [err for err in result.errors
                         if not err.lineno or utils.is_line_in_ranges(err.lineno, utils.lines_ranges(lines))]:
                 err_labels = copy.copy(labels)
@@ -122,16 +125,22 @@ class Candidate(object):
 
                 if not standard.version:
                     LOG.warn("{id}Best practice '{name}' not met:\n{path}:{error}".format(
-                        id=standard.id, name=standard.name, path=self.path, error=err),
-                        extra=flag_extra(err_labels))
+                        id=self._format_id(standard.id),
+                        name=standard.name,
+                        path=self.path,
+                        error=err), extra=flag_extra(err_labels))
                 elif LooseVersion(standard.version) > LooseVersion(self.version):
                     LOG.warn("{id}Future standard '{name}' not met:\n{path}:{error}".format(
-                        id=standard.id, name=standard.name, path=self.path, error=err),
-                        extra=flag_extra(err_labels))
+                        id=self._format_id(standard.id),
+                        name=standard.name,
+                        path=self.path,
+                        error=err), extra=flag_extra(err_labels))
                 else:
                     LOG.error("{id}Standard '{name}' not met:\n{path}:{error}".format(
-                        id=standard.id, name=standard.name, path=self.path, error=err),
-                        extra=flag_extra(err_labels))
+                        id=self._format_id(standard.id),
+                        name=standard.name,
+                        path=self.path,
+                        error=err), extra=flag_extra(err_labels))
                     errors = errors + 1
             if not result.errors:
                 if not standard.version:
@@ -142,6 +151,12 @@ class Candidate(object):
                     LOG.info("Standard '%s' met" % standard.name)
 
         return errors
+
+    def _format_id(self, standard_id):
+        if standard_id and standard_id.strip():
+            standard_id = "[{id}] ".format(id=standard_id.strip())
+
+        return standard_id
 
     def __repr__(self): # noqa
         return "%s (%s)" % (type(self).__name__, self.path)
