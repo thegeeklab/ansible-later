@@ -3,6 +3,7 @@
 
 import argparse
 import json
+import multiprocessing
 
 from ansiblelater import LOG, __version__, logger
 from ansiblelater.command import base, candidates
@@ -29,14 +30,14 @@ def main():
 
     settings = base.get_settings(args)
     config = settings.config
-    # print(json.dumps(settings.config["logging"], indent=4, sort_keys=True))
 
     logger.update_logger(LOG, config["logging"]["level"], config["logging"]["json"])
 
     files = config["rules"]["files"]
     standards = base.get_standards(config["rules"]["standards"])
 
-    errors = 0
+    workers = multiprocessing.cpu_count() - 2
+    p = multiprocessing.Pool(workers)
     for filename in files:
         lines = None
         candidate = candidates.classify(filename, settings, standards)
@@ -51,10 +52,12 @@ def main():
                 LOG.info("Reviewing %s lines %s" % (candidate, lines))
             else:
                 LOG.info("Reviewing all of %s" % candidate)
-            errors = errors + candidate.review(settings, lines)
+            p.imap(candidate.review, (settings, lines,))
         else:
             LOG.info("Couldn't classify file %s" % filename)
-    return errors
+
+    p.close()
+    p.join()
 
 
 if __name__ == "__main__":

@@ -1,6 +1,5 @@
 """Global settings object definition."""
 
-import copy
 import logging
 import os
 
@@ -36,6 +35,7 @@ class Settings(object):
 
         """
         self.config_file = config_file
+        self.args_files = False
         self.args = self._set_args(args)
         self.config = self._get_config()
         self.schema = None
@@ -60,7 +60,11 @@ class Settings(object):
                 log_level = min(len(levels) - 1, max(log_level + adjustment, 0))
             tmp_dict["logging"]["level"] = logging.getLevelName(levels[log_level])
 
-        tmp_dict["rules"]["files"] = self._get_files(tmp_dict)
+        if len(tmp_dict["rules"]["files"]) == 0:
+            tmp_dict["rules"]["files"] = "*"
+        else:
+            tmp_dict["rules"]["files"] = tmp_dict["rules"]["files"]
+            self.args_files = True
 
         return tmp_dict
 
@@ -101,17 +105,6 @@ class Settings(object):
 
         return defaults
 
-    def _get_files(self, args):
-        if len(args["rules"]["files"]) == 0:
-            filelist = []
-            for root, dirs, files in os.walk("."):
-                for filename in files:
-                    filelist.append(os.path.relpath(os.path.normpath(os.path.join(root, filename))))
-        else:
-            filelist = args["rules"]["files"]
-
-        return filelist
-
     def _validate(self, config):
         try:
             anyconfig.validate(config, self.schema, ac_schema_safe=False)
@@ -124,14 +117,24 @@ class Settings(object):
             utils.sysexit_with_message("{schema}: {msg}".format(schema=schema_error, msg=e.message))
 
     def _update_filelist(self):
-        files = self.config["rules"]["files"]
+        include = self.config["rules"]["files"]
         excludes = self.config["rules"]["exclude_files"]
         ignore_dotfiles = self.config["rules"]["ignore_dotfiles"]
 
-        if ignore_dotfiles:
+        if ignore_dotfiles and not self.args_files:
             excludes.append(".")
+        else:
+            del excludes[:]
 
-        valid = copy.copy(files)
-        for item in valid:
-            if glob_match(item, excludes):
-                files.remove(item)
+        filelist = []
+        for root, dirs, files in os.walk("."):
+            for filename in files:
+                filelist.append(
+                    os.path.relpath(os.path.normpath(os.path.join(root, filename))))
+
+        valid = []
+        for item in filelist:
+            if glob_match(item, include) and not glob_match(item, excludes):
+                valid.append(item)
+
+        self.config["rules"]["files"] = valid
