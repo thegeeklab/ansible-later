@@ -18,9 +18,9 @@ def get_property(prop, project):
     return result.group(1)
 
 
-def get_readme(filename='README.md'):
+def get_readme(filename="README.md"):
     this = os.path.abspath(os.path.dirname(__file__))
-    with io.open(os.path.join(this, filename), encoding='utf-8') as f:
+    with io.open(os.path.join(this, filename), encoding="utf-8") as f:
         long_description = f.read()
     return long_description
 

@@ -310,7 +310,7 @@ def classify(filename, settings={}, standards=[]):
     if parentdir in ["library", "lookup_plugins", "callback_plugins",
                      "filter_plugins"] or filename.endswith(".py"):
         return Code(filename, settings, standards)
-    if "inventory" in basename or "hosts" in basename or parentdir in ["inventory"]:
+    if "inventory" == basename or "hosts" == basename or parentdir in ["inventories"]:
         return Inventory(filename, settings, standards)
     if "rolesfile" in basename or "requirements" in basename:
         return Rolesfile(filename, settings, standards)
