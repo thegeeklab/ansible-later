@@ -70,14 +70,18 @@ class Settings(object):
 
     def _get_config(self):
         defaults = self._get_defaults()
-        config_file = self.config_file
+        source_files = []
+        source_files.append(self.config_file)
+        source_files.append(os.path.relpath(os.path.normpath(os.path.join(os.getcwd(), ".later"))))
         cli_options = self.args
 
-        if config_file and os.path.exists(config_file):
-            with utils.open_file(config_file) as stream:
-                s = stream.read()
-                if self._validate(utils.safe_load(s)):
-                    anyconfig.merge(defaults, utils.safe_load(s), ac_merge=anyconfig.MS_DICTS)
+        for config in source_files:
+            if config and os.path.exists(config):
+                with utils.open_file(config) as stream:
+                    s = stream.read()
+                    sdict = utils.safe_load(s)
+                    if self._validate(sdict):
+                        anyconfig.merge(defaults, sdict, ac_merge=anyconfig.MS_DICTS)
 
         if cli_options and self._validate(cli_options):
             anyconfig.merge(defaults, cli_options, ac_merge=anyconfig.MS_DICTS)

@@ -116,7 +116,7 @@ class Candidate(object):
                 labels["id"] = standard.id
 
             for err in [err for err in result.errors
-                        if not err.lineno or utils.is_line_in_ranges(err.lineno, utils.lines_ranges(lines))]:
+                        if not err.lineno or utils.is_line_in_ranges(err.lineno, utils.lines_ranges(lines))]: # noqa
                 err_labels = copy.copy(labels)
                 err_labels["passed"] = False
                 if isinstance(err, Error):
@@ -141,15 +141,6 @@ class Candidate(object):
                         path=self.path,
                         error=err), extra=flag_extra(err_labels))
                     errors = errors + 1
-            # if not result.errors:
-            #     if not standard.version:
-            #         LOG.info("Best practice '%s' met" % standard.name, extra=flag_extra(labels))
-            #     elif LooseVersion(standard.version) > LooseVersion(self.version):
-            #         LOG.info("Future standard '%s' met" % standard.name, extra=flag_extra(labels))
-            #     else:
-            #         LOG.info("Standard '%s' met" % standard.name)
-
-        return errors
 
     def _format_id(self, standard_id):
         if standard_id and standard_id.strip():
