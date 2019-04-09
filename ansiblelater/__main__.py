@@ -2,7 +2,6 @@
 """Main program."""
 
 import argparse
-import json
 import multiprocessing
 
 from ansiblelater import LOG, __version__, logger
