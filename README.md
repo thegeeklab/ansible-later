@@ -13,28 +13,27 @@ for his work on ansible-review and ansible-lint.
 it helps to have a coding or best practice guideline in place. This will make ansible roles more readable for all
 maintainers and can reduce the troubleshooting time.
 
-`ansible-later` does _**not**_ ensure that your role will work as expected.
+`ansible-later` does _**not**_ ensure that your role will work as expected. For Deployment test you can use other tools
+like [molecule](https://github.com/ansible/molecule).
 
 The project name is an acronym for **L**ovely **A**utomation **TE**sting f**R**mework.
 
 ## Table of Content
 
-- [ansible-later](#ansible-later)
-  - [Table of Content](#table-of-content)
-    - [Setup](#setup)
-      - [Using pip](#using-pip)
-      - [From source](#from-source)
-    - [Usage](#usage)
-      - [Configuration](#configuration)
-      - [Review a git repositories](#review-a-git-repositories)
-      - [Review a list of files](#review-a-list-of-files)
-      - [Buildin rules](#buildin-rules)
-    - [Build your own](#build-your-own)
-      - [The standards file](#the-standards-file)
-      - [Candidates](#candidates)
-      - [Minimal standards checks](#minimal-standards-checks)
-    - [License](#license)
-    - [Maintainers and Contributors](#maintainers-and-contributors)
+- [Setup](#setup)
+  - [Using pip](#using-pip)
+  - [From source](#from-source)
+- [Configuration](#configuration)
+- [Usage](#usage)
+  - [Review a git repositories](#review-a-git-repositories)
+  - [Review a list of files](#review-a-list-of-files)
+  - [Buildin rules](#buildin-rules)
+- [Build your own](#build-your-own)
+  - [The standards file](#the-standards-file)
+  - [Candidates](#candidates)
+  - [Minimal standards checks](#minimal-standards-checks)
+- [License](#license)
+- [Maintainers and Contributors](#maintainers-and-contributors)
 
 ---
 
@@ -59,14 +58,30 @@ export PYTHONPATH=$PYTHONPATH:`pwd`/ansible-later/ansiblelater
 export PATH=$PATH:`pwd`/ansible-later/ansiblelater/bin
 ```
 
+### Configuration
+
+If your standards (and optionally inhouse rules) are set up, create
+a configuration file in the appropriate location (this will depend on
+your operating system)
+
+The location can be found by using `ansible-later` with no arguments.
+
+You can override the configuration file location with the `-c` flag.
+
+```INI
+[rules]
+standards = /path/to/your/standards/rules
+```
+
+The standards directory can be overridden with the `-d` argument.
+
 ### Usage
 
 ```Shell
 ansible-later FILES
 ```
 
-Where FILES is a space delimited list of files to review.
-ansible-later is _not_ recursive and won't descend
+Where FILES is a space delimited list of files to review. ansible-later is _not_ recursive and won't descend
 into child folders; it just processes the list of files you give it.
 
 Passing a folder in with the list of files will elicit a warning:
@@ -92,23 +107,6 @@ files, python code (modules, plugins) and playbooks.
   - roles with sub-roles
   - per-playbook repository
 - It should work with roles requirement files and with local roles
-
-#### Configuration
-
-If your standards (and optionally inhouse rules) are set up, create
-a configuration file in the appropriate location (this will depend on
-your operating system)
-
-The location can be found by using `ansible-later` with no arguments.
-
-You can override the configuration file location with the `-c` flag.
-
-```INI
-[rules]
-standards = /path/to/your/standards/rules
-```
-
-The standards directory can be overridden with the `-d` argument.
 
 #### Review a git repositories
 
