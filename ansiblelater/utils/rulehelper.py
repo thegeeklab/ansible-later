@@ -8,10 +8,13 @@ from yamllint import linter
 from yamllint.config import YamlLintConfig
 
 from ansiblelater.command.candidates import Error
-from ansiblelater.exceptions import LaterAnsibleError, LaterError
+from ansiblelater.exceptions import LaterAnsibleError
+from ansiblelater.exceptions import LaterError
 
-from .yamlhelper import (action_tasks, normalize_task, normalized_yaml,
-                         parse_yaml_linenumbers)
+from .yamlhelper import action_tasks
+from .yamlhelper import normalize_task
+from .yamlhelper import normalized_yaml
+from .yamlhelper import parse_yaml_linenumbers
 
 
 def get_tasks(candidate, settings):

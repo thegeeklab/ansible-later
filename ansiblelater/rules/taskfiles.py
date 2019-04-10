@@ -3,7 +3,8 @@
 import re
 from collections import defaultdict
 
-from ansiblelater.command.candidates import Error, Result
+from ansiblelater.command.candidates import Error
+from ansiblelater.command.candidates import Result
 from ansiblelater.utils.rulehelper import get_normalized_yaml
 
 

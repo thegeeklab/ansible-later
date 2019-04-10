@@ -7,7 +7,8 @@ from distutils.version import LooseVersion
 
 import ansible
 
-from ansiblelater import settings, utils
+from ansiblelater import settings
+from ansiblelater import utils
 
 
 def get_settings(args):

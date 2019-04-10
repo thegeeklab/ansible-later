@@ -5,10 +5,12 @@ import os
 
 import yaml
 
-from ansiblelater.command.candidates import Error, Result
-from ansiblelater.utils.rulehelper import (get_action_tasks,
-                                           get_normalized_task,
-                                           get_normalized_yaml, run_yamllint)
+from ansiblelater.command.candidates import Error
+from ansiblelater.command.candidates import Result
+from ansiblelater.utils.rulehelper import get_action_tasks
+from ansiblelater.utils.rulehelper import get_normalized_task
+from ansiblelater.utils.rulehelper import get_normalized_yaml
+from ansiblelater.utils.rulehelper import run_yamllint
 
 
 def check_yaml_has_content(candidate, settings):

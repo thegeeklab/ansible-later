@@ -8,8 +8,8 @@ from distutils.version import LooseVersion
 
 from six import iteritems
 
-from ansiblelater import LOG, utils
-from ansiblelater.exceptions import LaterAnsibleError, LaterError  # noqa
+from ansiblelater import LOG
+from ansiblelater import utils
 from ansiblelater.logger import flag_extra
 
 try:

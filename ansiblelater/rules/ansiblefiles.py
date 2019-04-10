@@ -4,10 +4,11 @@ import os
 import re
 from collections import defaultdict
 
-from ansiblelater.command.candidates import Error, Result
+from ansiblelater.command.candidates import Error
+from ansiblelater.command.candidates import Result
 from ansiblelater.utils import count_spaces
-from ansiblelater.utils.rulehelper import (get_normalized_tasks,
-                                           get_normalized_yaml)
+from ansiblelater.utils.rulehelper import get_normalized_tasks
+from ansiblelater.utils.rulehelper import get_normalized_yaml
 
 
 def check_braces_spaces(candidate, settings):

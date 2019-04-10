@@ -1,25 +1,29 @@
-from ansiblelater.rules.ansiblefiles import (check_become_user,
-                                             check_braces_spaces,
-                                             check_command_has_changes,
-                                             check_command_instead_of_module,
-                                             check_compare_to_literal_bool,
-                                             check_empty_string_compare,
-                                             check_filter_separation,
-                                             check_install_use_latest,
-                                             check_literal_bool_format,
-                                             check_name_format,
-                                             check_named_task,
-                                             check_shell_instead_command,
-                                             check_unique_named_task)
-from ansiblelater.rules.rolefiles import check_meta_main, check_scm_in_src
+"""Example standards definition."""
+
+from ansiblelater.rules.ansiblefiles import check_become_user
+from ansiblelater.rules.ansiblefiles import check_braces_spaces
+from ansiblelater.rules.ansiblefiles import check_command_has_changes
+from ansiblelater.rules.ansiblefiles import check_command_instead_of_module
+from ansiblelater.rules.ansiblefiles import check_compare_to_literal_bool
+from ansiblelater.rules.ansiblefiles import check_empty_string_compare
+from ansiblelater.rules.ansiblefiles import check_filter_separation
+from ansiblelater.rules.ansiblefiles import check_install_use_latest
+from ansiblelater.rules.ansiblefiles import check_literal_bool_format
+from ansiblelater.rules.ansiblefiles import check_name_format
+from ansiblelater.rules.ansiblefiles import check_named_task
+from ansiblelater.rules.ansiblefiles import check_shell_instead_command
+from ansiblelater.rules.ansiblefiles import check_unique_named_task
+from ansiblelater.rules.rolefiles import check_meta_main
+from ansiblelater.rules.rolefiles import check_scm_in_src
 from ansiblelater.rules.taskfiles import check_line_between_tasks
-from ansiblelater.rules.yamlfiles import (check_native_yaml, check_yaml_colons,
-                                          check_yaml_document_start,
-                                          check_yaml_empty_lines,
-                                          check_yaml_file,
-                                          check_yaml_has_content,
-                                          check_yaml_hyphens,
-                                          check_yaml_indent)
+from ansiblelater.rules.yamlfiles import check_native_yaml
+from ansiblelater.rules.yamlfiles import check_yaml_colons
+from ansiblelater.rules.yamlfiles import check_yaml_document_start
+from ansiblelater.rules.yamlfiles import check_yaml_empty_lines
+from ansiblelater.rules.yamlfiles import check_yaml_file
+from ansiblelater.rules.yamlfiles import check_yaml_has_content
+from ansiblelater.rules.yamlfiles import check_yaml_hyphens
+from ansiblelater.rules.yamlfiles import check_yaml_indent
 from ansiblelater.standard import Standard
 
 tasks_should_be_separated = Standard(dict(

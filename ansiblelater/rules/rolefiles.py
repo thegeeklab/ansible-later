@@ -2,8 +2,10 @@
 
 from nested_lookup import nested_lookup
 
-from ansiblelater.command.candidates import Error, Result
-from ansiblelater.utils.rulehelper import get_raw_yaml, get_tasks
+from ansiblelater.command.candidates import Error
+from ansiblelater.command.candidates import Result
+from ansiblelater.utils.rulehelper import get_raw_yaml
+from ansiblelater.utils.rulehelper import get_tasks
 
 
 def check_meta_main(candidate, settings):

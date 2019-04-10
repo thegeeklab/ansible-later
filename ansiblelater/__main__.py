@@ -4,8 +4,11 @@
 import argparse
 import multiprocessing
 
-from ansiblelater import LOG, __version__, logger
-from ansiblelater.command import base, candidates
+from ansiblelater import LOG
+from ansiblelater import __version__
+from ansiblelater import logger
+from ansiblelater.command import base
+from ansiblelater.command import candidates
 
 
 def main():
