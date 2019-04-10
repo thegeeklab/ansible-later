@@ -10,7 +10,9 @@ from ansiblelater.utils.rulehelper import (get_normalized_tasks,
 
 def check_braces_spaces(candidate, settings):
     yamllines, errors = get_normalized_yaml(candidate, settings)
-    description = "no suitable numbers of spaces (required: 1)"
+    conf = settings["ansible"]["double-braces"]
+    description = "no suitable numbers of spaces (min: {min} max: {max})".format(
+        min=conf["min-spaces-inside"], max=conf["max-spaces-inside"])
 
     matches = []
     braces = re.compile("{{(.*?)}}")
@@ -23,9 +25,13 @@ def check_braces_spaces(candidate, settings):
                     matches.append((i, item))
 
         for i, line in matches:
-            leading, trailing = count_spaces(line)
+            [leading, trailing] = count_spaces(line)
+            sum_spaces = leading + trailing
 
-            if not leading == 1 or not trailing == 1:
+            if (
+                (sum_spaces < conf["min-spaces-inside"] * 2)
+                or (sum_spaces > conf["min-spaces-inside"] * 2)
+            ):
                 errors.append(Error(i, description))
     return Result(candidate.path, errors)
 

@@ -103,7 +103,33 @@ class Settings(object):
             },
             "ansible": {
                 "custom_modules": [],
-            }
+                "double-braces": {
+                    "min-spaces-inside": 1,
+                    "max-spaces-inside": 1,
+                },
+            },
+            "yamllint": {
+                "empty-lines": {
+                    "max": 1,
+                    "max-start": 0,
+                    "max-end": 1,
+                },
+                "indentation": {
+                    "spaces": 2,
+                    "check-multi-line-strings": False,
+                    "indent-sequences": True,
+                },
+                "hyphens": {
+                    "max-spaces-after": 1
+                },
+                "document-start": {
+                    "present": True
+                },
+                "colons": {
+                    "max-spaces-before": 0,
+                    "max-spaces-after": 1
+                },
+            },
         }
         self.schema = anyconfig.gen_schema(defaults)
 

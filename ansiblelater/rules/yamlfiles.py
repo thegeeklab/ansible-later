@@ -44,32 +44,36 @@ def check_native_yaml(candidate, settings):
 
 
 def check_yaml_empty_lines(candidate, settings):
-    options = "rules: {empty-lines: {max: 1, max-start: 0, max-end: 1}}"
-    errors = run_yamllint(candidate, settings, options)
+    options = "rules: {{empty-lines: {conf}}}".format(
+        conf=settings["yamllint"]["empty-lines"])
+    errors = run_yamllint(candidate.path, options)
     return Result(candidate.path, errors)
 
 
 def check_yaml_indent(candidate, settings):
-    options = "rules: {indentation: {spaces: 2, check-multi-line-strings: false, indent-sequences: true}}"
-    errors = run_yamllint(candidate, settings, options)
+    options = "rules: {{indentation: {conf}}}".format(
+        conf=settings["yamllint"]["indentation"])
+    errors = run_yamllint(candidate.path, options)
     return Result(candidate.path, errors)
 
 
 def check_yaml_hyphens(candidate, settings):
-    options = "rules: {hyphens: {max-spaces-after: 1}}"
-    errors = run_yamllint(candidate, settings, options)
+    options = "rules: {{hyphens: {conf}}}".format(
+        conf=settings["yamllint"]["hyphens"])
+    errors = run_yamllint(candidate.path, options)
     return Result(candidate.path, errors)
 
 
 def check_yaml_document_start(candidate, settings):
-    options = "rules: {document-start: {present: true}}"
-    errors = run_yamllint(candidate, settings, options)
+    options = "rules: {{document-start: {conf}}}".format(
+        conf=settings["yamllint"]["document-start"])
+    errors = run_yamllint(candidate.path, options)
     return Result(candidate.path, errors)
 
 
 def check_yaml_colons(candidate, settings):
-    options = "rules: {colons: {max-spaces-before: 0, max-spaces-after: 1}}"
-    errors = run_yamllint(candidate, settings, options)
+    options = "rules: {{colons: {conf}}}"
+    errors = run_yamllint(candidate.path, options)
     return Result(candidate.path, errors)
 
 

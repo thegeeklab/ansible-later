@@ -121,10 +121,10 @@ def get_raw_yaml(candidate, settings):
     return content, errors
 
 
-def run_yamllint(candidate, settings, options="extends: default"):
+def run_yamllint(path, options="extends: default"):
     errors = []
     try:
-        with codecs.open(candidate.path, mode="rb", encoding="utf-8") as f:
+        with codecs.open(path, mode="rb", encoding="utf-8") as f:
             for problem in linter.run(f, YamlLintConfig(options)):
                 errors.append(Error(problem.line, problem.desc))
     except LaterError as ex:
