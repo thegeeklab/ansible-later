@@ -1,3 +1,5 @@
+"""Checks related to ansible specific best practices."""
+
 import os
 import re
 from collections import defaultdict

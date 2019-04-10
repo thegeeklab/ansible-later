@@ -1,3 +1,5 @@
+"""Checks related to generic YAML syntax (yamllint)."""
+
 import codecs
 import os
 

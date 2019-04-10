@@ -1,3 +1,5 @@
+"""Global utils collection."""
+
 from __future__ import print_function
 
 import contextlib

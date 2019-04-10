@@ -1,3 +1,5 @@
+"""Checks related to ansible roles files."""
+
 from nested_lookup import nested_lookup
 
 from ansiblelater.command.candidates import Error, Result

@@ -1,3 +1,5 @@
+"""Abstracted methods to simplify role writeup."""
+
 import codecs
 from collections import defaultdict
 
