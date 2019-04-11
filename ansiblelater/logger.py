@@ -27,11 +27,11 @@ colorama.init(autoreset=True, strip=not _should_do_markup())
 
 def flag_extra(extra):
     """Ensure extra args are prefixed."""
-    assert isinstance(extra, dict)
-
     flagged = dict()
-    for key, value in iteritems(extra):
-        flagged["later_" + key] = value
+
+    if isinstance(extra, dict):
+        for key, value in iteritems(extra):
+            flagged["later_" + key] = value
 
     return flagged
 
