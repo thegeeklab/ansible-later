@@ -73,14 +73,16 @@ class Candidate(object):
             version = utils.standards_latest(self.standards)
             if self.expected_version:
                 if isinstance(self, RoleFile):
-                    LOG.warn("%s %s is in a role that contains a meta/main.yml without a declared "
-                             "standards version. "
-                             "Using latest standards version %s" %
-                             (type(self).__name__, self.path, version))
+                    LOG.warning(
+                        "%s %s is in a role that contains a meta/main.yml without a declared "
+                        "standards version. "
+                        "Using latest standards version %s" %
+                        (type(self).__name__, self.path, version))
                 else:
-                    LOG.warn("%s %s does not present standards version. "
-                             "Using latest standards version %s" %
-                             (type(self).__name__, self.path, version))
+                    LOG.warning(
+                        "%s %s does not present standards version. "
+                        "Using latest standards version %s" %
+                        (type(self).__name__, self.path, version))
         else:
             LOG.info("%s %s declares standards version %s" %
                      (type(self).__name__, self.path, version))
@@ -125,13 +127,13 @@ class Candidate(object):
                     err_labels.update(err.to_dict())
 
                 if not standard.version:
-                    LOG.warn("{id}Best practice '{name}' not met:\n{path}:{error}".format(
+                    LOG.warning("{id}Best practice '{name}' not met:\n{path}:{error}".format(
                         id=self._format_id(standard.id),
                         name=standard.name,
                         path=self.path,
                         error=err), extra=flag_extra(err_labels))
                 elif LooseVersion(standard.version) > LooseVersion(self.version):
-                    LOG.warn("{id}Future standard '{name}' not met:\n{path}:{error}".format(
+                    LOG.warning("{id}Future standard '{name}' not met:\n{path}:{error}".format(
                         id=self._format_id(standard.id),
                         name=standard.name,
                         path=self.path,

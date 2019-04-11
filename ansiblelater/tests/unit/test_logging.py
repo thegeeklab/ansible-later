@@ -1,41 +1,42 @@
+"""Test logging module."""
+
 from __future__ import print_function
 
 import colorama
-import logging
 
-from ansiblelater.utils import info, warn, abort, error, should_do_markup
+from ansiblelater import logger
 
 
-def test_abort(capsys, mocker):
-    abort('foo')
-    stdout, _ = capsys.readouterr()
+def test_critical(capsys, mocker):
+    log = logger.get_logger("test_critical")
+    log.critical("foo")
+    _, stderr = capsys.readouterr()
 
-    print('{}{}{}'.format(colorama.Fore.RED, 'FATAL: foo'.rstrip(),
+    print("{}{}{}".format(colorama.Fore.RED, "CRITICAL: foo".rstrip(),
                           colorama.Style.RESET_ALL))
     x, _ = capsys.readouterr()
 
-    assert x == stdout
+    assert x == stderr
 
 
 def test_error(capsys, mocker):
-    error('foo')
-    stdout, _ = capsys.readouterr()
+    log = logger.get_logger("test_error")
+    log.error("foo")
+    _, stderr = capsys.readouterr()
 
-    print('{}{}{}'.format(colorama.Fore.RED, 'ERROR: foo'.rstrip(),
+    print("{}{}{}".format(colorama.Fore.RED, "ERROR: foo".rstrip(),
                           colorama.Style.RESET_ALL))
     x, _ = capsys.readouterr()
 
-    assert x == stdout
+    assert x == stderr
 
 
 def test_warn(capsys, mocker):
-    settings = mocker.MagicMock()
-    settings.log_level = getattr(logging, 'WARNING')
-
-    warn('foo', settings)
+    log = logger.get_logger("test_warn")
+    log.warning("foo")
     stdout, _ = capsys.readouterr()
 
-    print('{}{}{}'.format(colorama.Fore.YELLOW, 'WARN: foo'.rstrip(),
+    print("{}{}{}".format(colorama.Fore.YELLOW, "WARNING: foo".rstrip(),
                           colorama.Style.RESET_ALL))
     x, _ = capsys.readouterr()
 
@@ -43,13 +44,11 @@ def test_warn(capsys, mocker):
 
 
 def test_info(capsys, mocker):
-    settings = mocker.MagicMock()
-    settings.log_level = getattr(logging, 'INFO')
-
-    info('foo', settings)
+    log = logger.get_logger("test_info")
+    log.info("foo")
     stdout, _ = capsys.readouterr()
 
-    print('{}{}{}'.format(colorama.Fore.BLUE, 'INFO: foo'.rstrip(),
+    print("{}{}{}".format(colorama.Fore.BLUE, "INFO: foo".rstrip(),
                           colorama.Style.RESET_ALL))
     x, _ = capsys.readouterr()
 
@@ -57,26 +56,26 @@ def test_info(capsys, mocker):
 
 
 def test_markup_detection_pycolors0(monkeypatch):
-    monkeypatch.setenv('PY_COLORS', '0')
-    assert not should_do_markup()
+    monkeypatch.setenv("PY_COLORS", "0")
+    assert not logger._should_do_markup()
 
 
 def test_markup_detection_pycolors1(monkeypatch):
-    monkeypatch.setenv('PY_COLORS', '1')
-    assert should_do_markup()
+    monkeypatch.setenv("PY_COLORS", "1")
+    assert logger._should_do_markup()
 
 
 def test_markup_detection_tty_yes(mocker):
-    mocker.patch('sys.stdout.isatty', return_value=True)
-    mocker.patch('os.environ', {'TERM': 'xterm'})
-    assert should_do_markup()
+    mocker.patch("sys.stdout.isatty", return_value=True)
+    mocker.patch("os.environ", {"TERM": "xterm"})
+    assert logger._should_do_markup()
     mocker.resetall()
     mocker.stopall()
 
 
 def test_markup_detection_tty_no(mocker):
-    mocker.patch('os.environ', {})
-    mocker.patch('sys.stdout.isatty', return_value=False)
-    assert not should_do_markup()
+    mocker.patch("os.environ", {})
+    mocker.patch("sys.stdout.isatty", return_value=False)
+    assert not logger._should_do_markup()
     mocker.resetall()
     mocker.stopall()

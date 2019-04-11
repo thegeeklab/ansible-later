@@ -128,10 +128,10 @@ def _get_warn_handler(json=False):
 
 
 def _get_info_handler(json=False):
-    handler = logging.StreamHandler(sys.stderr)
+    handler = logging.StreamHandler(sys.stdout)
     handler.setLevel(logging.INFO)
     handler.addFilter(LogFilter(logging.INFO))
-    handler.setFormatter(MultilineFormatter(info("%(message)s")))
+    handler.setFormatter(MultilineFormatter(info(CONSOLE_FORMAT)))
 
     if json:
         handler.setFormatter(MultilineJsonFormatter(JSON_FORMAT))
