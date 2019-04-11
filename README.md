@@ -24,9 +24,8 @@ The project name is an acronym for **L**ovely **A**utomation **TE**sting f**R**m
   - [Using pip](#using-pip)
   - [From source](#from-source)
 - [Configuration](#configuration)
+  - [Default settings](#default-settings)
 - [Usage](#usage)
-  - [Review a git repositories](#review-a-git-repositories)
-  - [Review a list of files](#review-a-list-of-files)
   - [Buildin rules](#buildin-rules)
 - [Build your own](#build-your-own)
   - [The standards file](#the-standards-file)
@@ -53,27 +52,86 @@ sudo pip install ansible-later
 
 ```Shell
 # Install dependency
-git clone https://repourl
+git clone https://github.com/xoxys/ansible-later
 export PYTHONPATH=$PYTHONPATH:`pwd`/ansible-later/ansiblelater
-export PATH=$PATH:`pwd`/ansible-later/ansiblelater/bin
+export PATH=$PATH:`pwd`/ansible-later/bin
 ```
 
 ### Configuration
 
-If your standards (and optionally inhouse rules) are set up, create
-a configuration file in the appropriate location (this will depend on
-your operating system)
+ansible-later comes with some default settigs which should be sufficent for most users to start,
+but you can adjust most settings to your needs.
 
-The location can be found by using `ansible-later` with no arguments.
+Changes can be made in a yaml configuration file or through cli options
+which will be processed in the following order (last wins):
 
-You can override the configuration file location with the `-c` flag.
+- default config (build-in)
+- global config file (this will depend on your operating system)
+- folderbased config file (`.later` file in current working folder)
+- cli options
 
-```INI
-[rules]
-standards = /path/to/your/standards/rules
+Be careful! YAML Attributes will be overwritten while lists in any
+config file will be merged.
+
+To make it easier to review a singel file e.g. for debugging purpose, amsible-later
+will ignore `exclude_files` and `ignore_dotfiles` options.
+
+#### Default settings
+
+```YAML
+ansible:
+  # Add the name of used custom ansible modules.
+  # Otherwise ansible-later can't detect unknown modules
+  # and will through an error.
+  custom_modules: []
+  # Settings for variable formatting rule (ANSIBLE0004)
+  double-braces:
+    max-spaces-inside: 1
+    min-spaces-inside: 1
+
+logging:
+  # You can enable json logging if a parsable output is required
+  json: False
+  # Possible options debug | info | warning | error | critical
+  level: "warning"
+
+# Global settings for all defined rules
+rules:
+  # list of files to exclude
+  exclude_files: []
+  # Examples:
+  #  - molecule/
+  #  - files/**/*.py
+
+  # List of Ansible rule ID's
+  # If empty all rules will be used.
+  filter: []
+  
+  # All dotfiles (including hidden folders) are excluded by default.
+  # You can disable this setting and handle dotfiles by yourself with `exclude_files`.
+  ignore_dotfiles: True
+  # Path to the folder containing your custom standards file
+  standards: ansiblelater/data
+
+# Block to control included yamlllint rules.
+# See https://yamllint.readthedocs.io/en/stable/rules.html
+yamllint:
+  colons:
+    max-spaces-after: 1
+    max-spaces-before: 0
+  document-start:
+    present: True
+  empty-lines:
+    max: 1
+    max-end: 1
+    max-start: 0
+  hyphens:
+    max-spaces-after: 1
+  indentation:
+    check-multi-line-strings: False
+    indent-sequences: True
+    spaces: 2
 ```
-
-The standards directory can be overridden with the `-d` argument.
 
 ### Usage
 
@@ -81,25 +139,23 @@ The standards directory can be overridden with the `-d` argument.
 ansible-later FILES
 ```
 
-Where FILES is a space delimited list of files to review. ansible-later is _not_ recursive and won't descend
-into child folders; it just processes the list of files you give it.
-
-Passing a folder in with the list of files will elicit a warning:
+Where FILES is a space delimited list of files to review. You can also pass glob
+patterns to ansible-later:
 
 ```Shell
-WARN: Couldn't classify file ./foldername
+# Review single files
+ansible-later meta/main.yml tasks/install.yml
+
+# Review all yml files (including subfolders)
+ansible-later **/*.yml
 ```
 
-ansible-later will review inventory files, role
-files, python code (modules, plugins) and playbooks.
+ansible-later will review inventory files, role f0iles, python code (modules, plugins)
+and playbooks.
 
 - The goal is that each file that changes in a
   changeset should be reviewable simply by passing
   those files as the arguments to ansible-later.
-- Roles are slightly harder, and sub-roles are yet
-  harder still (currently just using `-R` to process
-  roles works very well, but doesn't examine the
-  structure of the role)
 - Using `{{ playbook_dir }}` in sub roles is so far
   very hard.
 - This should work against various repository styles
@@ -107,24 +163,6 @@ files, python code (modules, plugins) and playbooks.
   - roles with sub-roles
   - per-playbook repository
 - It should work with roles requirement files and with local roles
-
-#### Review a git repositories
-
-- `git ls-files | xargs ansible-later` works well in
-  a roles repo to review the whole role. But it will
-  review the whole of other repos too.
-- `git ls-files *[^LICENSE,.md] | xargs ansible-later`
-  works like the first example but excludes some
-  unnecessary files.
-- `git diff branch_to_compare | ansible-later` will
-  review only the changes between the branches and
-  surrounding context.
-
-#### Review a list of files
-
-- `find . -type f | xargs ansible-later` will review
-  all files in the current folder (and all subfolders),
-  even if they're not checked into git
 
 #### Buildin rules
 
