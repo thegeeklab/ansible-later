@@ -69,8 +69,8 @@ setup(
         "colorama",
         "anyconfig",
         "python-json-logger",
-        "globmatch",
-        "jsonschema"
+        "jsonschema",
+        "pathspec"
     ],
     entry_points={
         "console_scripts": [
