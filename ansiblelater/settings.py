@@ -164,8 +164,8 @@ class Settings(object):
                     os.path.relpath(os.path.normpath(os.path.join(root, filename))))
 
         valid = []
-        includespec = pathspec.PathSpec.from_lines('gitwildmatch', includes)
-        excludespec = pathspec.PathSpec.from_lines('gitwildmatch', excludes)
+        includespec = pathspec.PathSpec.from_lines("gitwildmatch", includes)
+        excludespec = pathspec.PathSpec.from_lines("gitwildmatch", excludes)
         for item in filelist:
             if includespec.match_file(item) and not excludespec.match_file(item):
                 valid.append(item)
