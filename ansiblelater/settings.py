@@ -81,8 +81,8 @@ class Settings(object):
                 with utils.open_file(config) as stream:
                     s = stream.read()
                     sdict = utils.safe_load(s)
-                    sdict["logging"]["level"] = sdict["logging"]["level"].upper()
                     if self._validate(sdict):
+                        sdict["logging"]["level"] = sdict["logging"]["level"].upper()
                         anyconfig.merge(defaults, sdict, ac_merge=anyconfig.MS_DICTS)
 
         if cli_options and self._validate(cli_options):
@@ -100,7 +100,7 @@ class Settings(object):
                 "exclude_files": []
             },
             "logging": {
-                "level": logging.getLevelName(30),
+                "level": "WARNING",
                 "json": False
             },
             "ansible": {
