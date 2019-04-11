@@ -3,8 +3,8 @@
 import os
 
 import anyconfig
+import pathspec
 from appdirs import AppDirs
-from globmatch import glob_match
 from jsonschema._utils import format_as_index
 from pkg_resources import resource_filename
 
@@ -60,7 +60,7 @@ class Settings(object):
             tmp_dict["logging"]["level"] = levels[log_level]
 
         if len(tmp_dict["rules"]["files"]) == 0:
-            tmp_dict["rules"]["files"] = "*"
+            tmp_dict["rules"]["files"] = ["*"]
         else:
             tmp_dict["rules"]["files"] = tmp_dict["rules"]["files"]
             self.args_files = True
@@ -148,12 +148,12 @@ class Settings(object):
             utils.sysexit_with_message("{schema}: {msg}".format(schema=schema_error, msg=e.message))
 
     def _update_filelist(self):
-        include = self.config["rules"]["files"]
+        includes = self.config["rules"]["files"]
         excludes = self.config["rules"]["exclude_files"]
         ignore_dotfiles = self.config["rules"]["ignore_dotfiles"]
 
         if ignore_dotfiles and not self.args_files:
-            excludes.append(".")
+            excludes.append(".*")
         else:
             del excludes[:]
 
@@ -164,8 +164,10 @@ class Settings(object):
                     os.path.relpath(os.path.normpath(os.path.join(root, filename))))
 
         valid = []
+        includespec = pathspec.PathSpec.from_lines('gitwildmatch', includes)
+        excludespec = pathspec.PathSpec.from_lines('gitwildmatch', excludes)
         for item in filelist:
-            if glob_match(item, include) and not glob_match(item, excludes):
+            if includespec.match_file(item) and not excludespec.match_file(item):
                 valid.append(item)
 
         self.config["rules"]["files"] = valid
