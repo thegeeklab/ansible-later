@@ -25,9 +25,10 @@ The project name is an acronym for **L**ovely **A**utomation **TE**sting f**R**m
   - [From source](#from-source)
 - [Configuration](#configuration)
   - [Default settings](#default-settings)
+  - [CLI Options](#cli-options)
 - [Usage](#usage)
-  - [Buildin rules](#buildin-rules)
-- [Build your own](#build-your-own)
+- [Buildin rules](#buildin-rules)
+- [Build your own rules](#build-your-own-rules)
   - [The standards file](#the-standards-file)
   - [Candidates](#candidates)
   - [Minimal standards checks](#minimal-standards-checks)
@@ -133,6 +134,34 @@ yamllint:
     spaces: 2
 ```
 
+#### CLI Options
+
+You can get all available cli options by running `ansible-later --help`:
+
+```Shell
+$ ansible-later --help
+usage: ansible-later [-h] [-c CONFIG_FILE] [-r RULES.STANDARDS]
+                     [-s RULES.FILTER] [-v] [-q] [--version]
+                     [rules.files [rules.files ...]]
+
+Validate ansible files against best pratice guideline
+
+positional arguments:
+  rules.files
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c CONFIG_FILE, --config CONFIG_FILE
+                        location of configuration file
+  -r RULES.STANDARDS, --rules RULES.STANDARDS
+                        location of standards rules
+  -s RULES.FILTER, --standards RULES.FILTER
+                        limit standards to specific ID's
+  -v                    increase log level
+  -q                    decrease log level
+  --version             show program's version number and exit
+```
+
 ### Usage
 
 ```Shell
@@ -164,7 +193,7 @@ and playbooks.
   - per-playbook repository
 - It should work with roles requirement files and with local roles
 
-#### Buildin rules
+### Buildin rules
 
 Reviews are nothing without some rules or standards against which to review. ansible-later
 comes with a couple of built-in checks explained in the following table.
@@ -196,7 +225,7 @@ comes with a couple of built-in checks explained in the following table.
 | check_become_user               | ANSIBLE0015 | `become` should be always used combined with `become_user`.       |                                                                      |
 | check_filter_separation         | ANSIBLE0016 | Jinja2 filters should be separated with spaces.                   |                                                                      |
 
-### Build your own
+### Build your own rules
 
 #### The standards file
 

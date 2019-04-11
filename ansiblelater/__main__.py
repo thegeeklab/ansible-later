@@ -16,15 +16,15 @@ def main():
     parser = argparse.ArgumentParser(
         description="Validate ansible files against best pratice guideline")
     parser.add_argument("-c", "--config", dest="config_file",
-                        help="Location of configuration file")
+                        help="location of configuration file")
     parser.add_argument("-r", "--rules", dest="rules.standards",
-                        help="Location of standards rules")
-    parser.add_argument("-q", "--quiet", dest="logging.level", action="append_const",
-                        const=1, help="Only output errors")
+                        help="location of standards rules")
     parser.add_argument("-s", "--standards", dest="rules.filter", action="append",
-                        help="limit standards to specific names")
+                        help="limit standards to specific ID's")
     parser.add_argument("-v", dest="logging.level", action="append_const", const=-1,
-                        help="Show more verbose output")
+                        help="increase log level")
+    parser.add_argument("-q", dest="logging.level", action="append_const",
+                        const=1, help="decrease log level")
     parser.add_argument("rules.files", nargs="*")
     parser.add_argument("--version", action="version", version="%(prog)s {}".format(__version__))
 
