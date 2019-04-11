@@ -68,7 +68,7 @@ which will be processed in the following order (last wins):
 
 - default config (build-in)
 - global config file (this will depend on your operating system)
-- folderbased config file (`.later` file in current working folder)
+- folderbased config file (`.later.yml` file in current working folder)
 - cli options
 
 Be careful! YAML Attributes will be overwritten while lists in any
@@ -80,6 +80,7 @@ will ignore `exclude_files` and `ignore_dotfiles` options.
 #### Default settings
 
 ```YAML
+---
 ansible:
   # Add the name of used custom ansible modules.
   # Otherwise ansible-later can't detect unknown modules

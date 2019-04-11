@@ -54,7 +54,7 @@ class Settings(object):
 
         # Override correct log level from argparse
         levels = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
-        log_level = levels.index(logging.getLevelName(defaults["logging"]["level"]))
+        log_level = levels.index(defaults["logging"]["level"])
         if tmp_dict.get("logging"):
             for adjustment in tmp_dict["logging"]["level"]:
                 log_level = min(len(levels) - 1, max(log_level + adjustment, 0))
@@ -72,7 +72,8 @@ class Settings(object):
         defaults = self._get_defaults()
         source_files = []
         source_files.append(self.config_file)
-        source_files.append(os.path.relpath(os.path.normpath(os.path.join(os.getcwd(), ".later"))))
+        source_files.append(os.path.relpath(
+            os.path.normpath(os.path.join(os.getcwd(), ".later.yml"))))
         cli_options = self.args
 
         for config in source_files:
@@ -80,6 +81,7 @@ class Settings(object):
                 with utils.open_file(config) as stream:
                     s = stream.read()
                     sdict = utils.safe_load(s)
+                    sdict["logging"]["level"] = sdict["logging"]["level"].upper()
                     if self._validate(sdict):
                         anyconfig.merge(defaults, sdict, ac_merge=anyconfig.MS_DICTS)
 
@@ -98,7 +100,7 @@ class Settings(object):
                 "exclude_files": []
             },
             "logging": {
-                "level": logging.getLevelName("WARNING"),
+                "level": logging.getLevelName(30),
                 "json": False
             },
             "ansible": {
