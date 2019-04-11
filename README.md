@@ -91,6 +91,9 @@ ansible:
     max-spaces-inside: 1
     min-spaces-inside: 1
 
+# Global logging configuration
+# If you would like to force colored output (e.g. non-tty)
+# set emvironment variable `PY_COLORS=1`
 logging:
   # You can enable json logging if a parsable output is required
   json: False
@@ -295,7 +298,7 @@ which contains some meta informations and is an instance of one of following obj
 | HostVars    | all files (including subdirs) within the parent dir `host_vars`                                                              |
 | Meta        | all files within the parent dir `meta`                                                                                       |
 | Code        | all files within the parent dir `library`, `lookup_plugins`, `callback_plugins` and `filter_plugins` or python files (`.py`) |
-| Inventory   | all files within the parent dir `inventory` and `inventory` or `hosts` in filename                                           |
+| Inventory   | all files within the parent dir `inventories` and `inventory` or `hosts` as filename                                         |
 | Rolesfile   | all files with `rolesfile` or `requirements` in filename                                                                     |
 | Makefile    | all files with `Makefile` in filename                                                                                        |
 | Template    | all files (including subdirs) within the parent dir `templates` or jinja2 files (`.j2`)                                      |
