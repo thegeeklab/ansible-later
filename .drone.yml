@@ -69,7 +69,7 @@ steps:
   commands:
   - pip install -r test-requirements.txt -qq
   - pip install -qq .
-  - bandit -r ./ansiblelater
+  - bandit -r ./ansiblelater -x ./ansiblelater/tests
   environment:
     PY_COLORS: 1
   depends_on:

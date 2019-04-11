@@ -37,7 +37,6 @@ class Candidate(object):
         self.filetype = type(self).__name__.lower()
         self.expected_version = True
         self.standards = self._get_standards(settings, standards)
-        self.version = self._get_version(settings)
 
         try:
             with codecs.open(filename, mode="rb", encoding="utf-8") as f:
@@ -46,26 +45,29 @@ class Candidate(object):
         except UnicodeDecodeError:
             self.binary = True
 
+        self.version = self._get_version(settings)
+
     def _get_version(self, settings):
-        if isinstance(self, RoleFile):
-            parentdir = os.path.dirname(os.path.abspath(self.path))
-            while parentdir != os.path.dirname(parentdir):
-                meta_file = os.path.join(parentdir, "meta", "main.yml")
-                if os.path.exists(meta_file):
-                    path = meta_file
-                    break
-                parentdir = os.path.dirname(parentdir)
-        else:
-            path = self.path
-
+        path = self.path
         version = None
-        version_re = re.compile(r"^# Standards:\s*([\d.]+)")
 
-        with codecs.open(path, mode="rb", encoding="utf-8") as f:
-            for line in f:
-                match = version_re.match(line)
-                if match:
-                    version = match.group(1)
+        if not self.binary:
+            if isinstance(self, RoleFile):
+                parentdir = os.path.dirname(os.path.abspath(self.path))
+                while parentdir != os.path.dirname(parentdir):
+                    meta_file = os.path.join(parentdir, "meta", "main.yml")
+                    if os.path.exists(meta_file):
+                        path = meta_file
+                        break
+                    parentdir = os.path.dirname(parentdir)
+
+            version_re = re.compile(r"^# Standards:\s*([\d.]+)")
+
+            with codecs.open(path, mode="rb", encoding="utf-8") as f:
+                for line in f:
+                    match = version_re.match(line)
+                    if match:
+                        version = match.group(1)
 
         if not version:
             version = utils.standards_latest(self.standards)

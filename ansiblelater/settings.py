@@ -1,6 +1,5 @@
 """Global settings object definition."""
 
-import logging
 import os
 
 import anyconfig
@@ -58,7 +57,7 @@ class Settings(object):
         if tmp_dict.get("logging"):
             for adjustment in tmp_dict["logging"]["level"]:
                 log_level = min(len(levels) - 1, max(log_level + adjustment, 0))
-            tmp_dict["logging"]["level"] = logging.getLevelName(levels[log_level])
+            tmp_dict["logging"]["level"] = levels[log_level]
 
         if len(tmp_dict["rules"]["files"]) == 0:
             tmp_dict["rules"]["files"] = "*"

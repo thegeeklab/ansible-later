@@ -68,6 +68,9 @@ setup(
         "nested-lookup",
         "colorama",
         "anyconfig",
+        "python-json-logger",
+        "globmatch",
+        "jsonschema"
     ],
     entry_points={
         "console_scripts": [

@@ -52,7 +52,7 @@ local PipelineTesting = {
       commands: [
         "pip install -r test-requirements.txt -qq",
         "pip install -qq .",
-        "bandit -r ./ansiblelater",
+        "bandit -r ./ansiblelater -x ./ansiblelater/tests",
       ],
       depends_on: [
         "clone",
