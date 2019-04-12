@@ -6,6 +6,7 @@ import sys
 from distutils.version import LooseVersion
 
 import ansible
+import toolz
 
 from ansiblelater import settings
 from ansiblelater import utils
@@ -47,5 +48,12 @@ def get_standards(filepath):
             "Standards require ansible-later version %s (current version %s). "
             "Please upgrade ansible-later." %
             (standards.ansible_review_min_version, utils.get_property("__version__")))
+
+    normalized_std = (list(toolz.remove(lambda x: x.id == "", standards.standards)))
+    unique_std = len(list(toolz.unique(normalized_std, key=lambda x: x.id)))
+    all_std = len(normalized_std)
+    if not all_std == unique_std:
+        utils.sysexit_with_message(
+            "Detect duplicate ID's in standards definition. Please use unique ID's only.")
 
     return standards.standards
