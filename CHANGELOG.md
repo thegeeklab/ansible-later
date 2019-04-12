@@ -6,6 +6,7 @@ with old releases.
 - BREAKING
   - Switch configuration files to YAML
   - Enable multi location configuration files [#14](https://github.com/xoxys/ansible-later/issues/14)
+  - ID's used in standards have to be unique (or not set)
 
 - FEATURE
   - Add optional JSON logging [#13](https://github.com/xoxys/ansible-later/issues/13)

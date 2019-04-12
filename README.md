@@ -242,7 +242,9 @@ Create a file called standards.py (this can import other modules)
 from ansiblelater include Standard, Result
 
 tasks_are_uniquely_named = Standard(dict(
+    # ID's are optional but if you use ID's they have to be unique
     id="ANSIBLE0003",
+    # Short description of the standard goal
     name="Tasks and handlers must be uniquely named within a single file",
     check=check_unique_named_task,
     version="0.1",
