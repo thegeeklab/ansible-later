@@ -70,7 +70,8 @@ setup(
         "anyconfig",
         "python-json-logger",
         "jsonschema",
-        "pathspec"
+        "pathspec",
+        "toolz"
     ],
     entry_points={
         "console_scripts": [
