@@ -41,13 +41,13 @@ def get_standards(filepath):
                                    "Please upgrade ansible." %
                                    (standards.ansible_min_version, ansible.__version__))
 
-    if getattr(standards, "ansible_review_min_version", None) and \
-            LooseVersion(standards.ansible_review_min_version) > LooseVersion(
+    if getattr(standards, "ansible_later_min_version", None) and \
+            LooseVersion(standards.ansible_later_min_version) > LooseVersion(
                 utils.get_property("__version__")):
         utils.sysexit_with_message(
             "Standards require ansible-later version %s (current version %s). "
             "Please upgrade ansible-later." %
-            (standards.ansible_review_min_version, utils.get_property("__version__")))
+            (standards.ansible_later_min_version, utils.get_property("__version__")))
 
     normalized_std = (list(toolz.remove(lambda x: x.id == "", standards.standards)))
     unique_std = len(list(toolz.unique(normalized_std, key=lambda x: x.id)))

@@ -197,7 +197,7 @@ use_yaml_rather_than_key_value = Standard(dict(
 
 
 ansible_min_version = '2.1'
-ansible_review_min_version = '0.1.0'
+ansible_later_min_version = '0.1.0'
 
 
 standards = [

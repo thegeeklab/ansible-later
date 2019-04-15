@@ -7,6 +7,7 @@ with old releases.
   - Switch configuration files to YAML
   - Enable multi location configuration files [#14](https://github.com/xoxys/ansible-later/issues/14)
   - ID's used in standards have to be unique (or not set)
+  - `ansible_review_min_version` was renamed to `ansible_later_min_version`
 
 - FEATURE
   - Add optional JSON logging [#13](https://github.com/xoxys/ansible-later/issues/13)
