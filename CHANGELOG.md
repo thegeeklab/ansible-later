@@ -1,2 +1,3 @@
 - BUGFIXES
-  - Set minimum number of workers to 2
+  - Fix missing exit code
+  - Fix small role issues

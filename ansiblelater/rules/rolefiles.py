@@ -1,12 +1,12 @@
 """Checks related to ansible roles files."""
 
+from ansible.parsing.yaml.objects import AnsibleMapping
 from nested_lookup import nested_lookup
 
 from ansiblelater.command.candidates import Error
 from ansiblelater.command.candidates import Result
 from ansiblelater.utils.rulehelper import get_raw_yaml
 from ansiblelater.utils.rulehelper import get_tasks
-from ansible.parsing.yaml.objects import AnsibleMapping
 
 
 def check_meta_main(candidate, settings):

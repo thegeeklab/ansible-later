@@ -81,8 +81,8 @@ class Settings(object):
                     s = stream.read()
                     sdict = utils.safe_load(s)
                     if self._validate(sdict):
-                        sdict["logging"]["level"] = sdict["logging"]["level"].upper()
                         anyconfig.merge(defaults, sdict, ac_merge=anyconfig.MS_DICTS)
+                        defaults["logging"]["level"] = defaults["logging"]["level"].upper()
 
         if cli_options and self._validate(cli_options):
             anyconfig.merge(defaults, cli_options, ac_merge=anyconfig.MS_DICTS)
