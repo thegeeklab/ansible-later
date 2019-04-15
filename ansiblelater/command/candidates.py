@@ -102,12 +102,14 @@ class Candidate(object):
 
         return target_standards
 
-    def review(self, settings, lines=None):
+    def review(self, args):
+        (settings, lines) = args
         errors = 0
 
         for standard in self.standards:
             if type(self).__name__.lower() not in standard.types:
                 continue
+
             result = standard.check(self, settings.config)
 
             if not result:
@@ -145,6 +147,8 @@ class Candidate(object):
                         path=self.path,
                         error=err), extra=flag_extra(err_labels))
                     errors = errors + 1
+
+        return errors
 
     def _format_id(self, standard_id):
         if standard_id and standard_id.strip():

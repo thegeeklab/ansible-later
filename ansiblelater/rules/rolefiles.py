@@ -6,6 +6,7 @@ from ansiblelater.command.candidates import Error
 from ansiblelater.command.candidates import Result
 from ansiblelater.utils.rulehelper import get_raw_yaml
 from ansiblelater.utils.rulehelper import get_tasks
+from ansible.parsing.yaml.objects import AnsibleMapping
 
 
 def check_meta_main(candidate, settings):
@@ -27,7 +28,8 @@ def check_scm_in_src(candidate, settings):
 
     if not errors:
         for role in roles:
-            if "+" in role.get("src"):
-                errors.append(Error(role["__line__"], description))
+            if isinstance(role, AnsibleMapping):
+                if "+" in role.get("src"):
+                    errors.append(Error(role["__line__"], description))
 
     return Result(candidate.path, errors)

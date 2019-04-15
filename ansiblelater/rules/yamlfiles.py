@@ -76,7 +76,8 @@ def check_yaml_document_start(candidate, settings):
 
 
 def check_yaml_colons(candidate, settings):
-    options = "rules: {{colons: {conf}}}"
+    options = "rules: {{colons: {conf}}}".format(
+        conf=settings["yamllint"]["colons"])
     errors = run_yamllint(candidate.path, options)
     return Result(candidate.path, errors)
 

@@ -40,6 +40,7 @@ def main():
 
     workers = max(multiprocessing.cpu_count() - 2, 2)
     p = multiprocessing.Pool(workers)
+    errors = []
     for filename in files:
         lines = None
         candidate = candidates.classify(filename, settings, standards)
@@ -54,12 +55,14 @@ def main():
                 LOG.info("Reviewing %s lines %s" % (candidate, lines))
             else:
                 LOG.info("Reviewing all of %s" % candidate)
-            p.imap(candidate.review, (settings, lines,))
+            errors = errors + p.map(candidate.review, [(settings, lines)])
         else:
             LOG.info("Couldn't classify file %s" % filename)
 
     p.close()
     p.join()
+
+    return 0 if sum(errors) == 0 else 1
 
 
 if __name__ == "__main__":
