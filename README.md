@@ -13,28 +13,27 @@ for his work on ansible-review and ansible-lint.
 it helps to have a coding or best practice guideline in place. This will make ansible roles more readable for all
 maintainers and can reduce the troubleshooting time.
 
-`ansible-later` does _**not**_ ensure that your role will work as expected.
+`ansible-later` does _**not**_ ensure that your role will work as expected. For Deployment test you can use other tools
+like [molecule](https://github.com/ansible/molecule).
 
 The project name is an acronym for **L**ovely **A**utomation **TE**sting f**R**mework.
 
 ## Table of Content
 
-- [ansible-later](#ansible-later)
-  - [Table of Content](#table-of-content)
-    - [Setup](#setup)
-      - [Using pip](#using-pip)
-      - [From source](#from-source)
-    - [Usage](#usage)
-      - [Configuration](#configuration)
-      - [Review a git repositories](#review-a-git-repositories)
-      - [Review a list of files](#review-a-list-of-files)
-      - [Buildin rules](#buildin-rules)
-    - [Build your own](#build-your-own)
-      - [The standards file](#the-standards-file)
-      - [Candidates](#candidates)
-      - [Minimal standards checks](#minimal-standards-checks)
-    - [License](#license)
-    - [Maintainers and Contributors](#maintainers-and-contributors)
+- [Setup](#setup)
+  - [Using pip](#using-pip)
+  - [From source](#from-source)
+- [Configuration](#configuration)
+  - [Default settings](#default-settings)
+  - [CLI Options](#cli-options)
+- [Usage](#usage)
+- [Buildin rules](#buildin-rules)
+- [Build your own rules](#build-your-own-rules)
+  - [The standards file](#the-standards-file)
+  - [Candidates](#candidates)
+  - [Minimal standards checks](#minimal-standards-checks)
+- [License](#license)
+- [Maintainers and Contributors](#maintainers-and-contributors)
 
 ---
 
@@ -54,9 +53,117 @@ sudo pip install ansible-later
 
 ```Shell
 # Install dependency
-git clone https://repourl
+git clone https://github.com/xoxys/ansible-later
 export PYTHONPATH=$PYTHONPATH:`pwd`/ansible-later/ansiblelater
-export PATH=$PATH:`pwd`/ansible-later/ansiblelater/bin
+export PATH=$PATH:`pwd`/ansible-later/bin
+```
+
+### Configuration
+
+ansible-later comes with some default settigs which should be sufficent for most users to start,
+but you can adjust most settings to your needs.
+
+Changes can be made in a yaml configuration file or through cli options
+which will be processed in the following order (last wins):
+
+- default config (build-in)
+- global config file (this will depend on your operating system)
+- folderbased config file (`.later.yml` file in current working folder)
+- cli options
+
+Be careful! YAML Attributes will be overwritten while lists in any
+config file will be merged.
+
+To make it easier to review a singel file e.g. for debugging purpose, amsible-later
+will ignore `exclude_files` and `ignore_dotfiles` options.
+
+#### Default settings
+
+```YAML
+---
+ansible:
+  # Add the name of used custom ansible modules.
+  # Otherwise ansible-later can't detect unknown modules
+  # and will through an error.
+  custom_modules: []
+  # Settings for variable formatting rule (ANSIBLE0004)
+  double-braces:
+    max-spaces-inside: 1
+    min-spaces-inside: 1
+
+# Global logging configuration
+# If you would like to force colored output (e.g. non-tty)
+# set emvironment variable `PY_COLORS=1`
+logging:
+  # You can enable json logging if a parsable output is required
+  json: False
+  # Possible options debug | info | warning | error | critical
+  level: "warning"
+
+# Global settings for all defined rules
+rules:
+  # list of files to exclude
+  exclude_files: []
+  # Examples:
+  #  - molecule/
+  #  - files/**/*.py
+
+  # List of Ansible rule ID's
+  # If empty all rules will be used.
+  filter: []
+  
+  # All dotfiles (including hidden folders) are excluded by default.
+  # You can disable this setting and handle dotfiles by yourself with `exclude_files`.
+  ignore_dotfiles: True
+  # Path to the folder containing your custom standards file
+  standards: ansiblelater/data
+
+# Block to control included yamlllint rules.
+# See https://yamllint.readthedocs.io/en/stable/rules.html
+yamllint:
+  colons:
+    max-spaces-after: 1
+    max-spaces-before: 0
+  document-start:
+    present: True
+  empty-lines:
+    max: 1
+    max-end: 1
+    max-start: 0
+  hyphens:
+    max-spaces-after: 1
+  indentation:
+    check-multi-line-strings: False
+    indent-sequences: True
+    spaces: 2
+```
+
+#### CLI Options
+
+You can get all available cli options by running `ansible-later --help`:
+
+```Shell
+$ ansible-later --help
+usage: ansible-later [-h] [-c CONFIG_FILE] [-r RULES.STANDARDS]
+                     [-s RULES.FILTER] [-v] [-q] [--version]
+                     [rules.files [rules.files ...]]
+
+Validate ansible files against best pratice guideline
+
+positional arguments:
+  rules.files
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c CONFIG_FILE, --config CONFIG_FILE
+                        location of configuration file
+  -r RULES.STANDARDS, --rules RULES.STANDARDS
+                        location of standards rules
+  -s RULES.FILTER, --standards RULES.FILTER
+                        limit standards to specific ID's
+  -v                    increase log level
+  -q                    decrease log level
+  --version             show program's version number and exit
 ```
 
 ### Usage
@@ -65,26 +172,23 @@ export PATH=$PATH:`pwd`/ansible-later/ansiblelater/bin
 ansible-later FILES
 ```
 
-Where FILES is a space delimited list of files to review.
-ansible-later is _not_ recursive and won't descend
-into child folders; it just processes the list of files you give it.
-
-Passing a folder in with the list of files will elicit a warning:
+Where FILES is a space delimited list of files to review. You can also pass glob
+patterns to ansible-later:
 
 ```Shell
-WARN: Couldn't classify file ./foldername
+# Review single files
+ansible-later meta/main.yml tasks/install.yml
+
+# Review all yml files (including subfolders)
+ansible-later **/*.yml
 ```
 
-ansible-later will review inventory files, role
-files, python code (modules, plugins) and playbooks.
+ansible-later will review inventory files, role f0iles, python code (modules, plugins)
+and playbooks.
 
 - The goal is that each file that changes in a
   changeset should be reviewable simply by passing
   those files as the arguments to ansible-later.
-- Roles are slightly harder, and sub-roles are yet
-  harder still (currently just using `-R` to process
-  roles works very well, but doesn't examine the
-  structure of the role)
 - Using `{{ playbook_dir }}` in sub roles is so far
   very hard.
 - This should work against various repository styles
@@ -93,42 +197,7 @@ files, python code (modules, plugins) and playbooks.
   - per-playbook repository
 - It should work with roles requirement files and with local roles
 
-#### Configuration
-
-If your standards (and optionally inhouse rules) are set up, create
-a configuration file in the appropriate location (this will depend on
-your operating system)
-
-The location can be found by using `ansible-later` with no arguments.
-
-You can override the configuration file location with the `-c` flag.
-
-```INI
-[rules]
-standards = /path/to/your/standards/rules
-```
-
-The standards directory can be overridden with the `-d` argument.
-
-#### Review a git repositories
-
-- `git ls-files | xargs ansible-later` works well in
-  a roles repo to review the whole role. But it will
-  review the whole of other repos too.
-- `git ls-files *[^LICENSE,.md] | xargs ansible-later`
-  works like the first example but excludes some
-  unnecessary files.
-- `git diff branch_to_compare | ansible-later` will
-  review only the changes between the branches and
-  surrounding context.
-
-#### Review a list of files
-
-- `find . -type f | xargs ansible-later` will review
-  all files in the current folder (and all subfolders),
-  even if they're not checked into git
-
-#### Buildin rules
+### Buildin rules
 
 Reviews are nothing without some rules or standards against which to review. ansible-later
 comes with a couple of built-in checks explained in the following table.
@@ -160,7 +229,7 @@ comes with a couple of built-in checks explained in the following table.
 | check_become_user               | ANSIBLE0015 | `become` should be always used combined with `become_user`.       |                                                                      |
 | check_filter_separation         | ANSIBLE0016 | Jinja2 filters should be separated with spaces.                   |                                                                      |
 
-### Build your own
+### Build your own rules
 
 #### The standards file
 
@@ -173,7 +242,9 @@ Create a file called standards.py (this can import other modules)
 from ansiblelater include Standard, Result
 
 tasks_are_uniquely_named = Standard(dict(
+    # ID's are optional but if you use ID's they have to be unique
     id="ANSIBLE0003",
+    # Short description of the standard goal
     name="Tasks and handlers must be uniquely named within a single file",
     check=check_unique_named_task,
     version="0.1",
@@ -229,7 +300,7 @@ which contains some meta informations and is an instance of one of following obj
 | HostVars    | all files (including subdirs) within the parent dir `host_vars`                                                              |
 | Meta        | all files within the parent dir `meta`                                                                                       |
 | Code        | all files within the parent dir `library`, `lookup_plugins`, `callback_plugins` and `filter_plugins` or python files (`.py`) |
-| Inventory   | all files within the parent dir `inventory` and `inventory` or `hosts` in filename                                           |
+| Inventory   | all files within the parent dir `inventories` and `inventory` or `hosts` as filename                                         |
 | Rolesfile   | all files with `rolesfile` or `requirements` in filename                                                                     |
 | Makefile    | all files with `Makefile` in filename                                                                                        |
 | Template    | all files (including subdirs) within the parent dir `templates` or jinja2 files (`.j2`)                                      |

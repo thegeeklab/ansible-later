@@ -1,0 +1,3 @@
+[flake8.extension]
+A00 = flake8_builtins:BuiltinsChecker
+

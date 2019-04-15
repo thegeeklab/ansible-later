@@ -1,53 +1,24 @@
+"""Global utils collection."""
+
 from __future__ import print_function
 
-import importlib
-import logging
+import contextlib
 import os
-import sys
 import re
-import colorama
-
+import sys
 from distutils.version import LooseVersion
-from ansible.module_utils.parsing.convert_bool import boolean as to_bool
+
+import yaml
+
+from ansiblelater import logger
 
 try:
-    import ConfigParser as configparser
+    import ConfigParser as configparser # noqa
 except ImportError:
-    import configparser
+    import configparser # noqa
 
 
-def should_do_markup():
-    py_colors = os.environ.get('PY_COLORS', None)
-    if py_colors is not None:
-        return to_bool(py_colors, strict=False)
-
-    return sys.stdout.isatty() and os.environ.get('TERM') != 'dumb'
-
-
-colorama.init(autoreset=True, strip=not should_do_markup())
-
-
-def abort(message, file=sys.stderr):
-    return color_text(colorama.Fore.RED, "FATAL: {}".format(message))
-    sys.exit(1)
-
-
-def error(message, file=sys.stderr):
-    return color_text(colorama.Fore.RED, "ERROR: {}".format(message))
-
-
-def warn(message, settings, file=sys.stdout):
-    if settings.log_level <= logging.WARNING:
-        return color_text(colorama.Fore.YELLOW, "WARN: {}".format(message))
-
-
-def info(message, settings, file=sys.stdout):
-    if settings.log_level <= logging.INFO:
-        return color_text(colorama.Fore.BLUE, "INFO: {}".format(message))
-
-
-def color_text(color, msg):
-    print('{}{}{}'.format(color, msg, colorama.Style.RESET_ALL))
+LOG = logger.get_logger(__name__)
 
 
 def count_spaces(c_string):
@@ -72,7 +43,7 @@ def get_property(prop):
     parentdir = os.path.dirname(currentdir)
     result = re.search(
         r'{}\s*=\s*[\'"]([^\'"]*)[\'"]'.format(prop),
-        open(os.path.join(parentdir, '__init__.py')).read())
+        open(os.path.join(parentdir, "__init__.py")).read())
     return result.group(1)
 
 
@@ -95,35 +66,48 @@ def is_line_in_ranges(line, ranges):
     return not ranges or any([line in r for r in ranges])
 
 
-def read_standards(settings):
-    if not settings.rulesdir:
-        abort("Standards directory is not set on command line or in configuration file - aborting")
-    sys.path.append(os.path.abspath(os.path.expanduser(settings.rulesdir)))
+def safe_load(string):
+    """
+    Parse the provided string returns a dict.
+
+    :param string: A string to be parsed.
+    :returns: dict
+
+    """
     try:
-        standards = importlib.import_module('standards')
-    except ImportError as e:
-        abort("Could not import standards from directory %s: %s" % (settings.rulesdir, str(e)))
-    return standards
+        return yaml.safe_load(string) or {}
+    except yaml.scanner.ScannerError as e:
+        print(str(e))
 
 
-def read_config(config_file):
-    config = configparser.RawConfigParser({'standards': None})
-    config.read(config_file)
+@contextlib.contextmanager
+def open_file(filename, mode="r"):
+    """
+    Open the provide file safely and returns a file type.
 
-    return Settings(config, config_file)
+    :param filename: A string containing an absolute path to the file to open.
+    :param mode: A string describing the way in which the file will be used.
+    :returns: file type
+
+    """
+    with open(filename, mode) as stream:
+        yield stream
 
 
-class Settings(object):
-    def __init__(self, config, config_file):
-        self.rulesdir = None
-        self.custom_modules = []
-        self.log_level = None
-        self.standards_filter = None
+def add_dict_branch(tree, vector, value):
+    key = vector[0]
+    tree[key] = value \
+        if len(vector) == 1 \
+        else add_dict_branch(tree[key] if key in tree else {},
+                             vector[1:],
+                             value)
+    return tree
 
-        if config.has_section('rules'):
-            self.rulesdir = config.get('rules', 'standards')
-        if config.has_section('ansible'):
-            modules = config.get('ansible', 'custom_modules')
-            self.custom_modules = [x.strip() for x in modules.split(',')]
 
-        self.configfile = config_file
+def sysexit(code=1):
+    sys.exit(code)
+
+
+def sysexit_with_message(msg, code=1):
+    LOG.critical(msg)
+    sysexit(code)

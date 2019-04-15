@@ -1,7 +1,11 @@
+"""Checks related to ansible roles files."""
+
 from nested_lookup import nested_lookup
 
-from ansiblelater import Error, Result
-from ansiblelater.utils.rulehelper import get_raw_yaml, get_tasks
+from ansiblelater.command.candidates import Error
+from ansiblelater.command.candidates import Result
+from ansiblelater.utils.rulehelper import get_raw_yaml
+from ansiblelater.utils.rulehelper import get_tasks
 
 
 def check_meta_main(candidate, settings):
@@ -23,7 +27,7 @@ def check_scm_in_src(candidate, settings):
 
     if not errors:
         for role in roles:
-            if '+' in role.get('src'):
-                errors.append(Error(role['__line__'], description))
+            if "+" in role.get("src"):
+                errors.append(Error(role["__line__"], description))
 
     return Result(candidate.path, errors)

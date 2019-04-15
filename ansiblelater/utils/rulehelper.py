@@ -1,23 +1,26 @@
-import codecs
-import yaml
+"""Abstracted methods to simplify role writeup."""
 
+import codecs
 from collections import defaultdict
+
+import yaml
 from yamllint import linter
 from yamllint.config import YamlLintConfig
-# Workaround for import errors with ansble 2.1 and 2.3
-from ansible.parsing.dataloader import DataLoader
-from ansiblelater import Error
-from .yamlhelper import normalize_task
+
+from ansiblelater.command.candidates import Error
+from ansiblelater.exceptions import LaterAnsibleError
+from ansiblelater.exceptions import LaterError
+
 from .yamlhelper import action_tasks
-from .yamlhelper import parse_yaml_linenumbers
+from .yamlhelper import normalize_task
 from .yamlhelper import normalized_yaml
-from .exceptions import LaterError, LaterAnsibleError
+from .yamlhelper import parse_yaml_linenumbers
 
 
 def get_tasks(candidate, settings):
     errors = []
     try:
-        with codecs.open(candidate.path, mode='rb', encoding='utf-8') as f:
+        with codecs.open(candidate.path, mode="rb", encoding="utf-8") as f:
             yamllines = parse_yaml_linenumbers(f, candidate.path)
 
     except LaterError as ex:
@@ -33,7 +36,7 @@ def get_action_tasks(candidate, settings):
     tasks = []
     errors = []
     try:
-        with codecs.open(candidate.path, mode='rb', encoding='utf-8') as f:
+        with codecs.open(candidate.path, mode="rb", encoding="utf-8") as f:
             yamllines = parse_yaml_linenumbers(f, candidate.path)
 
         if yamllines:
@@ -51,7 +54,7 @@ def get_normalized_task(task, candidate, settings):
     normalized = None
     errors = []
     try:
-        normalized = normalize_task(task, candidate.path, settings.custom_modules)
+        normalized = normalize_task(task, candidate.path, settings["ansible"]["custom_modules"])
     except LaterError as ex:
         e = ex.original
         errors.append(Error(e.problem_mark.line + 1, "syntax error: %s" % (e.problem)))
@@ -65,19 +68,20 @@ def get_normalized_tasks(candidate, settings):
     normalized = []
     errors = []
     try:
-        with codecs.open(candidate.path, mode='rb', encoding='utf-8') as f:
+        with codecs.open(candidate.path, mode="rb", encoding="utf-8") as f:
             yamllines = parse_yaml_linenumbers(f, candidate.path)
 
         if yamllines:
             tasks = action_tasks(yamllines, candidate)
             for task in tasks:
                 # An empty `tags` block causes `None` to be returned if
-                # the `or []` is not present - `task.get('tags', [])`
+                # the `or []` is not present - `task.get("tags", [])`
                 # does not suffice.
-                if 'skip_ansible_lint' in (task.get('tags') or []):
+                if "skip_ansible_lint" in (task.get("tags") or []):
                     # No need to normalize_task if we are skipping it.
                     continue
-                normalized.append(normalize_task(task, candidate.path, settings.custom_modules))
+                normalized.append(
+                    normalize_task(task, candidate.path, settings["ansible"]["custom_modules"]))
 
     except LaterError as ex:
         e = ex.original
@@ -112,7 +116,7 @@ def get_raw_yaml(candidate, settings):
     errors = []
 
     try:
-        with codecs.open(candidate.path, mode='rb', encoding='utf-8') as f:
+        with codecs.open(candidate.path, mode="rb", encoding="utf-8") as f:
             content = yaml.safe_load(f)
 
     except LaterError as ex:
@@ -122,10 +126,10 @@ def get_raw_yaml(candidate, settings):
     return content, errors
 
 
-def run_yamllint(candidate, settings, options="extends: default"):
+def run_yamllint(path, options="extends: default"):
     errors = []
     try:
-        with codecs.open(candidate.path, mode='rb', encoding='utf-8') as f:
+        with codecs.open(path, mode="rb", encoding="utf-8") as f:
             for problem in linter.run(f, YamlLintConfig(options)):
                 errors.append(Error(problem.line, problem.desc))
     except LaterError as ex:
