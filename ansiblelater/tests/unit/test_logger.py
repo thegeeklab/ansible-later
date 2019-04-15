@@ -7,6 +7,15 @@ import colorama
 from ansiblelater import logger
 
 
+def test_flag_extra():
+    extra = {}
+    extra.update(foo="bar")
+
+    flagged = logger.flag_extra(extra)
+
+    assert flagged.get("later_foo") == "bar"
+
+
 def test_critical(capsys, mocker):
     log = logger.get_logger("test_critical")
     log.critical("foo")

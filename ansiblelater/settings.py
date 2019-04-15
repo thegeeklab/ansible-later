@@ -34,10 +34,10 @@ class Settings(object):
 
         """
         self.config_file = config_file
+        self.schema = None
         self.args_files = False
         self.args = self._set_args(args)
         self.config = self._get_config()
-        self.schema = None
         self._update_filelist()
 
     def _set_args(self, args):
@@ -132,6 +132,7 @@ class Settings(object):
                 },
             },
         }
+
         self.schema = anyconfig.gen_schema(defaults)
 
         return defaults
