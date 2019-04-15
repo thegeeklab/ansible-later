@@ -172,7 +172,10 @@ optional arguments:
 ansible-later FILES
 ```
 
-Where FILES is a space delimited list of files to review. You can also pass glob
+If you don't pass any file to ansible-later it will review all files including subdirs in
+the current working directory (hidden files and folders are excluded by default).
+
+Otherwise you can pass a space delimited list of files to review. You can also pass glob
 patterns to ansible-later:
 
 ```Shell
@@ -183,7 +186,7 @@ ansible-later meta/main.yml tasks/install.yml
 ansible-later **/*.yml
 ```
 
-ansible-later will review inventory files, role f0iles, python code (modules, plugins)
+ansible-later will review inventory files, role files, python code (modules, plugins)
 and playbooks.
 
 - The goal is that each file that changes in a
