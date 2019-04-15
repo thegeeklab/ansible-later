@@ -38,7 +38,7 @@ def main():
     files = config["rules"]["files"]
     standards = base.get_standards(config["rules"]["standards"])
 
-    workers = multiprocessing.cpu_count() - 2
+    workers = max(multiprocessing.cpu_count() - 2, 2)
     p = multiprocessing.Pool(workers)
     for filename in files:
         lines = None
