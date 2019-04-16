@@ -102,7 +102,7 @@ class Candidate(object):
 
         return target_standards
 
-    def review(self, settings, lines=0):
+    def review(self, settings, lines=None):
         errors = 0
 
         for standard in self.standards:

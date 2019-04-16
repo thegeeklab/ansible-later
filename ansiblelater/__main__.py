@@ -2,6 +2,7 @@
 """Main program."""
 
 import argparse
+import multiprocessing
 import sys
 
 from ansiblelater import LOG
@@ -38,7 +39,9 @@ def main():
     files = config["rules"]["files"]
     standards = base.get_standards(config["rules"]["standards"])
 
-    errors = 0
+    workers = max(multiprocessing.cpu_count() - 2, 2)
+    p = multiprocessing.Pool(workers)
+    tasks = []
     for filename in files:
         lines = None
         candidate = candidates.classify(filename, settings, standards)
@@ -53,9 +56,14 @@ def main():
                 LOG.info("Reviewing %s lines %s" % (candidate, lines))
             else:
                 LOG.info("Reviewing all of %s" % candidate)
-            errors = errors + candidate.review(settings, lines)
+                tasks.append((candidate, settings, lines))
+                # errors = errors + res
         else:
             LOG.info("Couldn't classify file %s" % filename)
+
+    errors = (sum(p.map(_review_wrapper, tasks)))
+    p.close()
+    p.join()
 
     if not errors == 0:
         return_code = 1
@@ -63,6 +71,11 @@ def main():
         return_code = 0
 
     sys.exit(return_code)
+
+
+def _review_wrapper(args):
+    (candidate, settings, lines) = args
+    return candidate.review(settings, lines)
 
 
 if __name__ == "__main__":

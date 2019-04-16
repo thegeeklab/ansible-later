@@ -1,2 +1,2 @@
 - BUGFIXES
-  - Remove multiprocessing due to bad implementation and resulting performance issues
+  - Fix multiprocessing handler causing performance issues
