@@ -1,3 +1,2 @@
 - BUGFIXES
-  - Fix missing exit code
-  - Fix small role issues
+  - Remove multiprocessing due to bad implementation and resulting performance issues
