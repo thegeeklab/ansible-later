@@ -2,6 +2,7 @@
 """Main program."""
 
 import argparse
+import sys
 
 from ansiblelater import LOG
 from ansiblelater import __version__
@@ -56,7 +57,12 @@ def main():
         else:
             LOG.info("Couldn't classify file %s" % filename)
 
-    return errors
+    if not errors == 0:
+        return_code = 1
+    else:
+        return_code = 0
+
+    sys.exit(return_code)
 
 
 if __name__ == "__main__":
