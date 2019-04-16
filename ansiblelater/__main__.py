@@ -57,7 +57,6 @@ def main():
             else:
                 LOG.info("Reviewing all of %s" % candidate)
                 tasks.append((candidate, settings, lines))
-                # errors = errors + res
         else:
             LOG.info("Couldn't classify file %s" % filename)
 
