@@ -163,7 +163,9 @@ optional arguments:
   -r RULES.STANDARDS, --rules RULES.STANDARDS
                         location of standards rules
   -s RULES.FILTER, --standards RULES.FILTER
-                        limit standards to specific ID's
+                        limit standards to given ID's
+  -x RULES.EXCLUDE_FILTER, --exclude-standards RULES.EXCLUDE_FILTER
+                        exclude standards by given ID's
   -v                    increase log level
   -q                    decrease log level
   --version             show program's version number and exit
