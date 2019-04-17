@@ -108,9 +108,12 @@ rules:
   #  - molecule/
   #  - files/**/*.py
 
-  # List of Ansible rule ID's
+  # Limit checks to given rule ID's
   # If empty all rules will be used.
   filter: []
+
+  # Exclude given rule ID's from checks
+  exclude_filter: []
   
   # All dotfiles (including hidden folders) are excluded by default.
   # You can disable this setting and handle dotfiles by yourself with `exclude_files`.

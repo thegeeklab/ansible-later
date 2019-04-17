@@ -95,6 +95,7 @@ class Settings(object):
             "rules": {
                 "standards": rules_dir,
                 "filter": [],
+                "exclude_filter": [],
                 "ignore_dotfiles": True,
                 "exclude_files": []
             },

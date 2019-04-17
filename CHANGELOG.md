@@ -1,2 +1,2 @@
-- BUGFIXES
-  - Fix multiprocessing handler causing performance issues
+- ENHANCEMENT
+  - Add exclude_filter options ([#21](https://github.com/xoxys/ansible-later/issues/21))

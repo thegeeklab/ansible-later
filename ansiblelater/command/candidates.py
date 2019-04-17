@@ -91,14 +91,15 @@ class Candidate(object):
 
     def _get_standards(self, settings, standards):
         target_standards = []
-        limits = settings.config["rules"]["filter"]
+        includes = settings.config["rules"]["filter"]
+        excludes = settings.config["rules"]["exclude_filter"]
 
-        if limits:
-            for standard in standards:
-                if standard.id in limits:
-                    target_standards.append(standard)
-        else:
-            target_standards = standards
+        if len(includes) == 0:
+            includes = [s.id for s in standards]
+
+        for standard in standards:
+            if standard.id in includes and standard.id not in excludes:
+                target_standards.append(standard)
 
         return target_standards
 

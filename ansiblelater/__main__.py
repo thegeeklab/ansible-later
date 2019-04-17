@@ -22,6 +22,8 @@ def main():
                         help="location of standards rules")
     parser.add_argument("-s", "--standards", dest="rules.filter", action="append",
                         help="limit standards to specific ID's")
+    parser.add_argument("-x", "--exclude-standards", dest="rules.exclude_filter", action="append",
+                        help="exclude standards by ID")
     parser.add_argument("-v", dest="logging.level", action="append_const", const=-1,
                         help="increase log level")
     parser.add_argument("-q", dest="logging.level", action="append_const",
