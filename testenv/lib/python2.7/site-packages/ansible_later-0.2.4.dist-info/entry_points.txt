@@ -1,0 +1,3 @@
+[console_scripts]
+ansible-later = ansiblelater.__main__:main
+
