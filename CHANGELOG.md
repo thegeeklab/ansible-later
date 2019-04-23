@@ -1,2 +1,2 @@
-- ENHANCEMENT
-  - Add `exclude_filter` options [#21](https://github.com/xoxys/ansible-later/issues/21)
+- BUGFIXES
+  - Add missing files to build package
