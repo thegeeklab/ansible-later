@@ -36,7 +36,7 @@ setup(
     license=get_property("__license__", PACKAGE_NAME),
     long_description=get_readme(),
     long_description_content_type="text/markdown",
-    packages=find_packages(exclude=["ansiblelater/tests", "ansiblelater/tests.*"]),
+    packages=find_packages(exclude=["tests", "tests.*"]),
     package_data={"ansiblelater": ["data/*"]},
     python_requires=">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,,!=3.4.*",
     classifiers=[
