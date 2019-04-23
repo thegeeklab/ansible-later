@@ -1,4 +1,4 @@
 include README.md
 include LICENSE
 recursive-include ansiblelater/data *
-prune ansiblelater/tests/
+recursive-include ansiblelater/tests *
