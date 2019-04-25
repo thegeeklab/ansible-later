@@ -1,2 +1,2 @@
-- BUGFIXES
-  - Add missing files to build package
+- INTERNALS
+  - exclude unnecessary test files form build packages
