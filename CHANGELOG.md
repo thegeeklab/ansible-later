@@ -1,2 +1,5 @@
+- BUGFIXES
+  - Use default split delimiter for module arguments
+
 - INTERNALS
-  - exclude unnecessary test files form build packages
+  - remove outdated ansible vault reverences, vault encrypted files will be skipped
