@@ -50,16 +50,9 @@ except ImportError:
     # Fallback on the Ansible 1.9 module
     from ansible.module_utils.splitter import split_args
 
-# ansible-later doesn't need/want to know about encrypted secrets, but it needs
-# Ansible 2.3+ allows encrypted secrets within yaml files, so we pass a string
-# as the password to enable such yaml files to be opened and parsed successfully.
-DEFAULT_VAULT_PASSWORD = "x"
-
 
 def parse_yaml_from_file(filepath):
     dl = DataLoader()
-    if hasattr(dl, "set_vault_password"):
-        dl.set_vault_password(DEFAULT_VAULT_PASSWORD)
     return dl.load_from_file(filepath)
 
 
@@ -485,8 +478,6 @@ def parse_yaml_linenumbers(data, filename):
 
     try:
         kwargs = {}
-        if "vault_password" in inspect.getargspec(AnsibleLoader.__init__).args:
-            kwargs["vault_password"] = DEFAULT_VAULT_PASSWORD
         loader = AnsibleLoader(data, **kwargs)
         loader.compose_node = compose_node
         loader.construct_mapping = construct_mapping
