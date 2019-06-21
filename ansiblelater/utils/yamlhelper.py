@@ -392,7 +392,7 @@ def normalize_task(task, filename, custom_modules=[]):
     normalized["action"] = dict(__ansible_module__=action)
 
     if "_raw_params" in arguments:
-        normalized["action"]["__ansible_arguments__"] = arguments["_raw_params"].split(" ")
+        normalized["action"]["__ansible_arguments__"] = arguments["_raw_params"].strip().split()
         del(arguments["_raw_params"])
     else:
         normalized["action"]["__ansible_arguments__"] = list()
