@@ -179,9 +179,21 @@ def check_empty_string_compare(candidate, settings):
     description = "use `when: var` rather than `when: var != ""` (or " \
                   "conversely `when: not var` rather than `when: var == ""`)"
 
-    empty_string_compare = re.compile("[=!]= ?[\"'][\"']")
-
     if not errors:
+        if isinstance(candidate, Template):
+            matches = []
+            jinja_string = re.compile("({{|{%)(.*?)(}}|%})")
+
+            for i, line in yamllines:
+                match = jinja_string.findall(line)
+                if match:
+                    for item in match:
+                        matches.append((i, item[1]))
+
+            yamllines = matches
+
+        empty_string_compare = re.compile("[=!]= ?[\"'][\"']")
+
         for i, line in yamllines:
             if empty_string_compare.findall(line):
                 errors.append(Error(i, description))
@@ -194,21 +206,21 @@ def check_compare_to_literal_bool(candidate, settings):
     description = "use `when: var` rather than `when: var == True` " \
                   "(or conversely `when: not var`)"
 
-    if isinstance(candidate, Template):
-        matches = []
-        braces = re.compile("({{|{%)(.*?)(}}|%})")
-
-        for i, line in yamllines:
-            match = braces.findall(line)
-            if match:
-                for item in match:
-                    matches.append((i, item[1]))
-
-        yamllines = matches
-
-    literal_bool_compare = re.compile("[=!]= ?(True|true|False|false)")
-
     if not errors:
+        if isinstance(candidate, Template):
+            matches = []
+            jinja_string = re.compile("({{|{%)(.*?)(}}|%})")
+
+            for i, line in yamllines:
+                match = jinja_string.findall(line)
+                if match:
+                    for item in match:
+                        matches.append((i, item[1]))
+
+            yamllines = matches
+
+        literal_bool_compare = re.compile("[=!]= ?(True|true|False|false)")
+
         for i, line in yamllines:
             if literal_bool_compare.findall(line):
                 errors.append(Error(i, description))
