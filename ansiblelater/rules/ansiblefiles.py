@@ -6,6 +6,7 @@ from collections import defaultdict
 
 from ansiblelater.command.candidates import Error
 from ansiblelater.command.candidates import Result
+from ansiblelater.command.candidates import Template
 from ansiblelater.utils import count_spaces
 from ansiblelater.utils.rulehelper import get_normalized_tasks
 from ansiblelater.utils.rulehelper import get_normalized_yaml
@@ -192,6 +193,18 @@ def check_compare_to_literal_bool(candidate, settings):
     yamllines, errors = get_normalized_yaml(candidate, settings)
     description = "use `when: var` rather than `when: var == True` " \
                   "(or conversely `when: not var`)"
+
+    if isinstance(candidate, Template):
+        matches = []
+        braces = re.compile("({{|{%)(.*?)(}}|%})")
+
+        for i, line in yamllines:
+            match = braces.findall(line)
+            if match:
+                for item in match:
+                    matches.append((i, item[1]))
+
+        yamllines = matches
 
     literal_bool_compare = re.compile("[=!]= ?(True|true|False|false)")
 
