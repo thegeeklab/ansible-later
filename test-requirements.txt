@@ -1,3 +1,5 @@
+# open issue
+# https://gitlab.com/pycqa/flake8-docstrings/issues/36
 pydocstyle<4.0.0
 flake8
 flake8-colors
