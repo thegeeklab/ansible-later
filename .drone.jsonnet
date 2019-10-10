@@ -268,7 +268,7 @@ local PipelineNotifications = {
         DOCKERHUB_REPO_PREFIX: "xoxys",
         DOCKERHUB_REPO_NAME: "ansible-later",
         README_PATH: "README.md",
-        SHORT_DESCRIPTION: "ansible-later - Simple annotation based documentation for your roles"
+        SHORT_DESCRIPTION: "ansible-later - lovely automation testing framework"
       },
       when: {
         ref: [
@@ -294,6 +294,9 @@ local PipelineNotifications = {
         template: "Status: **{{ build.status }}**<br/> Build: [{{ repo.Owner }}/{{ repo.Name }}]({{ build.link }}) ({{ build.branch }}) by {{ build.author }}<br/> Message: {{ build.message }}",
         username: { "from_secret": "matrix_username" },
         password: { "from_secret": "matrix_password" },
+      },
+      when: {
+        status: [ "success", "failure" ],
       },
     },
   ],

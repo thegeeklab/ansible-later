@@ -406,7 +406,7 @@ steps:
     DOCKERHUB_USERNAME:
       from_secret: docker_username
     README_PATH: README.md
-    SHORT_DESCRIPTION: ansible-later - Simple annotation based documentation for your roles
+    SHORT_DESCRIPTION: ansible-later - lovely automation testing framework
   when:
     ref:
     - refs/heads/master
@@ -431,6 +431,10 @@ steps:
     template: "Status: **{{ build.status }}**<br/> Build: [{{ repo.Owner }}/{{ repo.Name }}]({{ build.link }}) ({{ build.branch }}) by {{ build.author }}<br/> Message: {{ build.message }}"
     username:
       from_secret: matrix_username
+  when:
+    status:
+    - success
+    - failure
 
 trigger:
   ref:
@@ -448,6 +452,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 04876d1de8c58e1e070643c6218cb343fd1e100cb5956ce0af99cc4fec762fcc
+hmac: 825a77f8fb6f029b87bf463a2f2d670a8d0297f3cf17684787188362eba6a336
 
 ...
