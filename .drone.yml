@@ -1,13 +1,38 @@
 ---
 kind: pipeline
-name: testing
+name: lint
 
 platform:
   os: linux
   arch: amd64
 
 steps:
-- name: python2.7-ansible
+- name: flake8
+  pull: always
+  image: python:3.7
+  commands:
+  - pip install -r test-requirements.txt -qq
+  - pip install -qq .
+  - flake8 ./ansiblelater
+  environment:
+    PY_COLORS: 1
+
+trigger:
+  ref:
+  - refs/heads/master
+  - "refs/tags/**"
+  - "refs/pull/**"
+
+---
+kind: pipeline
+name: test
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: python27-ansible
   pull: always
   image: python:2.7
   commands:
@@ -18,7 +43,7 @@ steps:
   depends_on:
   - clone
 
-- name: python3.5-ansible
+- name: python35-ansible
   pull: always
   image: python:3.5
   commands:
@@ -29,7 +54,7 @@ steps:
   depends_on:
   - clone
 
-- name: python3.6-ansible
+- name: python36-ansible
   pull: always
   image: python:3.6
   commands:
@@ -40,7 +65,7 @@ steps:
   depends_on:
   - clone
 
-- name: python3.7-ansible
+- name: python37-ansible
   pull: always
   image: python:3.7
   commands:
@@ -51,25 +76,12 @@ steps:
   depends_on:
   - clone
 
-- name: python-flake8
+- name: python38-rc-ansible
   pull: always
-  image: python:3.7
+  image: python:3.8-rc
   commands:
-  - pip install -r test-requirements.txt -qq
-  - pip install -qq .
-  - flake8 ./ansiblelater
-  environment:
-    PY_COLORS: 1
-  depends_on:
-  - clone
-
-- name: python-bandit
-  pull: always
-  image: python:3.7
-  commands:
-  - pip install -r test-requirements.txt -qq
-  - pip install -qq .
-  - bandit -r ./ansiblelater -x ./ansiblelater/tests
+  - pip install tox -qq
+  - "tox -e $(tox -l | grep py38-rc | xargs | sed 's/ /,/g') -q"
   environment:
     PY_COLORS: 1
   depends_on:
@@ -87,10 +99,11 @@ steps:
       from_secret: codecov_token
     PY_COLORS: 1
   depends_on:
-  - python2.7-ansible
-  - python3.5-ansible
-  - python3.6-ansible
-  - python3.7-ansible
+  - python27-ansible
+  - python35-ansible
+  - python36-ansible
+  - python37-ansible
+  - python38-rc-ansible
 
 trigger:
   ref:
@@ -98,9 +111,40 @@ trigger:
   - "refs/tags/**"
   - "refs/pull/**"
 
+depends_on:
+- lint
+
 ---
 kind: pipeline
-name: build
+name: security
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: bandit
+  pull: always
+  image: python:3.7
+  commands:
+  - pip install -r test-requirements.txt -qq
+  - pip install -qq .
+  - bandit -r ./ansiblelater -x ./ansiblelater/tests
+  environment:
+    PY_COLORS: 1
+
+trigger:
+  ref:
+  - refs/heads/master
+  - "refs/tags/**"
+  - "refs/pull/**"
+
+depends_on:
+- test
+
+---
+kind: pipeline
+name: build-package
 
 platform:
   os: linux
@@ -117,24 +161,7 @@ steps:
   pull: always
   image: alpine
   commands:
-  - apk add --no-cache coreutils
-  - "sha256sum -b dist/* > sha256sum.txt"
-
-- name: gpg-sign
-  pull: always
-  image: plugins/gpgsign:1
-  settings:
-    detach_sign: true
-    files:
-    - "dist/*"
-    key:
-      from_secret: gpgsign_key
-    passphrase:
-      from_secret: gpgsign_passphrase
-  when:
-    event:
-      exclude:
-      - pull_request
+  - "cd dist/ && sha256sum * > ../sha256sum.txt"
 
 - name: publish-github
   pull: always
@@ -149,8 +176,8 @@ steps:
     overwrite: true
     title: "${DRONE_TAG}"
   when:
-    event:
-    - tag
+    ref:
+    - "refs/tags/**"
 
 - name: publish-pypi
   pull: always
@@ -163,8 +190,8 @@ steps:
     username:
       from_secret: pypi_username
   when:
-    event:
-    - tag
+    ref:
+    - "refs/tags/**"
 
 trigger:
   ref:
@@ -173,7 +200,175 @@ trigger:
   - "refs/pull/**"
 
 depends_on:
-- testing
+- security
+
+---
+kind: pipeline
+name: build-container-amd64
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  pull: always
+  image: python:3.7
+  commands:
+  - python setup.py bdist_wheel
+
+- name: dryrun
+  pull: always
+  image: plugins/docker:18-linux-amd64
+  settings:
+    dockerfile: Dockerfile
+    dry_run: true
+    password:
+      from_secret: docker_password
+    repo: xoxys/ansible-later
+    username:
+      from_secret: docker_username
+  when:
+    ref:
+    - "refs/pull/**"
+
+- name: publish
+  pull: always
+  image: plugins/docker:18-linux-amd64
+  settings:
+    auto_tag: true
+    auto_tag_suffix: amd64
+    dockerfile: Dockerfile
+    password:
+      from_secret: docker_password
+    repo: xoxys/ansible-later
+    username:
+      from_secret: docker_username
+  when:
+    ref:
+    - refs/heads/master
+    - "refs/tags/**"
+
+trigger:
+  ref:
+  - refs/heads/master
+  - "refs/tags/**"
+  - "refs/pull/**"
+
+depends_on:
+- security
+
+---
+kind: pipeline
+name: build-container-arm64
+
+platform:
+  os: linux
+  arch: arm64
+
+steps:
+- name: build
+  pull: always
+  image: python:3.7
+  commands:
+  - python setup.py bdist_wheel
+
+- name: dryrun
+  pull: always
+  image: plugins/docker:18-linux-arm64
+  settings:
+    dockerfile: Dockerfile
+    dry_run: true
+    password:
+      from_secret: docker_password
+    repo: xoxys/ansible-later
+    username:
+      from_secret: docker_username
+  when:
+    ref:
+    - "refs/pull/**"
+
+- name: publish
+  pull: always
+  image: plugins/docker:18-linux-arm64
+  settings:
+    auto_tag: true
+    auto_tag_suffix: arm64
+    dockerfile: Dockerfile
+    password:
+      from_secret: docker_password
+    repo: xoxys/ansible-later
+    username:
+      from_secret: docker_username
+  when:
+    ref:
+    - refs/heads/master
+    - "refs/tags/**"
+
+trigger:
+  ref:
+  - refs/heads/master
+  - "refs/tags/**"
+  - "refs/pull/**"
+
+depends_on:
+- security
+
+---
+kind: pipeline
+name: build-container-arm
+
+platform:
+  os: linux
+  arch: arm
+
+steps:
+- name: build
+  pull: always
+  image: python:3.7
+  commands:
+  - python setup.py bdist_wheel
+
+- name: dryrun
+  pull: always
+  image: plugins/docker:18-linux-arm
+  settings:
+    dockerfile: Dockerfile
+    dry_run: true
+    password:
+      from_secret: docker_password
+    repo: xoxys/ansible-later
+    username:
+      from_secret: docker_username
+  when:
+    ref:
+    - "refs/pull/**"
+
+- name: publish
+  pull: always
+  image: plugins/docker:18-linux-arm
+  settings:
+    auto_tag: true
+    auto_tag_suffix: arm
+    dockerfile: Dockerfile
+    password:
+      from_secret: docker_password
+    repo: xoxys/ansible-later
+    username:
+      from_secret: docker_username
+  when:
+    ref:
+    - refs/heads/master
+    - "refs/tags/**"
+
+trigger:
+  ref:
+  - refs/heads/master
+  - "refs/tags/**"
+  - "refs/pull/**"
+
+depends_on:
+- security
 
 ---
 kind: pipeline
@@ -184,6 +379,46 @@ platform:
   arch: amd64
 
 steps:
+- name: manifest
+  pull: always
+  image: plugins/manifest
+  settings:
+    auto_tag: true
+    ignore_missing: true
+    password:
+      from_secret: docker_password
+    spec: manifest.tmpl
+    username:
+      from_secret: docker_username
+  when:
+    ref:
+    - refs/heads/master
+    - "refs/tags/**"
+
+- name: readme
+  pull: always
+  image: sheogorath/readme-to-dockerhub
+  environment:
+    DOCKERHUB_PASSWORD:
+      from_secret: docker_password
+    DOCKERHUB_REPO_NAME: ansible-later
+    DOCKERHUB_REPO_PREFIX: xoxys
+    DOCKERHUB_USERNAME:
+      from_secret: docker_username
+    README_PATH: README.md
+    SHORT_DESCRIPTION: ansible-later - Simple annotation based documentation for your roles
+  when:
+    ref:
+    - refs/heads/master
+    - "refs/tags/**"
+
+- name: microbadger
+  pull: always
+  image: plugins/webhook
+  settings:
+    urls:
+      from_secret: microbadger_url
+
 - name: matrix
   image: plugins/matrix
   settings:
@@ -204,6 +439,13 @@ trigger:
   - failure
 
 depends_on:
-- build
+- build-package
+- build-container-amd64
+- build-container-arm64
+- build-container-arm
+
+---
+kind: signature
+hmac: 16fda397e94995b67b04af6d36fb22c81393687fce44291b980d4e9812f39125
 
 ...

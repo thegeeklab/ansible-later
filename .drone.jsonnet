@@ -1,5 +1,5 @@
-local PythonVersions(pyversion="2.7", py="27") = {
-    name: "python" + pyversion + "-ansible",
+local PythonVersion(pyversion="2.7") = {
+    name: "python" + std.strReplace(pyversion, '.', '') + "-ansible",
     image: "python:" + pyversion,
     pull: "always",
     environment: {
@@ -7,57 +7,53 @@ local PythonVersions(pyversion="2.7", py="27") = {
     },
     commands: [
       "pip install tox -qq",
-      "tox -e $(tox -l | grep py" + py + " | xargs | sed 's/ /,/g') -q",
+      "tox -e $(tox -l | grep py" + std.strReplace(pyversion, '.', '') + " | xargs | sed 's/ /,/g') -q",
     ],
     depends_on: [
       "clone",
     ],
 };
 
-local PipelineTesting = {
+local PipelineLint = {
+    kind: "pipeline",
+    name: "lint",
+    platform: {
+        os: "linux",
+        arch: "amd64",
+    },
+    steps: [
+        {
+            name: "flake8",
+            image: "python:3.7",
+            pull: "always",
+            environment: {
+                PY_COLORS: 1
+            },
+            commands: [
+                "pip install -r test-requirements.txt -qq",
+                "pip install -qq .",
+                "flake8 ./ansiblelater",
+            ],
+        },
+    ],
+    trigger: {
+        ref: ["refs/heads/master", "refs/tags/**", "refs/pull/**"],
+    },
+};
+
+local PipelineTest = {
   kind: "pipeline",
-  name: "testing",
+  name: "test",
   platform: {
     os: "linux",
     arch: "amd64",
   },
   steps: [
-    PythonVersions(pyversion="2.7", py="27"),
-    PythonVersions(pyversion="3.5", py="35"),
-    PythonVersions(pyversion="3.6", py="36"),
-    PythonVersions(pyversion="3.7", py="37"),
-    {
-      name: "python-flake8",
-      image: "python:3.7",
-      pull: "always",
-      environment: {
-        PY_COLORS: 1
-      },
-      commands: [
-        "pip install -r test-requirements.txt -qq",
-        "pip install -qq .",
-        "flake8 ./ansiblelater",
-      ],
-      depends_on: [
-        "clone",
-      ],
-    },
-    {
-      name: "python-bandit",
-      image: "python:3.7",
-      pull: "always",
-      environment: {
-        PY_COLORS: 1
-      },
-      commands: [
-        "pip install -r test-requirements.txt -qq",
-        "pip install -qq .",
-        "bandit -r ./ansiblelater -x ./ansiblelater/tests",
-      ],
-      depends_on: [
-        "clone",
-      ],
-    },
+    PythonVersion(pyversion="2.7"),
+    PythonVersion(pyversion="3.5"),
+    PythonVersion(pyversion="3.6"),
+    PythonVersion(pyversion="3.7"),
+    PythonVersion(pyversion="3.8-rc"),
     {
       name: "codecov",
       image: "python:3.7",
@@ -72,24 +68,120 @@ local PipelineTesting = {
         "codecov --required"
       ],
       depends_on: [
-        "python2.7-ansible",
-        "python3.5-ansible",
-        "python3.6-ansible",
-        "python3.7-ansible"
+        "python27-ansible",
+        "python35-ansible",
+        "python36-ansible",
+        "python37-ansible",
+        "python38-rc-ansible",
       ],
     }
+  ],
+  depends_on: [
+        "lint",
   ],
   trigger: {
     ref: ["refs/heads/master", "refs/tags/**", "refs/pull/**"],
   },
 };
 
-local PipelineBuild = {
+local PipelineSecurity = {
+    kind: "pipeline",
+    name: "security",
+    platform: {
+        os: "linux",
+        arch: "amd64",
+    },
+    steps: [
+        {
+            name: "bandit",
+            image: "python:3.7",
+            pull: "always",
+            environment: {
+                PY_COLORS: 1
+            },
+            commands: [
+                "pip install -r test-requirements.txt -qq",
+                "pip install -qq .",
+                "bandit -r ./ansiblelater -x ./ansiblelater/tests",
+            ],
+        },
+    ],
+    depends_on: [
+        "test",
+    ],
+    trigger: {
+        ref: ["refs/heads/master", "refs/tags/**", "refs/pull/**"],
+    },
+};
+
+local PipelineBuildPackage = {
+    kind: "pipeline",
+    name: "build-package",
+    platform: {
+        os: "linux",
+        arch: "amd64",
+    },
+    steps: [
+        {
+            name: "build",
+            image: "python:3.7",
+            pull: "always",
+            commands: [
+                "python setup.py sdist bdist_wheel",
+            ]
+        },
+        {
+            name: "checksum",
+            image: "alpine",
+            pull: "always",
+            commands: [
+                "cd dist/ && sha256sum * > ../sha256sum.txt"
+            ],
+        },
+        {
+            name: "publish-github",
+            image: "plugins/github-release",
+            pull: "always",
+            settings: {
+                overwrite: true,
+                api_key: { "from_secret": "github_token"},
+                files: ["dist/*", "sha256sum.txt"],
+                title: "${DRONE_TAG}",
+                note: "CHANGELOG.md",
+            },
+            when: {
+                ref: [ "refs/tags/**" ],
+            },
+        },
+        {
+          name: "publish-pypi",
+          image: "plugins/pypi",
+          pull: "always",
+          settings: {
+            username: { "from_secret": "pypi_username" },
+            password: { "from_secret": "pypi_password" },
+            repository: "https://upload.pypi.org/legacy/",
+            skip_build: true
+          },
+          when: {
+            ref: [ "refs/tags/**" ],
+          },
+        },
+    ],
+    depends_on: [
+        "security",
+    ],
+    trigger: {
+        ref: ["refs/heads/master", "refs/tags/**", "refs/pull/**"],
+    },
+};
+
+local PipelineBuildContainer(arch="amd64") = {
   kind: "pipeline",
-  name: "build",
+  name: "build-container-" + arch,
   platform: {
     os: "linux",
-    arch: "amd64",
+    arch: arch,
   },
   steps: [
     {
@@ -97,69 +189,46 @@ local PipelineBuild = {
       image: "python:3.7",
       pull: "always",
       commands: [
-        "python setup.py sdist bdist_wheel",
+          "python setup.py bdist_wheel",
       ]
     },
     {
-      name: "checksum",
-      image: "alpine",
-      pull: "always",
-      commands: [
-        "apk add --no-cache coreutils",
-        "sha256sum -b dist/* > sha256sum.txt"
-      ],
-    },
-    {
-      name: "gpg-sign",
-      image: "plugins/gpgsign:1",
+      name: "dryrun",
+      image: "plugins/docker:18-linux-" + arch,
       pull: "always",
       settings: {
-        key: { "from_secret": "gpgsign_key" },
-        passphrase: { "from_secret": "gpgsign_passphrase" },
-        detach_sign: true,
-        files: [ "dist/*" ],
+        dry_run: true,
+        dockerfile: "Dockerfile",
+        repo: "xoxys/ansible-later",
+        username: { "from_secret": "docker_username" },
+        password: { "from_secret": "docker_password" },
       },
       when: {
-        event: {
-          exclude: ['pull_request'],
-        },
+        ref: ["refs/pull/**"],
       },
     },
     {
-      name: "publish-github",
-      image: "plugins/github-release",
+      name: "publish",
+      image: "plugins/docker:18-linux-" + arch,
       pull: "always",
       settings: {
-        api_key: { "from_secret": "github_token"},
-        overwrite: true,
-        files: ["dist/*", "sha256sum.txt"],
-        title: "${DRONE_TAG}",
-        note: "CHANGELOG.md",
+        auto_tag: true,
+        auto_tag_suffix: arch,
+        dockerfile: "Dockerfile",
+        repo: "xoxys/ansible-later",
+        username: { "from_secret": "docker_username" },
+        password: { "from_secret": "docker_password" },
       },
       when: {
-        event: [ "tag" ],
-      },
-    },
-    {
-      name: "publish-pypi",
-      image: "plugins/pypi",
-      pull: "always",
-      settings: {
-        username: { "from_secret": "pypi_username" },
-        password: { "from_secret": "pypi_password" },
-        repository: "https://upload.pypi.org/legacy/",
-        skip_build: true
-      },
-      when: {
-        event: [ "tag" ],
+          ref: ["refs/heads/master", "refs/tags/**"],
       },
     },
   ],
   depends_on: [
-    "testing",
+    "security",
   ],
   trigger: {
-    ref: ["refs/heads/master", "refs/tags/**", "refs/pull/**"],
+      ref: ["refs/heads/master", "refs/tags/**", "refs/pull/**"],
   },
 };
 
@@ -171,6 +240,51 @@ local PipelineNotifications = {
     arch: "amd64",
   },
   steps: [
+    {
+      image: "plugins/manifest",
+      name: "manifest",
+      pull: "always",
+      settings: {
+        ignore_missing: true,
+        auto_tag: true,
+        username: { from_secret: "docker_username" },
+        password: { from_secret: "docker_password" },
+        spec: "manifest.tmpl",
+      },
+      when: {
+        ref: [
+          'refs/heads/master',
+          'refs/tags/**',
+        ],
+      },
+    },
+    {
+      name: "readme",
+      image: "sheogorath/readme-to-dockerhub",
+      pull: "always",
+      environment: {
+        DOCKERHUB_USERNAME: { from_secret: "docker_username" },
+        DOCKERHUB_PASSWORD: { from_secret: "docker_password" },
+        DOCKERHUB_REPO_PREFIX: "xoxys",
+        DOCKERHUB_REPO_NAME: "ansible-later",
+        README_PATH: "README.md",
+        SHORT_DESCRIPTION: "ansible-later - Simple annotation based documentation for your roles"
+      },
+      when: {
+        ref: [
+          'refs/heads/master',
+          'refs/tags/**',
+        ],
+      },
+    },
+    {
+      name: "microbadger",
+      image: "plugins/webhook",
+      pull: "always",
+      settings: {
+        urls: { from_secret: "microbadger_url" },
+      },
+    },
     {
       name: "matrix",
       image: "plugins/matrix",
@@ -184,7 +298,10 @@ local PipelineNotifications = {
     },
   ],
   depends_on: [
-    "build",
+    "build-package",
+    "build-container-amd64",
+    "build-container-arm64",
+    "build-container-arm"
   ],
   trigger: {
     ref: ["refs/heads/master", "refs/tags/**"],
@@ -193,7 +310,12 @@ local PipelineNotifications = {
 };
 
 [
-  PipelineTesting,
-  PipelineBuild,
+  PipelineLint,
+  PipelineTest,
+  PipelineSecurity,
+  PipelineBuildPackage,
+  PipelineBuildContainer(arch="amd64"),
+  PipelineBuildContainer(arch="arm64"),
+  PipelineBuildContainer(arch="arm"),
   PipelineNotifications,
 ]
