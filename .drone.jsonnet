@@ -289,8 +289,8 @@ local PipelineNotifications = {
       name: "matrix",
       image: "plugins/matrix",
       settings: {
-        homeserver: "https://matrix.rknet.org",
-        roomid: "MtidqQXWWAtQcByBhH:rknet.org",
+        homeserver: { "from_secret": "matrix_homeserver" },
+        roomid: { "from_secret": "matrix_roomid" },
         template: "Status: **{{ build.status }}**<br/> Build: [{{ repo.Owner }}/{{ repo.Name }}]({{ build.link }}) ({{ build.branch }}) by {{ build.author }}<br/> Message: {{ build.message }}",
         username: { "from_secret": "matrix_username" },
         password: { "from_secret": "matrix_password" },

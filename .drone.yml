@@ -422,10 +422,12 @@ steps:
 - name: matrix
   image: plugins/matrix
   settings:
-    homeserver: https://matrix.rknet.org
+    homeserver:
+      from_secret: matrix_homeserver
     password:
       from_secret: matrix_password
-    roomid: MtidqQXWWAtQcByBhH:rknet.org
+    roomid:
+      from_secret: matrix_roomid
     template: "Status: **{{ build.status }}**<br/> Build: [{{ repo.Owner }}/{{ repo.Name }}]({{ build.link }}) ({{ build.branch }}) by {{ build.author }}<br/> Message: {{ build.message }}"
     username:
       from_secret: matrix_username
@@ -446,6 +448,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 16fda397e94995b67b04af6d36fb22c81393687fce44291b980d4e9812f39125
+hmac: 04876d1de8c58e1e070643c6218cb343fd1e100cb5956ce0af99cc4fec762fcc
 
 ...
