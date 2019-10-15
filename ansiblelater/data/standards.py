@@ -18,13 +18,13 @@ from ansiblelater.rules.rolefiles import check_scm_in_src
 from ansiblelater.rules.taskfiles import check_line_between_tasks
 from ansiblelater.rules.yamlfiles import check_native_yaml
 from ansiblelater.rules.yamlfiles import check_yaml_colons
+from ansiblelater.rules.yamlfiles import check_yaml_document_end
 from ansiblelater.rules.yamlfiles import check_yaml_document_start
 from ansiblelater.rules.yamlfiles import check_yaml_empty_lines
 from ansiblelater.rules.yamlfiles import check_yaml_file
 from ansiblelater.rules.yamlfiles import check_yaml_has_content
 from ansiblelater.rules.yamlfiles import check_yaml_hyphens
 from ansiblelater.rules.yamlfiles import check_yaml_indent
-from ansiblelater.rules.yamlfiles import check_yaml_document_end
 from ansiblelater.standard import Standard
 
 tasks_should_be_separated = Standard(dict(
