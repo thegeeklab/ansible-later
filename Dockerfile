@@ -8,8 +8,8 @@ LABEL maintainer="Robert Kaussow <mail@geeklabor.de>" \
 
 ADD dist/ansible_later-*.whl /
 
-RUN apk --update add --virtual .build-deps build-base libffi-dev libressl-dev pip && \
-    pip install --upgrade --no-cache-dir git && \
+RUN apk --update add --virtual .build-deps build-base libffi-dev libressl-dev git && \
+    pip install --upgrade --no-cache-dir pip && \
     pip install --no-cache-dir --find-links=. ansible-later && \
     apk del .build-deps && \
     rm -rf /var/cache/apk/* && \
