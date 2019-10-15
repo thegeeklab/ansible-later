@@ -6,6 +6,8 @@ LABEL maintainer="Robert Kaussow <mail@geeklabor.de>" \
     org.label-schema.vendor="Robert Kaussow" \
     org.label-schema.schema-version="1.0"
 
+ENV PY_COLORS=1
+
 ADD dist/ansible_later-*.whl /
 
 RUN apk --update add --virtual .build-deps build-base libffi-dev libressl-dev && \
