@@ -127,6 +127,9 @@ class Settings(object):
                 "document-start": {
                     "present": True
                 },
+                "document-end": {
+                    "present": True
+                },
                 "colons": {
                     "max-spaces-before": 0,
                     "max-spaces-after": 1

@@ -75,6 +75,13 @@ def check_yaml_document_start(candidate, settings):
     return Result(candidate.path, errors)
 
 
+def check_yaml_document_end(candidate, settings):
+    options = "rules: {{document-end: {conf}}}".format(
+        conf=settings["yamllint"]["document-end"])
+    errors = run_yamllint(candidate.path, options)
+    return Result(candidate.path, errors)
+
+
 def check_yaml_colons(candidate, settings):
     options = "rules: {{colons: {conf}}}".format(
         conf=settings["yamllint"]["colons"])

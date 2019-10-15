@@ -24,6 +24,7 @@ from ansiblelater.rules.yamlfiles import check_yaml_file
 from ansiblelater.rules.yamlfiles import check_yaml_has_content
 from ansiblelater.rules.yamlfiles import check_yaml_hyphens
 from ansiblelater.rules.yamlfiles import check_yaml_indent
+from ansiblelater.rules.yamlfiles import check_yaml_document_end
 from ansiblelater.standard import Standard
 
 tasks_should_be_separated = Standard(dict(
@@ -224,6 +225,14 @@ use_yaml_rather_than_key_value = Standard(dict(
     types=["playbook", "task", "handler"]
 ))
 
+files_should_contain_document_end_marker = Standard(dict(
+    id="LINT0009",
+    name="YAML should contain document end marker",
+    check=check_yaml_document_end,
+    version="0.1",
+    types=["playbook", "task", "handler", "rolevars",
+           "hostvars", "groupvars", "meta"]
+))
 
 ansible_min_version = "2.5"
 ansible_later_min_version = "0.2.0"
@@ -256,4 +265,5 @@ standards = [
     rolesfile_should_be_in_yaml,
     files_should_not_be_purposeless,
     use_yaml_rather_than_key_value,
+    files_should_contain_document_end_marker,
 ]
