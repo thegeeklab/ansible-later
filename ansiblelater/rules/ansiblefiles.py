@@ -45,12 +45,12 @@ def check_named_task(candidate, settings):
     nameless_tasks = ["meta", "debug", "include_role", "import_role",
                       "include_tasks", "import_tasks", "include_vars",
                       "block"]
-    description = "module '%s' used without name attribute"
+    description = "module '%s' used without or empty name attribute"
 
     if not errors:
         for task in tasks:
             module = task["action"]["__ansible_module__"]
-            if "name" not in task and module not in nameless_tasks:
+            if ("name" not in task or not task["name"]) and module not in nameless_tasks:
                 errors.append(Error(task["__line__"], description % module))
 
     return Result(candidate.path, errors)
@@ -66,7 +66,7 @@ def check_name_format(candidate, settings):
             if "name" in task:
                 namelines[task["name"]].append(task["__line__"])
         for (name, lines) in namelines.items():
-            if not name[0].isupper():
+            if name and not name[0].isupper():
                 errors.append(Error(lines[-1], description % name))
 
     return Result(candidate.path, errors)
@@ -83,7 +83,7 @@ def check_unique_named_task(candidate, settings):
             if "name" in task:
                 namelines[task["name"]].append(task["__line__"])
         for (name, lines) in namelines.items():
-            if len(lines) > 1:
+            if name and len(lines) > 1:
                 errors.append(Error(lines[-1], description % name))
 
     return Result(candidate.path, errors)
