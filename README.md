@@ -220,7 +220,7 @@ comes with a couple of built-in checks explained in the following table.
 | check_yaml_file                 | LINT0006    | Roles file should be in yaml format.                              |                                                                      |
 | check_yaml_has_content          | LINT0007    | Files should contain useful content.                              |                                                                      |
 | check_native_yaml               | LINT0008    | Use YAML format for tasks and handlers rather than key=value.     |                                                                      |
-| check_yaml_document_end         | LINT0009    | YAML should contain document end marker.                          | {document-end: {present: true}                                       |
+| check_yaml_document_end         | LINT0009    | YAML should contain document end marker.                          | {document-end: {present: true}}                                      |
 | check_line_between_tasks        | ANSIBLE0001 | Single tasks should be separated by an empty line.                |                                                                      |
 | check_meta_main                 | ANSIBLE0002 | Meta file should contain a basic subset of parameters.            | author, description, min_ansible_version, platforms, dependencies    |
 | check_unique_named_task         | ANSIBLE0003 | Tasks and handlers must be uniquely named within a file.          |                                                                      |
