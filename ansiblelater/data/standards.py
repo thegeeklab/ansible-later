@@ -235,7 +235,7 @@ files_should_contain_document_end_marker = Standard(dict(
 ))
 
 ansible_min_version = "2.5"
-ansible_later_min_version = "0.2.0"
+ansible_later_min_version = "0.3.0"
 
 
 standards = [
