@@ -1,0 +1,27 @@
+---
+main:
+  - name: Setup
+    sub:
+      - name: Using pip
+        ref: "/setup/pip"
+      - name: From source
+        ref: "/setup/source"
+  - name: Configuration
+    ref: "/configuration"
+    sub:
+      - name: Default settings
+        ref: "/configuration/defaults"
+      - name: CLI options
+        ref: "/configuration/cli"
+  - name: Usage
+    ref: "/usage"
+  - name: Included rules
+    ref: "/included_rules"
+  - name: Build your own rules
+    sub:
+      - name: Standards file
+        ref: "/build_rules/standards_file"
+      - name: Candidates
+        ref: "/build_rules/candidates"
+      - name: Standards checks
+        ref: "/build_rules/standards_check"
