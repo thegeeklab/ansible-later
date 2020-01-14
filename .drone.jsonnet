@@ -1,7 +1,6 @@
 local PythonVersion(pyversion="2.7") = {
     name: "python" + std.strReplace(pyversion, '.', '') + "-ansible",
     image: "python:" + pyversion,
-    pull: "always",
     environment: {
       PY_COLORS: 1
     },
@@ -25,7 +24,6 @@ local PipelineLint = {
         {
             name: "flake8",
             image: "python:3.7",
-            pull: "always",
             environment: {
                 PY_COLORS: 1
             },
@@ -57,7 +55,6 @@ local PipelineTest = {
     {
       name: "codecov",
       image: "python:3.7",
-      pull: "always",
       environment: {
         PY_COLORS: 1,
         CODECOV_TOKEN: { "from_secret": "codecov_token" },
@@ -95,7 +92,6 @@ local PipelineSecurity = {
         {
             name: "bandit",
             image: "python:3.7",
-            pull: "always",
             environment: {
                 PY_COLORS: 1
             },
@@ -125,7 +121,6 @@ local PipelineBuildPackage = {
         {
             name: "build",
             image: "python:3.7",
-            pull: "always",
             commands: [
                 "python setup.py sdist bdist_wheel",
             ]
@@ -133,7 +128,6 @@ local PipelineBuildPackage = {
         {
             name: "checksum",
             image: "alpine",
-            pull: "always",
             commands: [
                 "cd dist/ && sha256sum * > ../sha256sum.txt"
             ],
@@ -141,7 +135,6 @@ local PipelineBuildPackage = {
         {
             name: "publish-github",
             image: "plugins/github-release",
-            pull: "always",
             settings: {
                 overwrite: true,
                 api_key: { "from_secret": "github_token"},
@@ -156,7 +149,6 @@ local PipelineBuildPackage = {
         {
           name: "publish-pypi",
           image: "plugins/pypi",
-          pull: "always",
           settings: {
             username: { "from_secret": "pypi_username" },
             password: { "from_secret": "pypi_password" },
@@ -187,7 +179,6 @@ local PipelineBuildContainer(arch="amd64") = {
     {
       name: "build",
       image: "python:3.7",
-      pull: "always",
       commands: [
           "python setup.py bdist_wheel",
       ]
@@ -195,7 +186,6 @@ local PipelineBuildContainer(arch="amd64") = {
     {
       name: "dryrun",
       image: "plugins/docker:18-linux-" + arch,
-      pull: "always",
       settings: {
         dry_run: true,
         dockerfile: "Dockerfile",
@@ -210,7 +200,6 @@ local PipelineBuildContainer(arch="amd64") = {
     {
       name: "publish",
       image: "plugins/docker:18-linux-" + arch,
-      pull: "always",
       settings: {
         auto_tag: true,
         auto_tag_suffix: arch,
@@ -320,7 +309,6 @@ local PipelineNotifications = {
     {
       image: "plugins/manifest",
       name: "manifest",
-      pull: "always",
       settings: {
         ignore_missing: true,
         auto_tag: true,
@@ -328,36 +316,22 @@ local PipelineNotifications = {
         password: { from_secret: "docker_password" },
         spec: "manifest.tmpl",
       },
-      when: {
-        ref: [
-          'refs/heads/master',
-          'refs/tags/**',
-        ],
-      },
     },
     {
       name: "readme",
       image: "sheogorath/readme-to-dockerhub",
-      pull: "always",
       environment: {
         DOCKERHUB_USERNAME: { from_secret: "docker_username" },
         DOCKERHUB_PASSWORD: { from_secret: "docker_password" },
         DOCKERHUB_REPO_PREFIX: "xoxys",
         DOCKERHUB_REPO_NAME: "ansible-later",
         README_PATH: "README.md",
-        SHORT_DESCRIPTION: "ansible-later - lovely automation testing framework"
-      },
-      when: {
-        ref: [
-          'refs/heads/master',
-          'refs/tags/**',
-        ],
+        SHORT_DESCRIPTION: "ansible-later - Lovely automation testing framework"
       },
     },
     {
       name: "microbadger",
       image: "plugins/webhook",
-      pull: "always",
       settings: {
         urls: { from_secret: "microbadger_url" },
       },
@@ -371,9 +345,6 @@ local PipelineNotifications = {
         template: "Status: **{{ build.status }}**<br/> Build: [{{ repo.Owner }}/{{ repo.Name }}]({{ build.link }}) ({{ build.branch }}) by {{ build.author }}<br/> Message: {{ build.message }}",
         username: { "from_secret": "matrix_username" },
         password: { "from_secret": "matrix_password" },
-      },
-      when: {
-        status: [ "success", "failure" ],
       },
     },
   ],

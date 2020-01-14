@@ -8,7 +8,6 @@ platform:
 
 steps:
 - name: flake8
-  pull: always
   image: python:3.7
   commands:
   - pip install -r test-requirements.txt -qq
@@ -33,7 +32,6 @@ platform:
 
 steps:
 - name: python27-ansible
-  pull: always
   image: python:2.7
   commands:
   - pip install tox -qq
@@ -44,7 +42,6 @@ steps:
   - clone
 
 - name: python35-ansible
-  pull: always
   image: python:3.5
   commands:
   - pip install tox -qq
@@ -55,7 +52,6 @@ steps:
   - clone
 
 - name: python36-ansible
-  pull: always
   image: python:3.6
   commands:
   - pip install tox -qq
@@ -66,7 +62,6 @@ steps:
   - clone
 
 - name: python37-ansible
-  pull: always
   image: python:3.7
   commands:
   - pip install tox -qq
@@ -77,7 +72,6 @@ steps:
   - clone
 
 - name: python38-rc-ansible
-  pull: always
   image: python:3.8-rc
   commands:
   - pip install tox -qq
@@ -88,7 +82,6 @@ steps:
   - clone
 
 - name: codecov
-  pull: always
   image: python:3.7
   commands:
   - pip install codecov
@@ -124,7 +117,6 @@ platform:
 
 steps:
 - name: bandit
-  pull: always
   image: python:3.7
   commands:
   - pip install -r test-requirements.txt -qq
@@ -152,19 +144,16 @@ platform:
 
 steps:
 - name: build
-  pull: always
   image: python:3.7
   commands:
   - python setup.py sdist bdist_wheel
 
 - name: checksum
-  pull: always
   image: alpine
   commands:
   - cd dist/ && sha256sum * > ../sha256sum.txt
 
 - name: publish-github
-  pull: always
   image: plugins/github-release
   settings:
     api_key:
@@ -180,7 +169,6 @@ steps:
     - refs/tags/**
 
 - name: publish-pypi
-  pull: always
   image: plugins/pypi
   settings:
     password:
@@ -212,13 +200,11 @@ platform:
 
 steps:
 - name: build
-  pull: always
   image: python:3.7
   commands:
   - python setup.py bdist_wheel
 
 - name: dryrun
-  pull: always
   image: plugins/docker:18-linux-amd64
   settings:
     dockerfile: Dockerfile
@@ -233,7 +219,6 @@ steps:
     - refs/pull/**
 
 - name: publish
-  pull: always
   image: plugins/docker:18-linux-amd64
   settings:
     auto_tag: true
@@ -268,13 +253,11 @@ platform:
 
 steps:
 - name: build
-  pull: always
   image: python:3.7
   commands:
   - python setup.py bdist_wheel
 
 - name: dryrun
-  pull: always
   image: plugins/docker:18-linux-arm64
   settings:
     dockerfile: Dockerfile
@@ -289,7 +272,6 @@ steps:
     - refs/pull/**
 
 - name: publish
-  pull: always
   image: plugins/docker:18-linux-arm64
   settings:
     auto_tag: true
@@ -324,13 +306,11 @@ platform:
 
 steps:
 - name: build
-  pull: always
   image: python:3.7
   commands:
   - python setup.py bdist_wheel
 
 - name: dryrun
-  pull: always
   image: plugins/docker:18-linux-arm
   settings:
     dockerfile: Dockerfile
@@ -345,7 +325,6 @@ steps:
     - refs/pull/**
 
 - name: publish
-  pull: always
   image: plugins/docker:18-linux-arm
   settings:
     auto_tag: true
@@ -454,7 +433,6 @@ platform:
 
 steps:
 - name: manifest
-  pull: always
   image: plugins/manifest
   settings:
     auto_tag: true
@@ -464,13 +442,8 @@ steps:
     spec: manifest.tmpl
     username:
       from_secret: docker_username
-  when:
-    ref:
-    - refs/heads/master
-    - refs/tags/**
 
 - name: readme
-  pull: always
   image: sheogorath/readme-to-dockerhub
   environment:
     DOCKERHUB_PASSWORD:
@@ -480,14 +453,9 @@ steps:
     DOCKERHUB_USERNAME:
       from_secret: docker_username
     README_PATH: README.md
-    SHORT_DESCRIPTION: ansible-later - lovely automation testing framework
-  when:
-    ref:
-    - refs/heads/master
-    - refs/tags/**
+    SHORT_DESCRIPTION: ansible-later - Lovely automation testing framework
 
 - name: microbadger
-  pull: always
   image: plugins/webhook
   settings:
     urls:
@@ -505,10 +473,6 @@ steps:
     template: "Status: **{{ build.status }}**<br/> Build: [{{ repo.Owner }}/{{ repo.Name }}]({{ build.link }}) ({{ build.branch }}) by {{ build.author }}<br/> Message: {{ build.message }}"
     username:
       from_secret: matrix_username
-  when:
-    status:
-    - success
-    - failure
 
 trigger:
   ref:
@@ -523,6 +487,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 225363c3eddd299c7a3bdf2e54a2007e5ebc7e3881dd1aa0325e9f9ea7b2bc3b
+hmac: df2c32e15c32636b0e817e9e2a2b3d53730cbb2fa3a1ff8adf13ba2401c73c2f
 
 ...
