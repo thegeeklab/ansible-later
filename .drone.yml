@@ -20,8 +20,8 @@ steps:
 trigger:
   ref:
   - refs/heads/master
-  - "refs/tags/**"
-  - "refs/pull/**"
+  - refs/tags/**
+  - refs/pull/**
 
 ---
 kind: pipeline
@@ -37,7 +37,7 @@ steps:
   image: python:2.7
   commands:
   - pip install tox -qq
-  - "tox -e $(tox -l | grep py27 | xargs | sed 's/ /,/g') -q"
+  - tox -e $(tox -l | grep py27 | xargs | sed 's/ /,/g') -q
   environment:
     PY_COLORS: 1
   depends_on:
@@ -48,7 +48,7 @@ steps:
   image: python:3.5
   commands:
   - pip install tox -qq
-  - "tox -e $(tox -l | grep py35 | xargs | sed 's/ /,/g') -q"
+  - tox -e $(tox -l | grep py35 | xargs | sed 's/ /,/g') -q
   environment:
     PY_COLORS: 1
   depends_on:
@@ -59,7 +59,7 @@ steps:
   image: python:3.6
   commands:
   - pip install tox -qq
-  - "tox -e $(tox -l | grep py36 | xargs | sed 's/ /,/g') -q"
+  - tox -e $(tox -l | grep py36 | xargs | sed 's/ /,/g') -q
   environment:
     PY_COLORS: 1
   depends_on:
@@ -70,7 +70,7 @@ steps:
   image: python:3.7
   commands:
   - pip install tox -qq
-  - "tox -e $(tox -l | grep py37 | xargs | sed 's/ /,/g') -q"
+  - tox -e $(tox -l | grep py37 | xargs | sed 's/ /,/g') -q
   environment:
     PY_COLORS: 1
   depends_on:
@@ -81,7 +81,7 @@ steps:
   image: python:3.8-rc
   commands:
   - pip install tox -qq
-  - "tox -e $(tox -l | grep py38-rc | xargs | sed 's/ /,/g') -q"
+  - tox -e $(tox -l | grep py38-rc | xargs | sed 's/ /,/g') -q
   environment:
     PY_COLORS: 1
   depends_on:
@@ -92,7 +92,7 @@ steps:
   image: python:3.7
   commands:
   - pip install codecov
-  - "coverage combine .tox/py*/.coverage"
+  - coverage combine .tox/py*/.coverage
   - codecov --required
   environment:
     CODECOV_TOKEN:
@@ -108,8 +108,8 @@ steps:
 trigger:
   ref:
   - refs/heads/master
-  - "refs/tags/**"
-  - "refs/pull/**"
+  - refs/tags/**
+  - refs/pull/**
 
 depends_on:
 - lint
@@ -136,8 +136,8 @@ steps:
 trigger:
   ref:
   - refs/heads/master
-  - "refs/tags/**"
-  - "refs/pull/**"
+  - refs/tags/**
+  - refs/pull/**
 
 depends_on:
 - test
@@ -161,7 +161,7 @@ steps:
   pull: always
   image: alpine
   commands:
-  - "cd dist/ && sha256sum * > ../sha256sum.txt"
+  - cd dist/ && sha256sum * > ../sha256sum.txt
 
 - name: publish-github
   pull: always
@@ -170,14 +170,14 @@ steps:
     api_key:
       from_secret: github_token
     files:
-    - "dist/*"
+    - dist/*
     - sha256sum.txt
     note: CHANGELOG.md
     overwrite: true
-    title: "${DRONE_TAG}"
+    title: ${DRONE_TAG}
   when:
     ref:
-    - "refs/tags/**"
+    - refs/tags/**
 
 - name: publish-pypi
   pull: always
@@ -191,13 +191,13 @@ steps:
       from_secret: pypi_username
   when:
     ref:
-    - "refs/tags/**"
+    - refs/tags/**
 
 trigger:
   ref:
   - refs/heads/master
-  - "refs/tags/**"
-  - "refs/pull/**"
+  - refs/tags/**
+  - refs/pull/**
 
 depends_on:
 - security
@@ -230,7 +230,7 @@ steps:
       from_secret: docker_username
   when:
     ref:
-    - "refs/pull/**"
+    - refs/pull/**
 
 - name: publish
   pull: always
@@ -247,13 +247,13 @@ steps:
   when:
     ref:
     - refs/heads/master
-    - "refs/tags/**"
+    - refs/tags/**
 
 trigger:
   ref:
   - refs/heads/master
-  - "refs/tags/**"
-  - "refs/pull/**"
+  - refs/tags/**
+  - refs/pull/**
 
 depends_on:
 - security
@@ -286,7 +286,7 @@ steps:
       from_secret: docker_username
   when:
     ref:
-    - "refs/pull/**"
+    - refs/pull/**
 
 - name: publish
   pull: always
@@ -303,13 +303,13 @@ steps:
   when:
     ref:
     - refs/heads/master
-    - "refs/tags/**"
+    - refs/tags/**
 
 trigger:
   ref:
   - refs/heads/master
-  - "refs/tags/**"
-  - "refs/pull/**"
+  - refs/tags/**
+  - refs/pull/**
 
 depends_on:
 - security
@@ -342,7 +342,7 @@ steps:
       from_secret: docker_username
   when:
     ref:
-    - "refs/pull/**"
+    - refs/pull/**
 
 - name: publish
   pull: always
@@ -359,16 +359,90 @@ steps:
   when:
     ref:
     - refs/heads/master
-    - "refs/tags/**"
+    - refs/tags/**
 
 trigger:
   ref:
   - refs/heads/master
-  - "refs/tags/**"
-  - "refs/pull/**"
+  - refs/tags/**
+  - refs/pull/**
 
 depends_on:
 - security
+
+---
+kind: pipeline
+name: docs
+
+platform:
+  os: linux
+  arch: amd64
+
+concurrency:
+  limit: 1
+
+steps:
+- name: assets
+  image: byrnedo/alpine-curl
+  commands:
+  - mkdir -p docs/themes/hugo-geekdoc/
+  - curl -L https://github.com/xoxys/hugo-geekdoc/releases/latest/download/hugo-geekdoc.tar.gz | tar -xz -C docs/themes/hugo-geekdoc/ --strip-components=1
+
+- name: test
+  image: klakegg/hugo:0.59.1-ext-alpine
+  commands:
+  - cd docs/ && hugo-official
+
+- name: freeze
+  image: appleboy/drone-ssh
+  settings:
+    host:
+      from_secret: ssh_host
+    key:
+      from_secret: ssh_key
+    script:
+    - cp -R /var/www/virtual/geeklab/html/ansible-later.geekdocs.de/ /var/www/virtual/geeklab/html/ansiblelater_freeze/
+    - ln -sfn /var/www/virtual/geeklab/html/ansiblelater_freeze /var/www/virtual/geeklab/ansible-later.geekdocs.de
+    username:
+      from_secret: ssh_username
+
+- name: publish
+  image: appleboy/drone-scp
+  settings:
+    host:
+      from_secret: ssh_host
+    key:
+      from_secret: ssh_key
+    rm: true
+    source: docs/public/*
+    strip_components: 2
+    target: /var/www/virtual/geeklab/html/ansible-later.geekdocs.de/
+    username:
+      from_secret: ssh_username
+
+- name: cleanup
+  image: appleboy/drone-ssh
+  settings:
+    host:
+      from_secret: ssh_host
+    key:
+      from_secret: ssh_key
+    script:
+    - ln -sfn /var/www/virtual/geeklab/html/ansible-later.geekdocs.de /var/www/virtual/geeklab/ansible-later.geekdocs.de
+    - rm -rf /var/www/virtual/geeklab/html/ansiblelater_freeze/
+    username:
+      from_secret: ssh_username
+
+trigger:
+  ref:
+  - refs/heads/master
+  - refs/tags/**
+
+depends_on:
+- build-package
+- build-container-amd64
+- build-container-arm64
+- build-container-arm
 
 ---
 kind: pipeline
@@ -393,7 +467,7 @@ steps:
   when:
     ref:
     - refs/heads/master
-    - "refs/tags/**"
+    - refs/tags/**
 
 - name: readme
   pull: always
@@ -410,7 +484,7 @@ steps:
   when:
     ref:
     - refs/heads/master
-    - "refs/tags/**"
+    - refs/tags/**
 
 - name: microbadger
   pull: always
@@ -439,19 +513,16 @@ steps:
 trigger:
   ref:
   - refs/heads/master
-  - "refs/tags/**"
+  - refs/tags/**
   status:
   - success
   - failure
 
 depends_on:
-- build-package
-- build-container-amd64
-- build-container-arm64
-- build-container-arm
+- docs
 
 ---
 kind: signature
-hmac: 825a77f8fb6f029b87bf463a2f2d670a8d0297f3cf17684787188362eba6a336
+hmac: 225363c3eddd299c7a3bdf2e54a2007e5ebc7e3881dd1aa0325e9f9ea7b2bc3b
 
 ...

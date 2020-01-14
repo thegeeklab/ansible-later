@@ -232,6 +232,83 @@ local PipelineBuildContainer(arch="amd64") = {
   },
 };
 
+local PipelineDocs = {
+  kind: "pipeline",
+  name: "docs",
+  platform: {
+    os: "linux",
+    arch: "amd64",
+  },
+  concurrency: {
+    limit: 1
+  },
+  steps: [
+    {
+      name: "assets",
+      image: "byrnedo/alpine-curl",
+      commands: [
+        "mkdir -p docs/themes/hugo-geekdoc/",
+        "curl -L https://github.com/xoxys/hugo-geekdoc/releases/latest/download/hugo-geekdoc.tar.gz | tar -xz -C docs/themes/hugo-geekdoc/ --strip-components=1",
+      ],
+    },
+    {
+      name: "test",
+      image: "klakegg/hugo:0.59.1-ext-alpine",
+      commands: [
+        "cd docs/ && hugo-official",
+      ]
+    },
+    {
+      name: "freeze",
+      image: "appleboy/drone-ssh",
+      settings: {
+        host: { from_secret: "ssh_host" },
+        key: { from_secret: "ssh_key" },
+        script: [
+          "cp -R /var/www/virtual/geeklab/html/ansible-later.geekdocs.de/ /var/www/virtual/geeklab/html/ansiblelater_freeze/",
+          "ln -sfn /var/www/virtual/geeklab/html/ansiblelater_freeze /var/www/virtual/geeklab/ansible-later.geekdocs.de",
+        ],
+        username: { from_secret: "ssh_username" },
+      },
+    },
+    {
+      name: "publish",
+      image: "appleboy/drone-scp",
+      settings: {
+        host: { from_secret: "ssh_host" },
+        key: { from_secret: "ssh_key" },
+        rm: true,
+        source: "docs/public/*",
+        strip_components: 2,
+        target: "/var/www/virtual/geeklab/html/ansible-later.geekdocs.de/",
+        username: { from_secret: "ssh_username" },
+      },
+    },
+    {
+      name: "cleanup",
+      image: "appleboy/drone-ssh",
+      settings: {
+        host: { from_secret: "ssh_host" },
+        key: { from_secret: "ssh_key" },
+        script: [
+          "ln -sfn /var/www/virtual/geeklab/html/ansible-later.geekdocs.de /var/www/virtual/geeklab/ansible-later.geekdocs.de",
+          "rm -rf /var/www/virtual/geeklab/html/ansiblelater_freeze/",
+        ],
+        username: { from_secret: "ssh_username" },
+      },
+    },
+  ],
+  depends_on: [
+    "build-package",
+    "build-container-amd64",
+    "build-container-arm64",
+    "build-container-arm",
+  ],
+  trigger: {
+      ref: ["refs/heads/master", "refs/tags/**"],
+  },
+};
+
 local PipelineNotifications = {
   kind: "pipeline",
   name: "notifications",
@@ -301,10 +378,7 @@ local PipelineNotifications = {
     },
   ],
   depends_on: [
-    "build-package",
-    "build-container-amd64",
-    "build-container-arm64",
-    "build-container-arm"
+    "docs"
   ],
   trigger: {
     ref: ["refs/heads/master", "refs/tags/**"],
@@ -320,5 +394,6 @@ local PipelineNotifications = {
   PipelineBuildContainer(arch="amd64"),
   PipelineBuildContainer(arch="arm64"),
   PipelineBuildContainer(arch="arm"),
+  PipelineDocs,
   PipelineNotifications,
 ]
