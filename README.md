@@ -2,9 +2,10 @@
 
 [![Build Status](https://cloud.drone.io/api/badges/xoxys/ansible-later/status.svg)](https://cloud.drone.io/xoxys/ansible-later)
 [![](https://img.shields.io/pypi/pyversions/ansible-later.svg)](https://pypi.org/project/ansible-later/)
+[![codecov](https://codecov.io/gh/xoxys/ansible-later/branch/master/graph/badge.svg)](https://codecov.io/gh/xoxys/ansible-later)
 [![](https://img.shields.io/pypi/status/ansible-later.svg)](https://pypi.org/project/ansible-later/)
 [![](https://img.shields.io/pypi/v/ansible-later.svg)](https://pypi.org/project/ansible-later/)
-[![codecov](https://codecov.io/gh/xoxys/ansible-later/branch/master/graph/badge.svg)](https://codecov.io/gh/xoxys/ansible-later)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 This is a fork of Will Thames [ansible-review](https://github.com/willthames/ansible-review) so credits goes to him
 for his work on ansible-review and ansible-lint.
