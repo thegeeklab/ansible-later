@@ -455,12 +455,6 @@ steps:
     README_PATH: README.md
     SHORT_DESCRIPTION: ansible-later - Lovely automation testing framework
 
-- name: microbadger
-  image: plugins/webhook
-  settings:
-    urls:
-      from_secret: microbadger_url
-
 - name: matrix
   image: plugins/matrix
   settings:
@@ -487,6 +481,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: df2c32e15c32636b0e817e9e2a2b3d53730cbb2fa3a1ff8adf13ba2401c73c2f
+hmac: b2660b25516b1bb3b643f8590eaf0e8d0e89b58470ff48866b48ba799801644f
 
 ...
