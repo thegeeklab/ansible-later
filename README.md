@@ -5,6 +5,7 @@
 [![Python Version](https://img.shields.io/pypi/pyversions/ansible-later.svg)](https://pypi.org/project/ansible-later/)
 [![PyPi Status](https://img.shields.io/pypi/status/ansible-later.svg)](https://pypi.org/project/ansible-later/)
 [![PyPi Release](https://img.shields.io/pypi/v/ansible-later.svg)](https://pypi.org/project/ansible-later/)
+[![Codecov](https://img.shields.io/codecov/c/github/xoxys/ansible-later)](https://codecov.io/gh/xoxys/ansible-later)
 [![License: MIT](https://img.shields.io/github/license/xoxys/ansible-later)](LICENSE)
 
 This is a fork of Will Thames [ansible-review](https://github.com/willthames/ansible-review) so credits goes to him
