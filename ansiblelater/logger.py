@@ -3,14 +3,18 @@
 import logging
 import os
 import sys
+from distutils.util import strtobool
 
 import colorama
-from ansible.module_utils.parsing.convert_bool import boolean as to_bool
 from pythonjsonlogger import jsonlogger
 from six import iteritems
 
 CONSOLE_FORMAT = "%(levelname)s: %(message)s"
 JSON_FORMAT = "(asctime) (levelname) (message)"
+
+
+def to_bool(string):
+    return bool(strtobool(str(string)))
 
 
 def _should_do_markup():
