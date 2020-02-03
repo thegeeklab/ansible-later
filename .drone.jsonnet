@@ -64,11 +64,10 @@ local PipelineTest = {
         'codecov --required',
       ],
       depends_on: [
-        'python27-ansible',
         'python35-ansible',
         'python36-ansible',
         'python37-ansible',
-        'python38-rc-ansible',
+        'python38-ansible',
       ],
     },
   ],

@@ -82,11 +82,10 @@ steps:
       from_secret: codecov_token
     PY_COLORS: 1
   depends_on:
-  - python27-ansible
   - python35-ansible
   - python36-ansible
   - python37-ansible
-  - python38-rc-ansible
+  - python38-ansible
 
 trigger:
   ref:
@@ -471,6 +470,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: c3ab53cef8f6ed95639ee81e607f79ce45e00f72a301ae4380b4c3bc11865908
+hmac: 9ccd2380da8eb6321d6604fb694b517a756f80503c7a3f792bcd343b3a3e159d
 
 ...
