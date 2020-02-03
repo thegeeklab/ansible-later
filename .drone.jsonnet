@@ -47,11 +47,10 @@ local PipelineTest = {
     arch: 'amd64',
   },
   steps: [
-    PythonVersion(pyversion='2.7'),
     PythonVersion(pyversion='3.5'),
     PythonVersion(pyversion='3.6'),
     PythonVersion(pyversion='3.7'),
-    PythonVersion(pyversion='3.8-rc'),
+    PythonVersion(pyversion='3.8'),
     {
       name: 'codecov',
       image: 'python:3.7',
