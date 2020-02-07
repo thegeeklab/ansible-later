@@ -247,7 +247,7 @@ local PipelineDocs = {
     },
     {
       name: 'freeze',
-      image: 'appleboy/drone-ssh',
+      image: 'appleboy/drone-ssh:1.5.5',
       settings: {
         host: { from_secret: 'ssh_host' },
         key: { from_secret: 'ssh_key' },
@@ -273,7 +273,7 @@ local PipelineDocs = {
     },
     {
       name: 'cleanup',
-      image: 'appleboy/drone-ssh',
+      image: 'appleboy/drone-ssh:1.5.5',
       settings: {
         host: { from_secret: 'ssh_host' },
         key: { from_secret: 'ssh_key' },

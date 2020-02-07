@@ -362,7 +362,7 @@ steps:
   - cd docs/ && hugo-official
 
 - name: freeze
-  image: appleboy/drone-ssh
+  image: appleboy/drone-ssh:1.5.5
   settings:
     host:
       from_secret: ssh_host
@@ -389,7 +389,7 @@ steps:
       from_secret: ssh_username
 
 - name: cleanup
-  image: appleboy/drone-ssh
+  image: appleboy/drone-ssh:1.5.5
   settings:
     host:
       from_secret: ssh_host
@@ -470,6 +470,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 9ccd2380da8eb6321d6604fb694b517a756f80503c7a3f792bcd343b3a3e159d
+hmac: 4b5f6077a3352113853e936f62396caf68d9a7a2014245f6b24cca6ae0fa8b3b
 
 ...
