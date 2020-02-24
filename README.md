@@ -20,10 +20,10 @@ like [molecule](https://github.com/ansible/molecule).
 
 You can find the full documentation at [https://ansible-later.geekdocs.de](https://ansible-later.geekdocs.de/).
 
-### License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-### Maintainers and Contributors
+## Maintainers and Contributors
 
 [Robert Kaussow](https://github.com/xoxys)
