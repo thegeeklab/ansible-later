@@ -42,7 +42,8 @@ def check_native_yaml(candidate, settings):
             if isinstance(task[action], dict):
                 continue
             # strip additional newlines off task[action]
-            if task[action].strip().split() != arguments:
+            task_action = bytes(task[action].strip(), "utf-8").decode("unicode_escape")
+            if task_action.split() != arguments:
                 errors.append(Error(task["__line__"], description))
     return Result(candidate.path, errors)
 
