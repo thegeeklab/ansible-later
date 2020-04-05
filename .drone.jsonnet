@@ -96,7 +96,7 @@ local PipelineSecurity = {
       commands: [
         'pip install -r test-requirements.txt -qq',
         'pip install -qq .',
-        'bandit -r ./ansiblelater -x ./ansiblelater/tests',
+        'bandit -r ./ansiblelater -x ./ansiblelater/test',
       ],
     },
   ],
