@@ -8,7 +8,7 @@ exclude =
     __pycache__
     build
     dist
-    tests
+    test
     *.pyc
     *.egg-info
     .cache

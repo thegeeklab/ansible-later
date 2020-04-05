@@ -38,7 +38,7 @@ setup(
     license=get_property("__license__", PACKAGE_NAME),
     long_description=get_readme(),
     long_description_content_type="text/markdown",
-    packages=find_packages(exclude=["*.tests", "tests", "tests.*"]),
+    packages=find_packages(exclude=["*.test", "test", "test.*"]),
     package_data={"ansiblelater": ["data/*"]},
     python_requires=">=3.5,<4",
     classifiers=[
@@ -65,5 +65,4 @@ setup(
         "colorama", "anyconfig", "python-json-logger", "jsonschema", "pathspec", "toolz"
     ],
     entry_points={"console_scripts": ["ansible-later = ansiblelater.__main__:main"]},
-    test_suite="tests"
 )
