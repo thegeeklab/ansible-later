@@ -9,7 +9,7 @@ import colorama
 from pythonjsonlogger import jsonlogger
 from six import iteritems
 
-CONSOLE_FORMAT = "%(levelname)s: %(message)s"
+CONSOLE_FORMAT = "%(levelname)s: {}%(message)s"
 JSON_FORMAT = "(asctime) (levelname) (message)"
 
 
@@ -63,6 +63,7 @@ class MultilineFormatter(logging.Formatter):
 
     def format(self, record):  # noqa
         record.msg = record.msg.replace("\n", "\n{}... ".format(colorama.Style.RESET_ALL))
+        record.msg = record.msg + "\n"
         return logging.Formatter.format(self, record)
 
 
@@ -157,22 +158,22 @@ def _get_critical_handler(json=False):
 
 def critical(message):
     """Format critical messages and return string."""
-    return color_text(colorama.Fore.RED, "{}".format(message))
+    return color_text(colorama.Fore.RED, message)
 
 
 def error(message):
     """Format error messages and return string."""
-    return color_text(colorama.Fore.RED, "{}".format(message))
+    return color_text(colorama.Fore.RED, message)
 
 
 def warn(message):
     """Format warn messages and return string."""
-    return color_text(colorama.Fore.YELLOW, "{}".format(message))
+    return color_text(colorama.Fore.YELLOW, message)
 
 
 def info(message):
     """Format info messages and return string."""
-    return color_text(colorama.Fore.BLUE, "{}".format(message))
+    return color_text(colorama.Fore.BLUE, message)
 
 
 def color_text(color, msg):
@@ -184,4 +185,5 @@ def color_text(color, msg):
     :returns: string
 
     """
+    msg = msg.format(colorama.Style.BRIGHT)
     return "{}{}{}".format(color, msg, colorama.Style.RESET_ALL)
