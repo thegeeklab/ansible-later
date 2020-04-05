@@ -189,6 +189,7 @@ class Candidate(object):
 
 
 class RoleFile(Candidate):
+    """Object classified as Ansible role file."""
 
     def __init__(self, filename, settings={}, standards=[]):
         super(RoleFile, self).__init__(filename, settings, standards)
@@ -203,10 +204,13 @@ class RoleFile(Candidate):
 
 
 class Playbook(Candidate):
+    """Object classified as Ansible playbook."""
+
     pass
 
 
 class Task(RoleFile):
+    """Object classified as Ansible task file."""
 
     def __init__(self, filename, settings={}, standards=[]):
         super(Task, self).__init__(filename, settings, standards)
@@ -214,6 +218,7 @@ class Task(RoleFile):
 
 
 class Handler(RoleFile):
+    """Object classified as Ansible handler file."""
 
     def __init__(self, filename, settings={}, standards=[]):
         super(Handler, self).__init__(filename, settings, standards)
@@ -221,10 +226,13 @@ class Handler(RoleFile):
 
 
 class Vars(Candidate):
+    """Object classified as Ansible vars file."""
+
     pass
 
 
 class Unversioned(Candidate):
+    """Object classified as unversioned file."""
 
     def __init__(self, filename, settings={}, standards=[]):
         super(Unversioned, self).__init__(filename, settings, standards)
@@ -232,50 +240,74 @@ class Unversioned(Candidate):
 
 
 class InventoryVars(Unversioned):
+    """Object classified as Ansible inventory vars."""
+
     pass
 
 
 class HostVars(InventoryVars):
+    """Object classified as Ansible host vars."""
+
     pass
 
 
 class GroupVars(InventoryVars):
+    """Object classified as Ansible group vars."""
+
     pass
 
 
 class RoleVars(RoleFile):
+    """Object classified as Ansible role vars."""
+
     pass
 
 
 class Meta(RoleFile):
+    """Object classified as Ansible meta file."""
+
     pass
 
 
 class Inventory(Unversioned):
+    """Object classified as Ansible inventory file."""
+
     pass
 
 
 class Code(Unversioned):
+    """Object classified as code file."""
+
     pass
 
 
 class Template(RoleFile):
+    """Object classified as Ansible template file."""
+
     pass
 
 
 class Doc(Unversioned):
+    """Object classified as documentation file."""
+
     pass
 
 
 class Makefile(Unversioned):
+    """Object classified as makefile."""
+
     pass
 
 
 class File(RoleFile):
+    """Object classified as generic file."""
+
     pass
 
 
 class Rolesfile(Unversioned):
+    """Object classified as Ansible roles file."""
+
     pass
 
 
@@ -310,6 +342,7 @@ class Error(object):
 
 
 class Result(object):
+    """Generic result object."""
 
     def __init__(self, candidate, errors=None):
         self.candidate = candidate
@@ -335,8 +368,10 @@ def classify(filename, settings={}, standards=[]):
         return HostVars(filename, settings, standards)
     if parentdir in ["meta"]:
         return Meta(filename, settings, standards)
-    if parentdir in ["library", "lookup_plugins", "callback_plugins", "filter_plugins"
-                    ] or filename.endswith(".py"):
+    if (
+        parentdir in ["library", "lookup_plugins", "callback_plugins", "filter_plugins"]
+        or filename.endswith(".py")
+    ):
         return Code(filename, settings, standards)
     if "inventory" == basename or "hosts" == basename or parentdir in ["inventories"]:
         return Inventory(filename, settings, standards)

@@ -33,8 +33,10 @@ def check_braces_spaces(candidate, settings):
             [leading, trailing] = count_spaces(line)
             sum_spaces = leading + trailing
 
-            if ((sum_spaces < conf["min-spaces-inside"] * 2)
-                or (sum_spaces > conf["min-spaces-inside"] * 2)):
+            if (
+                sum_spaces < conf["min-spaces-inside"] * 2
+                or sum_spaces > conf["min-spaces-inside"] * 2
+            ):
                 errors.append(Error(i, description))
     return Result(candidate.path, errors)
 

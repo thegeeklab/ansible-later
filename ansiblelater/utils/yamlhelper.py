@@ -23,7 +23,6 @@
 import codecs
 import glob
 import imp
-import inspect
 import os
 
 import ansible.parsing.mod_args
@@ -453,11 +452,9 @@ def action_tasks(yaml, file):
     block_rescue_always = ("block", "rescue", "always")
     tasks[:] = [task for task in tasks if all(k not in task for k in block_rescue_always)]
 
-    return [
-        task for task in tasks
-        if set(["include", "include_tasks", "import_playbook", "import_tasks"]
-              ).isdisjoint(task.keys())
-    ]
+    allowed = ["include", "include_tasks", "import_playbook", "import_tasks"]
+
+    return [task for task in tasks if set(allowed).isdisjoint(task.keys())]
 
 
 def task_to_str(task):
