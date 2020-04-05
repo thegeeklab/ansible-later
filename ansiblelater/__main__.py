@@ -15,19 +15,34 @@ from ansiblelater.command import candidates
 def main():
     """Run main program."""
     parser = argparse.ArgumentParser(
-        description="Validate ansible files against best pratice guideline")
-    parser.add_argument("-c", "--config", dest="config_file",
-                        help="location of configuration file")
-    parser.add_argument("-r", "--rules", dest="rules.standards",
-                        help="location of standards rules")
-    parser.add_argument("-s", "--standards", dest="rules.filter", action="append",
-                        help="limit standards to given ID's")
-    parser.add_argument("-x", "--exclude-standards", dest="rules.exclude_filter", action="append",
-                        help="exclude standards by given ID's")
-    parser.add_argument("-v", dest="logging.level", action="append_const", const=-1,
-                        help="increase log level")
-    parser.add_argument("-q", dest="logging.level", action="append_const",
-                        const=1, help="decrease log level")
+        description="Validate ansible files against best pratice guideline"
+    )
+    parser.add_argument(
+        "-c", "--config", dest="config_file", help="location of configuration file"
+    )
+    parser.add_argument(
+        "-r", "--rules", dest="rules.standards", help="location of standards rules"
+    )
+    parser.add_argument(
+        "-s",
+        "--standards",
+        dest="rules.filter",
+        action="append",
+        help="limit standards to given ID's"
+    )
+    parser.add_argument(
+        "-x",
+        "--exclude-standards",
+        dest="rules.exclude_filter",
+        action="append",
+        help="exclude standards by given ID's"
+    )
+    parser.add_argument(
+        "-v", dest="logging.level", action="append_const", const=-1, help="increase log level"
+    )
+    parser.add_argument(
+        "-q", dest="logging.level", action="append_const", const=1, help="decrease log level"
+    )
     parser.add_argument("rules.files", nargs="*")
     parser.add_argument("--version", action="version", version="%(prog)s {}".format(__version__))
 
