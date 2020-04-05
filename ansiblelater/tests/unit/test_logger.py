@@ -21,7 +21,11 @@ def test_critical(capsys, mocker):
     log.critical("foo")
     _, stderr = capsys.readouterr()
 
-    print("{}{}{}".format(colorama.Fore.RED, "CRITICAL: foo".rstrip(), colorama.Style.RESET_ALL))
+    print(
+        "{}CRITICAL: {}foo\n{}".format(
+            colorama.Fore.RED, colorama.Style.BRIGHT, colorama.Style.RESET_ALL
+        )
+    )
     x, _ = capsys.readouterr()
 
     assert x == stderr
@@ -32,7 +36,11 @@ def test_error(capsys, mocker):
     log.error("foo")
     _, stderr = capsys.readouterr()
 
-    print("{}{}{}".format(colorama.Fore.RED, "ERROR: foo".rstrip(), colorama.Style.RESET_ALL))
+    print(
+        "{}ERROR: {}foo\n{}".format(
+            colorama.Fore.RED, colorama.Style.BRIGHT, colorama.Style.RESET_ALL
+        )
+    )
     x, _ = capsys.readouterr()
 
     assert x == stderr
@@ -43,7 +51,11 @@ def test_warn(capsys, mocker):
     log.warning("foo")
     stdout, _ = capsys.readouterr()
 
-    print("{}{}{}".format(colorama.Fore.YELLOW, "WARNING: foo".rstrip(), colorama.Style.RESET_ALL))
+    print(
+        "{}WARNING: {}foo\n{}".format(
+            colorama.Fore.YELLOW, colorama.Style.BRIGHT, colorama.Style.RESET_ALL
+        )
+    )
     x, _ = capsys.readouterr()
 
     assert x == stdout
@@ -54,7 +66,11 @@ def test_info(capsys, mocker):
     log.info("foo")
     stdout, _ = capsys.readouterr()
 
-    print("{}{}{}".format(colorama.Fore.BLUE, "INFO: foo".rstrip(), colorama.Style.RESET_ALL))
+    print(
+        "{}INFO: {}foo\n{}".format(
+            colorama.Fore.BLUE, colorama.Style.BRIGHT, colorama.Style.RESET_ALL
+        )
+    )
     x, _ = capsys.readouterr()
 
     assert x == stdout
