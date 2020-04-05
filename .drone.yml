@@ -74,9 +74,9 @@ steps:
 - name: codecov
   image: python:3.7
   commands:
-  - pip install codecov
+  - pip install codecov -qq
   - coverage combine .tox/py*/.coverage
-  - codecov --required
+  - codecov --required -X gcov
   environment:
     CODECOV_TOKEN:
       from_secret: codecov_token
@@ -470,6 +470,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 4b5f6077a3352113853e936f62396caf68d9a7a2014245f6b24cca6ae0fa8b3b
+hmac: 03c91a03dab38f62ce4e792238c87e34ac583fa570ff806bf4208df7ed579cd8
 
 ...
