@@ -14,5 +14,4 @@ pytest
 pytest-mock
 pytest-cov
 bandit
-requests-mock
 yapf
