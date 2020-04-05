@@ -1,6 +1,7 @@
 repository:
   name: ansible-later
   description: Ansible - Lovely Automation Testing Framework
+  homepage: https://ansible-later.geekdocs.de
   topics: ansible, ansible-later, ansible-review, best practice
 
   private: false
@@ -18,6 +19,9 @@ labels:
   - name: bug
     color: d73a4a
     description: Something isn't working
+  - name: documentation
+    color: 0075ca
+    description: Improvements or additions to documentation
   - name: duplicate
     color: cfd3d7
     description: This issue or pull request already exists
@@ -39,3 +43,14 @@ labels:
   - name: wontfix
     color: ffffff
     description: This will not be worked on
+
+branches:
+  - name: master
+    protection:
+      required_pull_request_reviews: null
+      required_status_checks:
+        strict: true
+        contexts:
+          - continuous-integration/drone/pr
+      enforce_admins: null
+      restrictions: null
