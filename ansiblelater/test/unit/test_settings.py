@@ -1,3 +1,5 @@
+"""Test settings module."""
+
 import pytest
 
 from ansiblelater import settings

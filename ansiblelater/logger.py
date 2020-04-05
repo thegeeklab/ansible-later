@@ -158,25 +158,25 @@ def _get_critical_handler(json=False):
 
 def critical(message):
     """Format critical messages and return string."""
-    return color_text(colorama.Fore.RED, message)
+    return color_text(colorama.Fore.RED, colorama.Fore.LIGHTRED_EX, message)
 
 
 def error(message):
     """Format error messages and return string."""
-    return color_text(colorama.Fore.RED, message)
+    return color_text(colorama.Fore.RED, colorama.Fore.LIGHTRED_EX, message)
 
 
 def warn(message):
     """Format warn messages and return string."""
-    return color_text(colorama.Fore.YELLOW, message)
+    return color_text(colorama.Fore.YELLOW, colorama.Fore.LIGHTYELLOW_EX, message)
 
 
 def info(message):
     """Format info messages and return string."""
-    return color_text(colorama.Fore.BLUE, message)
+    return color_text(colorama.Fore.BLUE, colorama.Fore.LIGHTBLUE_EX, message)
 
 
-def color_text(color, msg):
+def color_text(color, light, msg):
     """
     Colorize strings.
 
@@ -185,5 +185,5 @@ def color_text(color, msg):
     :returns: string
 
     """
-    msg = msg.format(colorama.Style.BRIGHT)
+    msg = msg.format(light)
     return "{}{}{}".format(color, msg, colorama.Style.RESET_ALL)
