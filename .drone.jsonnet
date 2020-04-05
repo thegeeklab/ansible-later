@@ -23,7 +23,7 @@ local PipelineLint = {
   steps: [
     {
       name: 'flake8',
-      image: 'python:3.7',
+      image: 'python:3.8',
       environment: {
         PY_COLORS: 1,
       },
@@ -53,7 +53,7 @@ local PipelineTest = {
     PythonVersion(pyversion='3.8'),
     {
       name: 'codecov',
-      image: 'python:3.7',
+      image: 'python:3.8',
       environment: {
         PY_COLORS: 1,
         CODECOV_TOKEN: { from_secret: 'codecov_token' },
@@ -89,7 +89,7 @@ local PipelineSecurity = {
   steps: [
     {
       name: 'bandit',
-      image: 'python:3.7',
+      image: 'python:3.8',
       environment: {
         PY_COLORS: 1,
       },
@@ -118,7 +118,7 @@ local PipelineBuildPackage = {
   steps: [
     {
       name: 'build',
-      image: 'python:3.7',
+      image: 'python:3.8',
       commands: [
         'python setup.py sdist bdist_wheel',
       ],
@@ -176,7 +176,7 @@ local PipelineBuildContainer(arch='amd64') = {
   steps: [
     {
       name: 'build',
-      image: 'python:3.7',
+      image: 'python:3.8',
       commands: [
         'python setup.py bdist_wheel',
       ],

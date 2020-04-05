@@ -8,7 +8,7 @@ platform:
 
 steps:
 - name: flake8
-  image: python:3.7
+  image: python:3.8
   commands:
   - pip install -r test-requirements.txt -qq
   - pip install -qq .
@@ -72,7 +72,7 @@ steps:
   - clone
 
 - name: codecov
-  image: python:3.7
+  image: python:3.8
   commands:
   - pip install codecov -qq
   - coverage combine .tox/py*/.coverage
@@ -106,7 +106,7 @@ platform:
 
 steps:
 - name: bandit
-  image: python:3.7
+  image: python:3.8
   commands:
   - pip install -r test-requirements.txt -qq
   - pip install -qq .
@@ -133,7 +133,7 @@ platform:
 
 steps:
 - name: build
-  image: python:3.7
+  image: python:3.8
   commands:
   - python setup.py sdist bdist_wheel
 
@@ -189,7 +189,7 @@ platform:
 
 steps:
 - name: build
-  image: python:3.7
+  image: python:3.8
   commands:
   - python setup.py bdist_wheel
 
@@ -242,7 +242,7 @@ platform:
 
 steps:
 - name: build
-  image: python:3.7
+  image: python:3.8
   commands:
   - python setup.py bdist_wheel
 
@@ -295,7 +295,7 @@ platform:
 
 steps:
 - name: build
-  image: python:3.7
+  image: python:3.8
   commands:
   - python setup.py bdist_wheel
 
@@ -470,6 +470,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 981fa0e9653bab1b4110af5212d45e411dc3e3a6b01f1a6a534b0a1eecb36e94
+hmac: 49e423952c5576de0462f252623bc51432d24658e5c893c1534cede967b51ba3
 
 ...
