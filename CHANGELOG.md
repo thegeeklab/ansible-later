@@ -1,3 +1,3 @@
-* BUGFIX
-  * replace removed dependency `ansible.module_utils.parsing.convert_bool`
-  * decode task actions to prevent errors on multiline strings
+* ENHANCEMENT
+  * improve ANSIBLE0001 logic to avoid false positive results
+  * improve log output readability

@@ -22,7 +22,5 @@ class Standard(object):
         self.check = standard_dict.get("check")
         self.types = standard_dict.get("types")
 
-
-    def __repr__(self): # noqa
-        return "Standard: %s (version: %s, types: %s)" % (
-               self.name, self.version, self.types)
+    def __repr__(self):  # noqa
+        return "Standard: %s (version: %s, types: %s)" % (self.name, self.version, self.types)

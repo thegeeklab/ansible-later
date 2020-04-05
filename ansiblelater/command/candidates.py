@@ -77,15 +77,18 @@ class Candidate(object):
                         "%s %s is in a role that contains a meta/main.yml without a declared "
                         "standards version. "
                         "Using latest standards version %s" %
-                        (type(self).__name__, self.path, version))
+                        (type(self).__name__, self.path, version)
+                    )
                 else:
                     LOG.warning(
                         "%s %s does not present standards version. "
                         "Using latest standards version %s" %
-                        (type(self).__name__, self.path, version))
+                        (type(self).__name__, self.path, version)
+                    )
         else:
-            LOG.info("%s %s declares standards version %s" %
-                     (type(self).__name__, self.path, version))
+            LOG.info(
+                "%s %s declares standards version %s" % (type(self).__name__, self.path, version)
+            )
 
         return version
 
@@ -113,39 +116,61 @@ class Candidate(object):
             result = standard.check(self, settings.config)
 
             if not result:
-                utils.sysexit_with_message("Standard '{}' returns an empty result object.".format(
-                    standard.check.__name__))
+                utils.sysexit_with_message(
+                    "Standard '{}' returns an empty result object.".format(
+                        standard.check.__name__
+                    )
+                )
 
-            labels = {"tag": "review", "standard": standard.name, "file": self.path, "passed": True}
+            labels = {
+                "tag": "review",
+                "standard": standard.name,
+                "file": self.path,
+                "passed": True
+            }
 
             if standard.id and standard.id.strip():
                 labels["id"] = standard.id
 
-            for err in [err for err in result.errors
-                        if not err.lineno or utils.is_line_in_ranges(err.lineno, utils.lines_ranges(lines))]: # noqa
+            for err in [
+                err for err in result.errors if not err.lineno
+                or utils.is_line_in_ranges(err.lineno, utils.lines_ranges(lines))
+            ]:  # noqa
                 err_labels = copy.copy(labels)
                 err_labels["passed"] = False
                 if isinstance(err, Error):
                     err_labels.update(err.to_dict())
 
                 if not standard.version:
-                    LOG.warning("{id}Best practice '{name}' not met:\n{path}:{error}".format(
-                        id=self._format_id(standard.id),
-                        name=standard.name,
-                        path=self.path,
-                        error=err), extra=flag_extra(err_labels))
+                    LOG.warning(
+                        "{id}Best practice '{name}' not met:\n{path}:{error}".format(
+                            id=self._format_id(standard.id),
+                            name=standard.name,
+                            path=self.path,
+                            error=err
+                        ),
+                        extra=flag_extra(err_labels)
+                    )
                 elif LooseVersion(standard.version) > LooseVersion(self.version):
-                    LOG.warning("{id}Future standard '{name}' not met:\n{path}:{error}".format(
-                        id=self._format_id(standard.id),
-                        name=standard.name,
-                        path=self.path,
-                        error=err), extra=flag_extra(err_labels))
+                    LOG.warning(
+                        "{id}Future standard '{name}' not met:\n{path}:{error}".format(
+                            id=self._format_id(standard.id),
+                            name=standard.name,
+                            path=self.path,
+                            error=err
+                        ),
+                        extra=flag_extra(err_labels)
+                    )
                 else:
-                    LOG.error("{id}Standard '{name}' not met:\n{path}:{error}".format(
-                        id=self._format_id(standard.id),
-                        name=standard.name,
-                        path=self.path,
-                        error=err), extra=flag_extra(err_labels))
+                    LOG.error(
+                        "{id}Standard '{name}' not met:\n{path}:{error}".format(
+                            id=self._format_id(standard.id),
+                            name=standard.name,
+                            path=self.path,
+                            error=err
+                        ),
+                        extra=flag_extra(err_labels)
+                    )
                     errors = errors + 1
 
         return errors
@@ -156,14 +181,16 @@ class Candidate(object):
 
         return standard_id
 
-    def __repr__(self): # noqa
+    def __repr__(self):  # noqa
         return "%s (%s)" % (type(self).__name__, self.path)
 
-    def __getitem__(self, item): # noqa
+    def __getitem__(self, item):  # noqa
         return self.__dict__.get(item)
 
 
 class RoleFile(Candidate):
+    """Object classified as Ansible role file."""
+
     def __init__(self, filename, settings={}, standards=[]):
         super(RoleFile, self).__init__(filename, settings, standards)
 
@@ -177,76 +204,110 @@ class RoleFile(Candidate):
 
 
 class Playbook(Candidate):
+    """Object classified as Ansible playbook."""
+
     pass
 
 
 class Task(RoleFile):
+    """Object classified as Ansible task file."""
+
     def __init__(self, filename, settings={}, standards=[]):
         super(Task, self).__init__(filename, settings, standards)
         self.filetype = "tasks"
 
 
 class Handler(RoleFile):
+    """Object classified as Ansible handler file."""
+
     def __init__(self, filename, settings={}, standards=[]):
         super(Handler, self).__init__(filename, settings, standards)
         self.filetype = "handlers"
 
 
 class Vars(Candidate):
+    """Object classified as Ansible vars file."""
+
     pass
 
 
 class Unversioned(Candidate):
+    """Object classified as unversioned file."""
+
     def __init__(self, filename, settings={}, standards=[]):
         super(Unversioned, self).__init__(filename, settings, standards)
         self.expected_version = False
 
 
 class InventoryVars(Unversioned):
+    """Object classified as Ansible inventory vars."""
+
     pass
 
 
 class HostVars(InventoryVars):
+    """Object classified as Ansible host vars."""
+
     pass
 
 
 class GroupVars(InventoryVars):
+    """Object classified as Ansible group vars."""
+
     pass
 
 
 class RoleVars(RoleFile):
+    """Object classified as Ansible role vars."""
+
     pass
 
 
 class Meta(RoleFile):
+    """Object classified as Ansible meta file."""
+
     pass
 
 
 class Inventory(Unversioned):
+    """Object classified as Ansible inventory file."""
+
     pass
 
 
 class Code(Unversioned):
+    """Object classified as code file."""
+
     pass
 
 
 class Template(RoleFile):
+    """Object classified as Ansible template file."""
+
     pass
 
 
 class Doc(Unversioned):
+    """Object classified as documentation file."""
+
     pass
 
 
 class Makefile(Unversioned):
+    """Object classified as makefile."""
+
     pass
 
 
 class File(RoleFile):
+    """Object classified as generic file."""
+
     pass
 
 
 class Rolesfile(Unversioned):
+    """Object classified as Ansible roles file."""
+
     pass
 
 
@@ -267,7 +328,7 @@ class Error(object):
         for (key, value) in iteritems(kwargs):
             setattr(self, key, value)
 
-    def __repr__(self): # noqa
+    def __repr__(self):  # noqa
         if self.lineno:
             return "%s: %s" % (self.lineno, self.message)
         else:
@@ -281,13 +342,14 @@ class Error(object):
 
 
 class Result(object):
+    """Generic result object."""
+
     def __init__(self, candidate, errors=None):
         self.candidate = candidate
         self.errors = errors or []
 
     def message(self):
-        return "\n".join(["{0}:{1}".format(self.candidate, error)
-                          for error in self.errors])
+        return "\n".join(["{0}:{1}".format(self.candidate, error) for error in self.errors])
 
 
 def classify(filename, settings={}, standards=[]):
@@ -306,8 +368,10 @@ def classify(filename, settings={}, standards=[]):
         return HostVars(filename, settings, standards)
     if parentdir in ["meta"]:
         return Meta(filename, settings, standards)
-    if parentdir in ["library", "lookup_plugins", "callback_plugins",
-                     "filter_plugins"] or filename.endswith(".py"):
+    if (
+        parentdir in ["library", "lookup_plugins", "callback_plugins", "filter_plugins"]
+        or filename.endswith(".py")
+    ):
         return Code(filename, settings, standards)
     if "inventory" == basename or "hosts" == basename or parentdir in ["inventories"]:
         return Inventory(filename, settings, standards)

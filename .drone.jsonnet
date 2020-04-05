@@ -59,9 +59,9 @@ local PipelineTest = {
         CODECOV_TOKEN: { from_secret: 'codecov_token' },
       },
       commands: [
-        'pip install codecov',
+        'pip install codecov -qq',
         'coverage combine .tox/py*/.coverage',
-        'codecov --required',
+        'codecov --required -X gcov',
       ],
       depends_on: [
         'python35-ansible',

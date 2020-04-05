@@ -13,10 +13,9 @@ import yaml
 from ansiblelater import logger
 
 try:
-    import ConfigParser as configparser # noqa
+    import ConfigParser as configparser  # noqa
 except ImportError:
-    import configparser # noqa
-
+    import configparser  # noqa
 
 LOG = logger.get_logger(__name__)
 
@@ -35,7 +34,7 @@ def count_spaces(c_string):
             break
         trailing_spaces += 1
 
-    return((leading_spaces, trailing_spaces))
+    return ((leading_spaces, trailing_spaces))
 
 
 def get_property(prop):
@@ -43,7 +42,8 @@ def get_property(prop):
     parentdir = os.path.dirname(currentdir)
     result = re.search(
         r'{}\s*=\s*[\'"]([^\'"]*)[\'"]'.format(prop),
-        open(os.path.join(parentdir, "__init__.py")).read())
+        open(os.path.join(parentdir, "__init__.py")).read()
+    )
     return result.group(1)
 
 

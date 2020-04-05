@@ -16,7 +16,8 @@ def check_braces_spaces(candidate, settings):
     yamllines, errors = get_normalized_yaml(candidate, settings)
     conf = settings["ansible"]["double-braces"]
     description = "no suitable numbers of spaces (min: {min} max: {max})".format(
-        min=conf["min-spaces-inside"], max=conf["max-spaces-inside"])
+        min=conf["min-spaces-inside"], max=conf["max-spaces-inside"]
+    )
 
     matches = []
     braces = re.compile("{{(.*?)}}")
@@ -33,8 +34,8 @@ def check_braces_spaces(candidate, settings):
             sum_spaces = leading + trailing
 
             if (
-                (sum_spaces < conf["min-spaces-inside"] * 2)
-                or (sum_spaces > conf["min-spaces-inside"] * 2)
+                sum_spaces < conf["min-spaces-inside"] * 2
+                or sum_spaces > conf["min-spaces-inside"] * 2
             ):
                 errors.append(Error(i, description))
     return Result(candidate.path, errors)
@@ -42,9 +43,10 @@ def check_braces_spaces(candidate, settings):
 
 def check_named_task(candidate, settings):
     tasks, errors = get_normalized_tasks(candidate, settings)
-    nameless_tasks = ["meta", "debug", "include_role", "import_role",
-                      "include_tasks", "import_tasks", "include_vars",
-                      "block"]
+    nameless_tasks = [
+        "meta", "debug", "include_role", "import_role", "include_tasks", "import_tasks",
+        "include_vars", "block"
+    ]
     description = "module '%s' used without or empty name attribute"
 
     if not errors:
@@ -93,11 +95,22 @@ def check_command_instead_of_module(candidate, settings):
     tasks, errors = get_normalized_tasks(candidate, settings)
     commands = ["command", "shell", "raw"]
     modules = {
-        "git": "git", "hg": "hg", "curl": "get_url or uri", "wget": "get_url or uri",
-        "svn": "subversion", "service": "service", "mount": "mount",
-        "rpm": "yum or rpm_key", "yum": "yum", "apt-get": "apt-get",
-        "unzip": "unarchive", "tar": "unarchive", "chkconfig": "service",
-        "rsync": "synchronize", "supervisorctl": "supervisorctl", "systemctl": "systemd",
+        "git": "git",
+        "hg": "hg",
+        "curl": "get_url or uri",
+        "wget": "get_url or uri",
+        "svn": "subversion",
+        "service": "service",
+        "mount": "mount",
+        "rpm": "yum or rpm_key",
+        "yum": "yum",
+        "apt-get": "apt-get",
+        "unzip": "unarchive",
+        "tar": "unarchive",
+        "chkconfig": "service",
+        "rsync": "synchronize",
+        "supervisorctl": "supervisorctl",
+        "systemctl": "systemd",
         "sed": "template or lineinfile"
     }
     description = "%s command used in place of %s module"
@@ -111,26 +124,32 @@ def check_command_instead_of_module(candidate, settings):
                     first_cmd_arg = task["action"]["__ansible_arguments__"][0]
 
                 executable = os.path.basename(first_cmd_arg)
-                if (first_cmd_arg and executable in modules
-                        and task["action"].get("warn", True) and "register" not in task):
+                if (
+                    first_cmd_arg and executable in modules and task["action"].get("warn", True)
+                    and "register" not in task
+                ):
                     errors.append(
-                        Error(task["__line__"], description % (executable, modules[executable])))
+                        Error(task["__line__"], description % (executable, modules[executable]))
+                    )
 
     return Result(candidate.path, errors)
 
 
 def check_install_use_latest(candidate, settings):
     tasks, errors = get_normalized_tasks(candidate, settings)
-    package_managers = ["yum", "apt", "dnf", "homebrew", "pacman", "openbsd_package", "pkg5",
-                        "portage", "pkgutil", "slackpkg", "swdepot", "zypper", "bundler", "pip",
-                        "pear", "npm", "yarn", "gem", "easy_install", "bower", "package", "apk",
-                        "openbsd_pkg", "pkgng", "sorcery", "xbps"]
+    package_managers = [
+        "yum", "apt", "dnf", "homebrew", "pacman", "openbsd_package", "pkg5", "portage", "pkgutil",
+        "slackpkg", "swdepot", "zypper", "bundler", "pip", "pear", "npm", "yarn", "gem",
+        "easy_install", "bower", "package", "apk", "openbsd_pkg", "pkgng", "sorcery", "xbps"
+    ]
     description = "package installs should use state=present with or without a version"
 
     if not errors:
         for task in tasks:
-            if (task["action"]["__ansible_module__"] in package_managers
-                    and task["action"].get("state") == "latest"):
+            if (
+                task["action"]["__ansible_module__"] in package_managers
+                and task["action"].get("state") == "latest"
+            ):
                 errors.append(Error(task["__line__"], description))
 
     return Result(candidate.path, errors)
@@ -165,10 +184,11 @@ def check_command_has_changes(candidate, settings):
     if not errors:
         for task in tasks:
             if task["action"]["__ansible_module__"] in commands:
-                if ("changed_when" not in task and "when" not in task
-                        and "when" not in task["__ansible_action_meta__"]
-                        and "creates" not in task["action"]
-                        and "removes" not in task["action"]):
+                if (
+                    "changed_when" not in task and "when" not in task
+                    and "when" not in task["__ansible_action_meta__"]
+                    and "creates" not in task["action"] and "removes" not in task["action"]
+                ):
                     errors.append(Error(task["__line__"], description))
 
     return Result(candidate.path, errors)

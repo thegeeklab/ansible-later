@@ -23,7 +23,6 @@
 import codecs
 import glob
 import imp
-import inspect
 import os
 
 import ansible.parsing.mod_args
@@ -78,14 +77,46 @@ LINE_NUMBER_KEY = "__line__"
 FILENAME_KEY = "__file__"
 
 VALID_KEYS = [
-    "name", "action", "when", "async", "poll", "notify",
-    "first_available_file", "include", "import_playbook",
-    "tags", "register", "ignore_errors", "delegate_to",
-    "local_action", "transport", "remote_user", "sudo",
-    "sudo_user", "sudo_pass", "when", "connection", "environment", "args", "always_run",
-    "any_errors_fatal", "changed_when", "failed_when", "check_mode", "delay",
-    "retries", "until", "su", "su_user", "su_pass", "no_log", "run_once",
-    "become", "become_user", "become_method", FILENAME_KEY,
+    "name",
+    "action",
+    "when",
+    "async",
+    "poll",
+    "notify",
+    "first_available_file",
+    "include",
+    "import_playbook",
+    "tags",
+    "register",
+    "ignore_errors",
+    "delegate_to",
+    "local_action",
+    "transport",
+    "remote_user",
+    "sudo",
+    "sudo_user",
+    "sudo_pass",
+    "when",
+    "connection",
+    "environment",
+    "args",
+    "always_run",
+    "any_errors_fatal",
+    "changed_when",
+    "failed_when",
+    "check_mode",
+    "delay",
+    "retries",
+    "until",
+    "su",
+    "su_user",
+    "su_pass",
+    "no_log",
+    "run_once",
+    "become",
+    "become_user",
+    "become_method",
+    FILENAME_KEY,
 ]
 
 BLOCK_NAME_TO_ACTION_TYPE_MAP = {
@@ -170,17 +201,16 @@ def find_children(playbook, playbook_dir):
                     break
                 valid_tokens.append(token)
             path = " ".join(valid_tokens)
-            results.append({
-                "path": path_dwim(basedir, path),
-                "type": child["type"]
-            })
+            results.append({"path": path_dwim(basedir, path), "type": child["type"]})
     return results
 
 
 def template(basedir, value, variables, fail_on_undefined=False, **kwargs):
     try:
-        value = ansible_template(os.path.abspath(basedir), value, variables,
-                                 **dict(kwargs, fail_on_undefined=fail_on_undefined))
+        value = ansible_template(
+            os.path.abspath(basedir), value, variables,
+            **dict(kwargs, fail_on_undefined=fail_on_undefined)
+        )
         # Hack to skip the following exception when using to_json filter on a variable.
         # I guess the filter doesn't like empty vars...
     except (AnsibleError, ValueError):
@@ -207,10 +237,12 @@ def play_children(basedir, item, parent_type, playbook_dir):
 
     if k in delegate_map:
         if v:
-            v = template(os.path.abspath(basedir),
-                         v,
-                         dict(playbook_dir=os.path.abspath(basedir)),
-                         fail_on_undefined=False)
+            v = template(
+                os.path.abspath(basedir),
+                v,
+                dict(playbook_dir=os.path.abspath(basedir)),
+                fail_on_undefined=False
+            )
             return delegate_map[k](basedir, k, v, parent_type)
     return []
 
@@ -237,12 +269,23 @@ def _taskshandlers_children(basedir, k, v, parent_type):
         elif "import_tasks" in th:
             append_children(th["import_tasks"], basedir, k, parent_type, results)
         elif "import_role" in th:
-            results.extend(_roles_children(basedir, k, [th["import_role"].get("name")], parent_type,
-                                           main=th["import_role"].get("tasks_from", "main")))
+            results.extend(
+                _roles_children(
+                    basedir,
+                    k, [th["import_role"].get("name")],
+                    parent_type,
+                    main=th["import_role"].get("tasks_from", "main")
+                )
+            )
         elif "include_role" in th:
-            results.extend(_roles_children(basedir, k, [th["include_role"].get("name")],
-                                           parent_type,
-                                           main=th["include_role"].get("tasks_from", "main")))
+            results.extend(
+                _roles_children(
+                    basedir,
+                    k, [th["include_role"].get("name")],
+                    parent_type,
+                    main=th["include_role"].get("tasks_from", "main")
+                )
+            )
         elif "block" in th:
             results.extend(_taskshandlers_children(basedir, k, th["block"], parent_type))
             if "rescue" in th:
@@ -260,10 +303,7 @@ def append_children(taskhandler, basedir, k, parent_type, results):
         playbook_section = k
     else:
         playbook_section = parent_type
-    results.append({
-        "path": path_dwim(basedir, taskhandler),
-        "type": playbook_section
-    })
+    results.append({"path": path_dwim(basedir, taskhandler), "type": playbook_section})
 
 
 def _roles_children(basedir, k, v, parent_type, main="main"):
@@ -272,12 +312,16 @@ def _roles_children(basedir, k, v, parent_type, main="main"):
         if isinstance(role, dict):
             if "role" in role or "name" in role:
                 if "tags" not in role or "skip_ansible_later" not in role["tags"]:
-                    results.extend(_look_for_role_files(basedir,
-                                                        role.get("role", role.get("name")),
-                                                        main=main))
+                    results.extend(
+                        _look_for_role_files(
+                            basedir, role.get("role", role.get("name")), main=main
+                        )
+                    )
             else:
-                raise SystemExit("role dict {0} does not contain a 'role' "
-                                 "or 'name' key".format(role))
+                raise SystemExit(
+                    "role dict {0} does not contain a 'role' "
+                    "or 'name' key".format(role)
+                )
         else:
             results.extend(_look_for_role_files(basedir, role, main=main))
     return results
@@ -296,9 +340,7 @@ def _rolepath(basedir, role):
         path_dwim(basedir, os.path.join("roles", role)),
         path_dwim(basedir, role),
         # if included from roles/[role]/meta/main.yml
-        path_dwim(
-            basedir, os.path.join("..", "..", "..", "roles", role)
-        ),
+        path_dwim(basedir, os.path.join("..", "..", "..", "roles", role)),
         path_dwim(basedir, os.path.join("..", "..", role))
     ]
 
@@ -356,7 +398,7 @@ def normalize_task(task, filename, custom_modules=[]):
     ansible_action_type = task.get("__ansible_action_type__", "task")
     ansible_action_meta = task.get("__ansible_action_meta__", dict())
     if "__ansible_action_type__" in task:
-        del(task["__ansible_action_type__"])
+        del (task["__ansible_action_type__"])
 
     normalized = dict()
     # TODO: Workaround for custom modules
@@ -372,7 +414,7 @@ def normalize_task(task, filename, custom_modules=[]):
     # denormalize shell -> command conversion
     if "_uses_shell" in arguments:
         action = "shell"
-        del(arguments["_uses_shell"])
+        del (arguments["_uses_shell"])
 
     for (k, v) in list(task.items()):
         if k in ("action", "local_action", "args", "delegate_to") or k == action:
@@ -386,7 +428,7 @@ def normalize_task(task, filename, custom_modules=[]):
 
     if "_raw_params" in arguments:
         normalized["action"]["__ansible_arguments__"] = arguments["_raw_params"].strip().split()
-        del(arguments["_raw_params"])
+        del (arguments["_raw_params"])
     else:
         normalized["action"]["__ansible_arguments__"] = list()
     normalized["action"].update(arguments)
@@ -410,8 +452,9 @@ def action_tasks(yaml, file):
     block_rescue_always = ("block", "rescue", "always")
     tasks[:] = [task for task in tasks if all(k not in task for k in block_rescue_always)]
 
-    return [task for task in tasks if set(
-        ["include", "include_tasks", "import_playbook", "import_tasks"]).isdisjoint(task.keys())]
+    allowed = ["include", "include_tasks", "import_playbook", "import_tasks"]
+
+    return [task for task in tasks if set(allowed).isdisjoint(task.keys())]
 
 
 def task_to_str(task):
@@ -419,9 +462,11 @@ def task_to_str(task):
     if name:
         return name
     action = task.get("action")
-    args = " ".join([u"{0}={1}".format(k, v) for (k, v) in action.items()
-                     if k not in ["__ansible_module__", "__ansible_arguments__"]
-                     ] + action.get("__ansible_arguments__"))
+    args = " ".join([
+        u"{0}={1}".format(k, v)
+        for (k, v) in action.items()
+        if k not in ["__ansible_module__", "__ansible_arguments__"]
+    ] + action.get("__ansible_arguments__"))
     return u"{0} {1}".format(action["__ansible_module__"], args)
 
 
@@ -439,7 +484,8 @@ def extract_from_list(blocks, candidates):
                 elif block[candidate] is not None:
                     raise RuntimeError(
                         "Key '%s' defined, but bad value: '%s'" %
-                        (candidate, str(block[candidate])))
+                        (candidate, str(block[candidate]))
+                    )
     return results
 
 
@@ -460,6 +506,7 @@ def parse_yaml_linenumbers(data, filename):
     The line numbers are stored in each node's LINE_NUMBER_KEY key.
 
     """
+
     def compose_node(parent, index):
         # the line number where the previous token has ended (plus empty lines)
         line = loader.line

@@ -81,7 +81,8 @@ def get_normalized_tasks(candidate, settings):
                     # No need to normalize_task if we are skipping it.
                     continue
                 normalized.append(
-                    normalize_task(task, candidate.path, settings["ansible"]["custom_modules"]))
+                    normalize_task(task, candidate.path, settings["ansible"]["custom_modules"])
+                )
 
     except LaterError as ex:
         e = ex.original

@@ -71,8 +71,9 @@ class Settings(object):
         defaults = self._get_defaults()
         source_files = []
         source_files.append(self.config_file)
-        source_files.append(os.path.relpath(
-            os.path.normpath(os.path.join(os.getcwd(), ".later.yml"))))
+        source_files.append(
+            os.path.relpath(os.path.normpath(os.path.join(os.getcwd(), ".later.yml")))
+        )
         cli_options = self.args
 
         for config in source_files:
@@ -147,10 +148,11 @@ class Settings(object):
             return True
         except Exception as e:
             schema_error = "Failed validating '{validator}' in schema{schema}".format(
-                validator=e.validator,
-                schema=format_as_index(list(e.relative_schema_path)[:-1])
+                validator=e.validator, schema=format_as_index(list(e.relative_schema_path)[:-1])
             )
-            utils.sysexit_with_message("{schema}: {msg}".format(schema=schema_error, msg=e.message))
+            utils.sysexit_with_message(
+                "{schema}: {msg}".format(schema=schema_error, msg=e.message)
+            )
 
     def _update_filelist(self):
         includes = self.config["rules"]["files"]
@@ -165,8 +167,7 @@ class Settings(object):
         filelist = []
         for root, dirs, files in os.walk("."):
             for filename in files:
-                filelist.append(
-                    os.path.relpath(os.path.normpath(os.path.join(root, filename))))
+                filelist.append(os.path.relpath(os.path.normpath(os.path.join(root, filename))))
 
         valid = []
         includespec = pathspec.PathSpec.from_lines("gitwildmatch", includes)
