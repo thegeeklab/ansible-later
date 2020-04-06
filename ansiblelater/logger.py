@@ -26,7 +26,7 @@ def _should_do_markup():
     return sys.stdout.isatty() and os.environ.get("TERM") != "dumb"
 
 
-colorama.init(autoreset=True, strip=not _should_do_markup())
+colorama.init(autoreset=True, strip=(not _should_do_markup()))
 
 
 def flag_extra(extra):
@@ -158,25 +158,25 @@ def _get_critical_handler(json=False):
 
 def critical(message):
     """Format critical messages and return string."""
-    return color_text(colorama.Fore.RED, colorama.Fore.LIGHTRED_EX, message)
+    return color_text(colorama.Fore.RED, message)
 
 
 def error(message):
     """Format error messages and return string."""
-    return color_text(colorama.Fore.RED, colorama.Fore.LIGHTRED_EX, message)
+    return color_text(colorama.Fore.RED, message)
 
 
 def warn(message):
     """Format warn messages and return string."""
-    return color_text(colorama.Fore.YELLOW, colorama.Fore.LIGHTYELLOW_EX, message)
+    return color_text(colorama.Fore.YELLOW, message)
 
 
 def info(message):
     """Format info messages and return string."""
-    return color_text(colorama.Fore.BLUE, colorama.Fore.LIGHTBLUE_EX, message)
+    return color_text(colorama.Fore.BLUE, message)
 
 
-def color_text(color, light, msg):
+def color_text(color, msg):
     """
     Colorize strings.
 
@@ -185,5 +185,5 @@ def color_text(color, light, msg):
     :returns: string
 
     """
-    msg = msg.format(light)
+    msg = msg.format(colorama.Style.DIM)
     return "{}{}{}".format(color, msg, colorama.Style.RESET_ALL)

@@ -23,7 +23,7 @@ def test_critical(capsys, mocker):
 
     print(
         "{}CRITICAL: {}foo\n{}".format(
-            colorama.Fore.RED, colorama.Fore.LIGHTRED_EX, colorama.Style.RESET_ALL
+            colorama.Fore.RED, colorama.Style.DIM, colorama.Style.RESET_ALL
         )
     )
     x, _ = capsys.readouterr()
@@ -38,7 +38,7 @@ def test_error(capsys, mocker):
 
     print(
         "{}ERROR: {}foo\n{}".format(
-            colorama.Fore.RED, colorama.Fore.LIGHTRED_EX, colorama.Style.RESET_ALL
+            colorama.Fore.RED, colorama.Style.DIM, colorama.Style.RESET_ALL
         )
     )
     x, _ = capsys.readouterr()
@@ -53,7 +53,7 @@ def test_warn(capsys, mocker):
 
     print(
         "{}WARNING: {}foo\n{}".format(
-            colorama.Fore.YELLOW, colorama.Fore.LIGHTYELLOW_EX, colorama.Style.RESET_ALL
+            colorama.Fore.YELLOW, colorama.Style.DIM, colorama.Style.RESET_ALL
         )
     )
     x, _ = capsys.readouterr()
@@ -68,7 +68,7 @@ def test_info(capsys, mocker):
 
     print(
         "{}INFO: {}foo\n{}".format(
-            colorama.Fore.BLUE, colorama.Fore.LIGHTBLUE_EX, colorama.Style.RESET_ALL
+            colorama.Fore.BLUE, colorama.Style.DIM, colorama.Style.RESET_ALL
         )
     )
     x, _ = capsys.readouterr()
