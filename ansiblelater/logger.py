@@ -9,7 +9,7 @@ import colorama
 from pythonjsonlogger import jsonlogger
 from six import iteritems
 
-CONSOLE_FORMAT = "%(levelname)s: {}%(message)s"
+CONSOLE_FORMAT = "{}%(levelname)s:{} %(message)s"
 JSON_FORMAT = "(asctime) (levelname) (message)"
 
 
@@ -185,5 +185,5 @@ def color_text(color, msg):
     :returns: string
 
     """
-    msg = msg.format(colorama.Style.DIM)
+    msg = msg.format(colorama.Style.BRIGHT, colorama.Style.NORMAL)
     return "{}{}{}".format(color, msg, colorama.Style.RESET_ALL)
