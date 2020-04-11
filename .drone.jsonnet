@@ -28,7 +28,7 @@ local PipelineLint = {
         PY_COLORS: 1,
       },
       commands: [
-        'pip install -r test-requirements.txt -qq',
+        'pip install -r dev-requirements.txt -qq',
         'pip install -qq .',
         'flake8 ./ansiblelater',
       ],
@@ -94,7 +94,7 @@ local PipelineSecurity = {
         PY_COLORS: 1,
       },
       commands: [
-        'pip install -r test-requirements.txt -qq',
+        'pip install -r dev-requirements.txt -qq',
         'pip install -qq .',
         'bandit -r ./ansiblelater -x ./ansiblelater/test',
       ],
