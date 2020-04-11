@@ -13,11 +13,10 @@ ADD dist/ansible_later-*.whl /
 RUN apk --update add --virtual .build-deps build-base libffi-dev libressl-dev && \
     apk --update add git && \
     pip install --upgrade --no-cache-dir pip && \
-    pip install --no-cache-dir --find-links=. ansible-later && \
-    apk del .build-deps && \
+    pip install --no-cache-dir ansible_later-*.whl && \
+    rm -f ansible_later-*.whl && \
     rm -rf /var/cache/apk/* && \
     rm -rf /root/.cache/  && \
-    rm -f ansible_later-*.whl
 
 USER root
 CMD []
