@@ -483,8 +483,9 @@ def extract_from_list(blocks, candidates):
                     results.extend(add_action_type(block[candidate], candidate, meta_data))
                 elif block[candidate] is not None:
                     raise RuntimeError(
-                        "Key '%s' defined, but bad value: '%s'" %
-                        (candidate, str(block[candidate]))
+                        "Key '{candidate}' defined, but bad value: '{block}'".format(
+                            candidate=candidate, block=str(block[candidate])
+                        )
                     )
     return results
 

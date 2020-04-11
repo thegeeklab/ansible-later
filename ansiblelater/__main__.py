@@ -64,18 +64,18 @@ def main():
         candidate = candidates.classify(filename, settings, standards)
         if candidate:
             if candidate.binary:
-                LOG.info("Not reviewing binary file %s" % filename)
+                LOG.info("Not reviewing binary file {name}".format(name=filename))
                 continue
             if candidate.vault:
-                LOG.info("Not reviewing vault file %s" % filename)
+                LOG.info("Not reviewing vault file {name}".format(name=filename))
                 continue
             if lines:
-                LOG.info("Reviewing %s lines %s" % (candidate, lines))
+                LOG.info("Reviewing {candidate} lines {no}".format(candidate=candidate, no=lines))
             else:
-                LOG.info("Reviewing all of %s" % candidate)
+                LOG.info("Reviewing all of {candidate}".format(candidate=candidate))
                 tasks.append((candidate, settings, lines))
         else:
-            LOG.info("Couldn't classify file %s" % filename)
+            LOG.info("Couldn't classify file {name}".format(name=filename))
 
     errors = (sum(p.map(_review_wrapper, tasks)))
     p.close()

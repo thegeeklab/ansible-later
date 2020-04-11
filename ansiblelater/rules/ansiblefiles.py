@@ -47,20 +47,20 @@ def check_named_task(candidate, settings):
         "meta", "debug", "include_role", "import_role", "include_tasks", "import_tasks",
         "include_vars", "block"
     ]
-    description = "module '%s' used without or empty name attribute"
+    description = "module '{module}' used without or empty name attribute"
 
     if not errors:
         for task in tasks:
             module = task["action"]["__ansible_module__"]
             if ("name" not in task or not task["name"]) and module not in nameless_tasks:
-                errors.append(Error(task["__line__"], description % module))
+                errors.append(Error(task["__line__"], description.format(module=module)))
 
     return Result(candidate.path, errors)
 
 
 def check_name_format(candidate, settings):
     tasks, errors = get_normalized_tasks(candidate, settings)
-    description = "name '%s' should start with uppercase"
+    description = "name '{name}' should start with uppercase"
     namelines = defaultdict(list)
 
     if not errors:
@@ -69,14 +69,14 @@ def check_name_format(candidate, settings):
                 namelines[task["name"]].append(task["__line__"])
         for (name, lines) in namelines.items():
             if name and not name[0].isupper():
-                errors.append(Error(lines[-1], description % name))
+                errors.append(Error(lines[-1], description.format(name=name)))
 
     return Result(candidate.path, errors)
 
 
 def check_unique_named_task(candidate, settings):
     tasks, errors = get_normalized_tasks(candidate, settings)
-    description = "name '%s' appears multiple times"
+    description = "name '{name}' appears multiple times"
 
     namelines = defaultdict(list)
 
@@ -86,7 +86,7 @@ def check_unique_named_task(candidate, settings):
                 namelines[task["name"]].append(task["__line__"])
         for (name, lines) in namelines.items():
             if name and len(lines) > 1:
-                errors.append(Error(lines[-1], description % name))
+                errors.append(Error(lines[-1], description.format(name=name)))
 
     return Result(candidate.path, errors)
 
@@ -113,7 +113,7 @@ def check_command_instead_of_module(candidate, settings):
         "systemctl": "systemd",
         "sed": "template or lineinfile"
     }
-    description = "%s command used in place of %s module"
+    description = "{exec} command used in place of {module} module"
 
     if not errors:
         for task in tasks:
@@ -129,7 +129,10 @@ def check_command_instead_of_module(candidate, settings):
                     and "register" not in task
                 ):
                     errors.append(
-                        Error(task["__line__"], description % (executable, modules[executable]))
+                        Error(
+                            task["__line__"],
+                            description.format(exec=executable, module=modules[executable])
+                        )
                     )
 
     return Result(candidate.path, errors)

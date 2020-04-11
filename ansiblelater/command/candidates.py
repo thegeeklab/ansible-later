@@ -74,20 +74,24 @@ class Candidate(object):
             if self.expected_version:
                 if isinstance(self, RoleFile):
                     LOG.warning(
-                        "%s %s is in a role that contains a meta/main.yml without a declared "
-                        "standards version. "
-                        "Using latest standards version %s" %
-                        (type(self).__name__, self.path, version)
+                        "{name} {path} is in a role that contains a meta/main.yml without a "
+                        "declared standards version. "
+                        "Using latest standards version {version}".format(
+                            name=type(self).__name__, path=self.path, version=version
+                        )
                     )
                 else:
                     LOG.warning(
-                        "%s %s does not present standards version. "
-                        "Using latest standards version %s" %
-                        (type(self).__name__, self.path, version)
+                        "{name} {path} does not present standards version. "
+                        "Using latest standards version {version}".format(
+                            name=type(self).__name__, path=self.path, version=version
+                        )
                     )
         else:
             LOG.info(
-                "%s %s declares standards version %s" % (type(self).__name__, self.path, version)
+                "{name} {path} declares standards version {version}".format(
+                    name=type(self).__name__, path=self.path, version=version
+                )
             )
 
         return version
@@ -182,7 +186,7 @@ class Candidate(object):
         return standard_id
 
     def __repr__(self):  # noqa
-        return "%s (%s)" % (type(self).__name__, self.path)
+        return "{name} ({path})".format(name=type(self).__name__, path=self.path)
 
     def __getitem__(self, item):  # noqa
         return self.__dict__.get(item)
@@ -330,9 +334,9 @@ class Error(object):
 
     def __repr__(self):  # noqa
         if self.lineno:
-            return "%s: %s" % (self.lineno, self.message)
+            return "{no}: {msg}".format(no=self.lineno, msg=self.message)
         else:
-            return " %s" % (self.message)
+            return " {msg}".format(msg=self.message)
 
     def to_dict(self):
         result = dict(lineno=self.lineno, message=self.message)

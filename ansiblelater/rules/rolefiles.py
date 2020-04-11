@@ -12,12 +12,12 @@ from ansiblelater.utils.rulehelper import get_tasks
 def check_meta_main(candidate, settings):
     content, errors = get_raw_yaml(candidate, settings)
     keys = ["author", "description", "min_ansible_version", "platforms", "dependencies"]
-    description = "file should contain '%s' key"
+    description = "file should contain '{key}' key"
 
     if not errors:
         for key in keys:
             if not nested_lookup(key, content):
-                errors.append(Error(None, description % (key)))
+                errors.append(Error(None, description.format(key=key)))
 
     return Result(candidate.path, errors)
 

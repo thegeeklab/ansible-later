@@ -97,6 +97,8 @@ def check_yaml_file(candidate, settings):
             try:
                 yaml.safe_load(f)
             except Exception as e:
-                errors.append(Error(e.problem_mark.line + 1, "syntax error: %s" % (e.problem)))
+                errors.append(
+                    Error(e.problem_mark.line + 1, "syntax error: {msg}".format(msg=e.problem))
+                )
 
     return Result(candidate.path, errors)

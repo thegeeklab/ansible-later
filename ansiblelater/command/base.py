@@ -31,23 +31,29 @@ def get_standards(filepath):
         standards = importlib.import_module("standards")
     except ImportError as e:
         utils.sysexit_with_message(
-            "Could not import standards from directory %s: %s" % (filepath, str(e))
+            "Could not import standards from directory {path}: {msg}".format(
+                path=filepath, msg=str(e)
+            )
         )
 
     if getattr(standards, "ansible_min_version", None) and \
             LooseVersion(standards.ansible_min_version) > LooseVersion(ansible.__version__):
         utils.sysexit_with_message(
-            "Standards require ansible version %s (current version %s). "
-            "Please upgrade ansible." % (standards.ansible_min_version, ansible.__version__)
+            "Standards require ansible version {min_version} (current version {version}). "
+            "Please upgrade ansible.".format(
+                min_version=standards.ansible_min_version, version=ansible.__version__
+            )
         )
 
     if getattr(standards, "ansible_later_min_version", None) and \
             LooseVersion(standards.ansible_later_min_version) > LooseVersion(
                 utils.get_property("__version__")):
         utils.sysexit_with_message(
-            "Standards require ansible-later version %s (current version %s). "
-            "Please upgrade ansible-later." %
-            (standards.ansible_later_min_version, utils.get_property("__version__"))
+            "Standards require ansible-later version {min_version} (current version {version}). "
+            "Please upgrade ansible-later.".format(
+                min_version=standards.ansible_later_min_version,
+                version=utils.get_property("__version__")
+            )
         )
 
     normalized_std = (list(toolz.remove(lambda x: x.id == "", standards.standards)))

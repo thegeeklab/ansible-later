@@ -25,9 +25,9 @@ def get_tasks(candidate, settings):
 
     except LaterError as ex:
         e = ex.original
-        errors.append(Error(e.problem_mark.line + 1, "syntax error: %s" % (e.problem)))
+        errors.append(Error(e.problem_mark.line + 1, "syntax error: {msg}".format(msg=e.problem)))
     except LaterAnsibleError as e:
-        errors.append(Error(e.line, "syntax error: %s" % (e.message)))
+        errors.append(Error(e.line, "syntax error: {msg}".format(e.message)))
 
     return yamllines, errors
 
@@ -43,9 +43,9 @@ def get_action_tasks(candidate, settings):
             tasks = action_tasks(yamllines, candidate)
     except LaterError as ex:
         e = ex.original
-        errors.append(Error(e.problem_mark.line + 1, "syntax error: %s" % (e.problem)))
+        errors.append(Error(e.problem_mark.line + 1, "syntax error: {msg}".format(msg=e.problem)))
     except LaterAnsibleError as e:
-        errors.append(Error(e.line, "syntax error: %s" % (e.message)))
+        errors.append(Error(e.line, "syntax error: {}".format(e.message)))
 
     return tasks, errors
 
@@ -57,9 +57,9 @@ def get_normalized_task(task, candidate, settings):
         normalized = normalize_task(task, candidate.path, settings["ansible"]["custom_modules"])
     except LaterError as ex:
         e = ex.original
-        errors.append(Error(e.problem_mark.line + 1, "syntax error: %s" % (e.problem)))
+        errors.append(Error(e.problem_mark.line + 1, "syntax error: {msg}".format(msg=e.problem)))
     except LaterAnsibleError as e:
-        errors.append(Error(e.line, "syntax error: %s" % (e.message)))
+        errors.append(Error(e.line, "syntax error: {msg}".format(msg=e.message)))
 
     return normalized, errors
 
@@ -86,9 +86,9 @@ def get_normalized_tasks(candidate, settings):
 
     except LaterError as ex:
         e = ex.original
-        errors.append(Error(e.problem_mark.line + 1, "syntax error: %s" % (e.problem)))
+        errors.append(Error(e.problem_mark.line + 1, "syntax error: {msg}".format(msg=e.problem)))
     except LaterAnsibleError as e:
-        errors.append(Error(e.line, "syntax error: %s" % (e.message)))
+        errors.append(Error(e.line, "syntax error: {msg}".format(msg=e.message)))
 
     return normalized, errors
 
@@ -105,9 +105,9 @@ def get_normalized_yaml(candidate, settings, options=None):
         yamllines = normalized_yaml(candidate.path, options)
     except LaterError as ex:
         e = ex.original
-        errors.append(Error(e.problem_mark.line + 1, "syntax error: %s" % (e.problem)))
+        errors.append(Error(e.problem_mark.line + 1, "syntax error: {msg}".format(msg=e.problem)))
     except LaterAnsibleError as e:
-        errors.append(Error(e.line, "syntax error: %s" % (e.message)))
+        errors.append(Error(e.line, "syntax error: {msg}".format(msg=e.message)))
 
     return yamllines, errors
 
@@ -122,7 +122,7 @@ def get_raw_yaml(candidate, settings):
 
     except LaterError as ex:
         e = ex.original
-        errors.append(Error(e.problem_mark.line + 1, "syntax error: %s" % (e.problem)))
+        errors.append(Error(e.problem_mark.line + 1, "syntax error: {msg}".format(msg=e.problem)))
 
     return content, errors
 
@@ -135,6 +135,6 @@ def run_yamllint(path, options="extends: default"):
                 errors.append(Error(problem.line, problem.desc))
     except LaterError as ex:
         e = ex.original
-        errors.append(Error(e.problem_mark.line + 1, "syntax error: %s" % (e.problem)))
+        errors.append(Error(e.problem_mark.line + 1, "syntax error: {msg}".format(msg=e.problem)))
 
     return errors
