@@ -1,2 +1,2 @@
-* INTERNAL
-  * maintenance and refactoring release, no changes
+* BUGFIX
+  * encode module arguments to fix comparison

@@ -35,7 +35,10 @@ def check_native_yaml(candidate, settings):
                 break
 
             action = normal_form["action"]["__ansible_module__"]
-            arguments = normal_form["action"]["__ansible_arguments__"]
+            arguments = [
+                bytes(x, "utf-8").decode("unicode_escape")
+                for x in normal_form["action"]["__ansible_arguments__"]
+            ]
             # Cope with `set_fact` where task["set_fact"] is None
             if not task.get(action):
                 continue
