@@ -27,7 +27,7 @@ def get_tasks(candidate, settings):
         e = ex.original
         errors.append(Error(e.problem_mark.line + 1, "syntax error: {msg}".format(msg=e.problem)))
     except LaterAnsibleError as e:
-        errors.append(Error(e.line, "syntax error: {msg}".format(e.message)))
+        errors.append(Error(e.line, "syntax error: {msg}".format(msg=e.message)))
 
     return yamllines, errors
 
