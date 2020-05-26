@@ -361,45 +361,20 @@ steps:
   commands:
   - cd docs/ && hugo-official
 
-- name: freeze
-  image: appleboy/drone-ssh:1.5.5
-  settings:
-    host:
-      from_secret: ssh_host
-    key:
-      from_secret: ssh_key
-    script:
-    - cp -R /var/www/virtual/geeklab/html/ansible-later.geekdocs.de/ /var/www/virtual/geeklab/html/ansiblelater_freeze/
-    - ln -sfn /var/www/virtual/geeklab/html/ansiblelater_freeze /var/www/virtual/geeklab/ansible-later.geekdocs.de
-    username:
-      from_secret: ssh_username
-
 - name: publish
-  image: appleboy/drone-scp
+  image: plugins/s3-sync
   settings:
-    host:
-      from_secret: ssh_host
-    key:
-      from_secret: ssh_key
-    rm: true
-    source: docs/public/*
-    strip_components: 2
-    target: /var/www/virtual/geeklab/html/ansible-later.geekdocs.de/
-    username:
-      from_secret: ssh_username
-
-- name: cleanup
-  image: appleboy/drone-ssh:1.5.5
-  settings:
-    host:
-      from_secret: ssh_host
-    key:
-      from_secret: ssh_key
-    script:
-    - ln -sfn /var/www/virtual/geeklab/html/ansible-later.geekdocs.de /var/www/virtual/geeklab/ansible-later.geekdocs.de
-    - rm -rf /var/www/virtual/geeklab/html/ansiblelater_freeze/
-    username:
-      from_secret: ssh_username
+    access_key:
+      from_secret: s3_access_key
+    bucket: geekdocs
+    delete: true
+    endpoint: https://sp.rknet.org
+    path_style: true
+    secret_key:
+      from_secret: s3_secret_access_key
+    source: docs/public/
+    strip_prefix: docs/public/
+    target: /${DRONE_REPO_NAME}
 
 trigger:
   ref:
@@ -470,6 +445,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: f0af28ae450c0424b52dd3e988f7521ea6556128002d03f2c6f5b82c3ae2d744
+hmac: d4e67d00974f1737d4dadf41a2db23f17f8b69946a0066fe75aa1bcf0edb126e
 
 ...
