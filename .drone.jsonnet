@@ -1,4 +1,4 @@
-local PythonVersion(pyversion='2.7') = {
+local PythonVersion(pyversion='3.5') = {
   name: 'python' + std.strReplace(pyversion, '.', '') + '-pytest',
   image: 'python:' + pyversion,
   environment: {
@@ -66,10 +66,10 @@ local PipelineTest = {
         'codecov --required -X gcov',
       ],
       depends_on: [
-        'python35-ansible',
-        'python36-ansible',
-        'python37-ansible',
-        'python38-ansible',
+        'python35-pytest',
+        'python36-pytest',
+        'python37-pytest',
+        'python38-pytest',
       ],
     },
   ],
