@@ -7,7 +7,7 @@ local PythonVersion(pyversion='3.5') = {
   commands: [
     'pip install -r dev-requirements.txt -qq',
     'pip install -qq .',
-    'pytest ansiblelater --cov=ansiblelater --no-cov-on-fail',
+    'pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail',
     'ansible-later --help',
     'ansible-later --version',
   ],
@@ -63,7 +63,6 @@ local PipelineTest = {
       },
       commands: [
         'pip install codecov -qq',
-        'coverage combine',
         'codecov --required -X gcov',
       ],
       depends_on: [

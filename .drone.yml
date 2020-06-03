@@ -36,7 +36,7 @@ steps:
   commands:
   - pip install -r dev-requirements.txt -qq
   - pip install -qq .
-  - pytest ansiblelater --cov=ansiblelater --no-cov-on-fail
+  - pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail
   - ansible-later --help
   - ansible-later --version
   environment:
@@ -49,7 +49,7 @@ steps:
   commands:
   - pip install -r dev-requirements.txt -qq
   - pip install -qq .
-  - pytest ansiblelater --cov=ansiblelater --no-cov-on-fail
+  - pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail
   - ansible-later --help
   - ansible-later --version
   environment:
@@ -62,7 +62,7 @@ steps:
   commands:
   - pip install -r dev-requirements.txt -qq
   - pip install -qq .
-  - pytest ansiblelater --cov=ansiblelater --no-cov-on-fail
+  - pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail
   - ansible-later --help
   - ansible-later --version
   environment:
@@ -75,7 +75,7 @@ steps:
   commands:
   - pip install -r dev-requirements.txt -qq
   - pip install -qq .
-  - pytest ansiblelater --cov=ansiblelater --no-cov-on-fail
+  - pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail
   - ansible-later --help
   - ansible-later --version
   environment:
@@ -87,7 +87,6 @@ steps:
   image: python:3.8
   commands:
   - pip install codecov -qq
-  - coverage combine
   - codecov --required -X gcov
   environment:
     CODECOV_TOKEN:
@@ -496,6 +495,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: cea3fb11c103d49bfac611b13916c457c0ce4df1194fa5e8c9c0a0f3a12c02ae
+hmac: 968f0d1f0676d8fab71d93009c40e0cb29edda9db6bfe9436200018279d509af
 
 ...
