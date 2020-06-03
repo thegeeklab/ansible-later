@@ -87,6 +87,7 @@ steps:
   image: python:3.8
   commands:
   - pip install codecov -qq
+  - coverage combine
   - codecov --required -X gcov
   environment:
     CODECOV_TOKEN:
@@ -495,6 +496,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: ed05de9ea3b8a80f154ee51a3d57497ba194c0310a2a0c7469a7e77d86de51ce
+hmac: cea3fb11c103d49bfac611b13916c457c0ce4df1194fa5e8c9c0a0f3a12c02ae
 
 ...

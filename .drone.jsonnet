@@ -63,6 +63,7 @@ local PipelineTest = {
       },
       commands: [
         'pip install codecov -qq',
+        'coverage combine',
         'codecov --required -X gcov',
       ],
       depends_on: [
