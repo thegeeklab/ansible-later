@@ -1,3 +1,5 @@
+* BUGFIX
+  * fix typo in argparse description
 * INTERNAL
   * add markdown linting to CI (markdownlint-cli)
   * add spellchecking to CI (spellcheck-cli)
