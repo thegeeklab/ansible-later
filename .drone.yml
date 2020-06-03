@@ -356,10 +356,49 @@ steps:
   - mkdir -p docs/themes/hugo-geekdoc/
   - curl -L https://github.com/xoxys/hugo-geekdoc/releases/latest/download/hugo-geekdoc.tar.gz | tar -xz -C docs/themes/hugo-geekdoc/ --strip-components=1
 
-- name: test
-  image: klakegg/hugo:0.59.1-ext-alpine
+- name: markdownlint
+  image: node:lts-alpine
   commands:
-  - cd docs/ && hugo-official
+  - npm install -g markdownlint-cli
+  - markdownlint 'docs/content/**/*.md' 'README.md'
+  environment:
+    FORCE_COLOR: true
+    NPM_CONFIG_LOGLEVEL: error
+
+- name: spellcheck
+  image: node:lts-alpine
+  commands:
+  - npm install -g spellchecker-cli
+  - spellchecker --files 'docs/content/**/*.md' 'README.md' -d .dictionary -p spell indefinite-article syntax-urls --no-suggestions
+  environment:
+    FORCE_COLOR: true
+    NPM_CONFIG_LOGLEVEL: error
+
+- name: testbuild
+  image: klakegg/hugo:0.72.0-ext-alpine
+  commands:
+  - hugo-official -s docs/ -b http://localhost/
+
+- name: link-validation
+  image: xoxys/link-validator
+  commands:
+  - link-validator -ro
+  environment:
+    LINK_VALIDATOR_BASE_DIR: docs/public
+
+- name: build
+  image: klakegg/hugo:0.72.0-ext-alpine
+  commands:
+  - hugo-official -s docs/
+
+- name: beautify
+  image: node:lts-alpine
+  commands:
+  - npm install -g js-beautify
+  - html-beautify -r -f 'docs/public/**/*.html'
+  environment:
+    FORCE_COLOR: true
+    NPM_CONFIG_LOGLEVEL: error
 
 - name: publish
   image: plugins/s3-sync
@@ -445,6 +484,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: d4e67d00974f1737d4dadf41a2db23f17f8b69946a0066fe75aa1bcf0edb126e
+hmac: e24f32f31953d936d86eb3e75e9a76521ac5a6066e98ce0ad66c0c79286ecd7e
 
 ...
