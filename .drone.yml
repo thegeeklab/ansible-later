@@ -31,41 +31,53 @@ platform:
   arch: amd64
 
 steps:
-- name: python35-ansible
+- name: python35-pytest
   image: python:3.5
   commands:
-  - pip install tox -qq
-  - tox -e $(tox -l | grep py35 | xargs | sed 's/ /,/g') -q
+  - pip install -r dev-requirements.txt -qq
+  - pip install -qq .
+  - pytest ansiblelater --cov=ansiblelater --no-cov-on-fail
+  - ansible-later --help
+  - ansible-later --version
   environment:
     PY_COLORS: 1
   depends_on:
   - clone
 
-- name: python36-ansible
+- name: python36-pytest
   image: python:3.6
   commands:
-  - pip install tox -qq
-  - tox -e $(tox -l | grep py36 | xargs | sed 's/ /,/g') -q
+  - pip install -r dev-requirements.txt -qq
+  - pip install -qq .
+  - pytest ansiblelater --cov=ansiblelater --no-cov-on-fail
+  - ansible-later --help
+  - ansible-later --version
   environment:
     PY_COLORS: 1
   depends_on:
   - clone
 
-- name: python37-ansible
+- name: python37-pytest
   image: python:3.7
   commands:
-  - pip install tox -qq
-  - tox -e $(tox -l | grep py37 | xargs | sed 's/ /,/g') -q
+  - pip install -r dev-requirements.txt -qq
+  - pip install -qq .
+  - pytest ansiblelater --cov=ansiblelater --no-cov-on-fail
+  - ansible-later --help
+  - ansible-later --version
   environment:
     PY_COLORS: 1
   depends_on:
   - clone
 
-- name: python38-ansible
+- name: python38-pytest
   image: python:3.8
   commands:
-  - pip install tox -qq
-  - tox -e $(tox -l | grep py38 | xargs | sed 's/ /,/g') -q
+  - pip install -r dev-requirements.txt -qq
+  - pip install -qq .
+  - pytest ansiblelater --cov=ansiblelater --no-cov-on-fail
+  - ansible-later --help
+  - ansible-later --version
   environment:
     PY_COLORS: 1
   depends_on:
@@ -75,7 +87,6 @@ steps:
   image: python:3.8
   commands:
   - pip install codecov -qq
-  - coverage combine .tox/py*/.coverage
   - codecov --required -X gcov
   environment:
     CODECOV_TOKEN:
@@ -484,6 +495,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: e24f32f31953d936d86eb3e75e9a76521ac5a6066e98ce0ad66c0c79286ecd7e
+hmac: 1aa29dfec526c097fdefe018bd59133a5fe2d0579cb4cb94f888daca8243e6ca
 
 ...

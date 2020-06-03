@@ -1,12 +1,15 @@
 local PythonVersion(pyversion='2.7') = {
-  name: 'python' + std.strReplace(pyversion, '.', '') + '-ansible',
+  name: 'python' + std.strReplace(pyversion, '.', '') + '-pytest',
   image: 'python:' + pyversion,
   environment: {
     PY_COLORS: 1,
   },
   commands: [
-    'pip install tox -qq',
-    'tox -e $(tox -l | grep py' + std.strReplace(pyversion, '.', '') + " | xargs | sed 's/ /,/g') -q",
+    'pip install -r dev-requirements.txt -qq',
+    'pip install -qq .',
+    'pytest ansiblelater --cov=ansiblelater --no-cov-on-fail',
+    'ansible-later --help',
+    'ansible-later --version',
   ],
   depends_on: [
     'clone',
@@ -60,7 +63,6 @@ local PipelineTest = {
       },
       commands: [
         'pip install codecov -qq',
-        'coverage combine .tox/py*/.coverage',
         'codecov --required -X gcov',
       ],
       depends_on: [
