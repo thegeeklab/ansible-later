@@ -2,11 +2,10 @@
 title: Included rules
 ---
 
-Reviews are nothing without some rules or standards against which to review. ansible-later
-comes with a couple of built-in checks explained in the following table.
+Reviews are nothing without some rules or standards against which to review. ansible-later comes with a couple of built-in checks explained in the following table.
 
 | Rule                            | ID          | Description                                                       | Parameter                                                            |
-|---------------------------------|-------------|-------------------------------------------------------------------|----------------------------------------------------------------------|
+| ------------------------------- | ----------- | ----------------------------------------------------------------- | -------------------------------------------------------------------- |
 | check_yaml_empty_lines          | LINT0001    | YAML should not contain unnecessarily empty lines.                | {max: 1, max-start: 0, max-end: 1}                                   |
 | check_yaml_indent               | LINT0002    | YAML should be correctly indented.                                | {spaces: 2, check-multi-line-strings: false, indent-sequences: true} |
 | check_yaml_hyphens              | LINT0003    | YAML should use consitent number of spaces after hyphens (-).     | {max-spaces-after: 1}                                                |

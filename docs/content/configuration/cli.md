@@ -2,15 +2,16 @@
 title: CLI options
 ---
 
-You can get all available cli options by running `ansible-later --help`:
+You can get all available CLI options by running `ansible-later --help`:
 
+<!-- prettier-ignore-start -->
 {{< highlight Shell "linenos=table" >}}
 $ ansible-later --help
 usage: ansible-later [-h] [-c CONFIG_FILE] [-r RULES.STANDARDS]
                      [-s RULES.FILTER] [-v] [-q] [--version]
                      [rules.files [rules.files ...]]
 
-Validate ansible files against best pratice guideline
+Validate Ansible files against best practice guideline
 
 positional arguments:
   rules.files
@@ -29,3 +30,4 @@ optional arguments:
   -q                    decrease log level
   --version             show program's version number and exit
 {{< /highlight >}}
+<!-- prettier-ignore-end -->

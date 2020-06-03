@@ -2,11 +2,10 @@
 title: Candidated
 ---
 
-Each file passed to `ansible-later` will be classified. The result is a `Candidate` object
-which contains some meta informations and is an instance of one of following object types.
+Each file passed to `ansible-later` will be classified. The result is a `Candidate` object which contains some meta information and is an instance of one of following object types.
 
 | Object type | Description                                                                                                                  |
-|-------------|------------------------------------------------------------------------------------------------------------------------------|
+| ----------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | Task        | all files within the parent dir `tasks`                                                                                      |
 | Handler     | all files within the parent dir `handler`                                                                                    |
 | RoleVars    | all files within the parent dir `vars` or `default`                                                                          |

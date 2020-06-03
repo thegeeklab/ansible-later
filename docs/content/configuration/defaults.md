@@ -2,10 +2,12 @@
 title: Default settings
 ---
 
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
 {{< highlight YAML "linenos=table" >}}
 ---
 ansible:
-  # Add the name of used custom ansible modules.
+  # Add the name of used custom Ansible modules.
   # Otherwise ansible-later can't detect unknown modules
   # and will through an error.
   custom_modules: []
@@ -16,9 +18,9 @@ ansible:
 
 # Global logging configuration
 # If you would like to force colored output (e.g. non-tty)
-# set emvironment variable `PY_COLORS=1`
+# set environment variable `PY_COLORS=1`
 logging:
-  # You can enable json logging if a parsable output is required
+  # You can enable JSON logging if a parsable output is required
   json: False
   # Possible options debug | info | warning | error | critical
   level: "warning"
@@ -37,14 +39,14 @@ rules:
 
   # Exclude given rule ID's from checks
   exclude_filter: []
-  
+
   # All dotfiles (including hidden folders) are excluded by default.
   # You can disable this setting and handle dotfiles by yourself with `exclude_files`.
   ignore_dotfiles: True
   # Path to the folder containing your custom standards file
   standards: ansiblelater/data
 
-# Block to control included yamlllint rules.
+# Block to control included yamllint rules.
 # See https://yamllint.readthedocs.io/en/stable/rules.html
 yamllint:
   colons:
@@ -63,3 +65,5 @@ yamllint:
     indent-sequences: True
     spaces: 2
 {{< /highlight >}}
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->

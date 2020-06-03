@@ -15,7 +15,7 @@ from ansiblelater.command import candidates
 def main():
     """Run main program."""
     parser = argparse.ArgumentParser(
-        description="Validate ansible files against best pratice guideline"
+        description="Validate Ansible files against best practice guideline"
     )
     parser.add_argument(
         "-c", "--config", dest="config_file", help="location of configuration file"
