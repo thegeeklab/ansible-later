@@ -8,6 +8,7 @@ check those standards.
 Create a file called standards.py (this can import other modules)
 
 <!-- prettier-ignore-start -->
+<!-- spellchecker-disable -->
 {{< highlight Python "linenos=table" >}}
 from ansiblelater include Standard, Result
 
@@ -26,15 +27,18 @@ standards = [
   role_must_contain_meta_main,
 ]
 {{< /highlight >}}
+<!-- spellchecker-enable -->
 <!-- prettier-ignore-end -->
 
 When you add new standards, you should increment the version of your standards. Your playbooks and roles should declare what version of standards you are using, otherwise ansible-later assumes you're using the latest. The declaration is done by adding standards version as first line in the file.
 
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
+<!-- spellchecker-disable -->
 {{< highlight INI "linenos=table" >}}
 # Standards: 1.2
 {{< /highlight >}}
+<!-- spellchecker-enable -->
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
 
@@ -45,9 +49,11 @@ An example standards file is available [here](https://github.com/xoxys/ansible-l
 If you only want to check one or two standards quickly (perhaps you want to review your entire code base for deprecated bare words), you can use the `-s` flag with the name of your standard. You can pass `-s` multiple times.
 
 <!-- prettier-ignore-start -->
+<!-- spellchecker-disable -->
 {{< highlight Shell "linenos=table" >}}
 git ls-files | xargs ansible-later -s "bare words are deprecated for with_items"
 {{< /highlight >}}
+<!-- spellchecker-enable -->
 <!-- prettier-ignore-end -->
 
 You can see the name of the standards being checked for each different file by running `ansible-later` with the `-v` option.

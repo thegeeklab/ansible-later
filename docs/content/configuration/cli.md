@@ -5,6 +5,7 @@ title: CLI options
 You can get all available CLI options by running `ansible-later --help`:
 
 <!-- prettier-ignore-start -->
+<!-- spellchecker-disable -->
 {{< highlight Shell "linenos=table" >}}
 $ ansible-later --help
 usage: ansible-later [-h] [-c CONFIG_FILE] [-r RULES.STANDARDS]
@@ -30,4 +31,5 @@ optional arguments:
   -q                    decrease log level
   --version             show program's version number and exit
 {{< /highlight >}}
+<!-- spellchecker-enable -->
 <!-- prettier-ignore-end -->

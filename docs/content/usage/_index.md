@@ -10,6 +10,7 @@ If you don't pass any file to ansible-later it will review all files including s
 
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
+<!-- spellchecker-disable -->
 {{< highlight Shell "linenos=table" >}}
 # Review single files
 ansible-later meta/main.yml tasks/install.yml
@@ -17,6 +18,7 @@ ansible-later meta/main.yml tasks/install.yml
 # Review all yml files (including sub-directories)
 ansible-later **/*.yml
 {{< /highlight >}}
+<!-- spellchecker-enable -->
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
 

@@ -4,6 +4,7 @@ title: Default settings
 
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
+<!-- spellchecker-disable -->
 {{< highlight YAML "linenos=table" >}}
 ---
 ansible:
@@ -65,5 +66,6 @@ yamllint:
     indent-sequences: True
     spaces: 2
 {{< /highlight >}}
+<!-- spellchecker-enable -->
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->

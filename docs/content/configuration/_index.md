@@ -4,7 +4,7 @@ title: Configuration
 
 ansible-later comes with some default settings which should be sufficient for most users to start, but you can adjust most settings to your needs.
 
-Changes can be made in a yaml configuration file or through CLI options which will be processed in the following order (last wins):
+Changes can be made in a YAML configuration file or through CLI options which will be processed in the following order (last wins):
 
 - default configuration (build-in)
 - global configuration file (this will depend on your operating system)
