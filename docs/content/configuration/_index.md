@@ -8,7 +8,7 @@ Changes can be made in a YAML configuration file or through CLI options which wi
 
 - default configuration (build-in)
 - global configuration file (this will depend on your operating system)
-- directory based configuration file (`.later.yml` file in current working directory)
+- folder-based configuration file (.later.yml|.later.yaml|.later) in current working directory
 - CLI options
 
 Be careful! YAML Attributes will be overwritten while lists in any configuration file will be merged.

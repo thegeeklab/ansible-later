@@ -1,2 +1,3 @@
-* ENHANCEMENT
-  * add custom modules auto-detection
+- ENHANCEMENT
+  - add custom modules auto-detection
+  - allow different naming for the directory based config file `.later|.later.yml|.later.yaml`

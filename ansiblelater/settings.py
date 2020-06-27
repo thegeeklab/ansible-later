@@ -71,9 +71,9 @@ class Settings(object):
         defaults = self._get_defaults()
         source_files = []
         source_files.append(self.config_file)
-        source_files.append(
-            os.path.relpath(os.path.normpath(os.path.join(os.getcwd(), ".later.yml")))
-        )
+        source_files.append(os.path.join(os.getcwd(), ".later"))
+        source_files.append(os.path.join(os.getcwd(), ".later.yml"))
+        source_files.append(os.path.join(os.getcwd(), ".later.yaml"))
         cli_options = self.args
 
         for config in source_files:
