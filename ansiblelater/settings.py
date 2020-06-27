@@ -88,6 +88,19 @@ class Settings(object):
         if cli_options and self._validate(cli_options):
             anyconfig.merge(defaults, cli_options, ac_merge=anyconfig.MS_DICTS)
 
+        library = os.path.relpath(os.path.normpath(os.path.join(os.getcwd(), "library")))
+        autodetect = []
+        if os.path.exists(library):
+            autodetect = [
+                os.path.splitext(f)[0]
+                for f in os.listdir(library)
+                if os.path.isfile(os.path.join(library, f)) and not f.startswith(".")
+            ]
+
+        for f in autodetect:
+            if f not in defaults["ansible"]["custom_modules"]:
+                defaults["ansible"]["custom_modules"].append(f)
+
         return defaults
 
     def _get_defaults(self):
