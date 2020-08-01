@@ -1,3 +1,2 @@
-- ENHANCEMENT
-  - add custom modules auto-detection
-  - allow different naming for the directory based config file `.later|.later.yml|.later.yaml`
+- INTERNAL
+  - upgrade CI pipeline to use Hugo v0.74.3
