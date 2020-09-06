@@ -394,7 +394,7 @@ local PipelineNotifications = {
           from_secret: 'docker_username',
         },
         PUSHRM_FILE: 'README.md',
-        PUSHRM_SHORT: 'ansible-doctor - Simple annotation based documentation for your roles',
+        PUSHRM_SHORT: 'ansible-later - Lovely automation testing framework for Ansible',
         PUSHRM_TARGET: 'xoxys/${DRONE_REPO_NAME}',
       },
       when: {

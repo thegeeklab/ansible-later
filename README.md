@@ -1,5 +1,7 @@
 # ansible-later
 
+ansible-later - Lovely automation testing framework for Ansible
+
 [![Build Status](https://img.shields.io/drone/build/xoxys/ansible-later?logo=drone)](https://cloud.drone.io/xoxys/ansible-later)
 [![Docker Hub](https://img.shields.io/badge/docker-latest-blue.svg?logo=docker&logoColor=white)](https://hub.docker.com/r/xoxys/ansible-later)
 [![Python Version](https://img.shields.io/pypi/pyversions/ansible-later.svg)](https://pypi.org/project/ansible-later/)
@@ -15,6 +17,10 @@ _ansible-later_ is a best practice scanner and linting tool. In most cases, if y
 _ansible-later_ does __not__ ensure that your role will work as expected. For Deployment test you can use other tools like [molecule](https://github.com/ansible/molecule).
 
 You can find the full documentation at [https://ansible-later.geekdocs.de](https://ansible-later.geekdocs.de/).
+
+## Community
+
+- [GitHub Action](https://github.com/patrickjahns/ansible-later-action) by [@patrickjahns](https://github.com/patrickjahns)
 
 ## License
 

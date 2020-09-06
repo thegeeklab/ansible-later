@@ -552,7 +552,7 @@ steps:
     DOCKER_USER:
       from_secret: docker_username
     PUSHRM_FILE: README.md
-    PUSHRM_SHORT: ansible-doctor - Simple annotation based documentation for your roles
+    PUSHRM_SHORT: ansible-later - Lovely automation testing framework for Ansible
     PUSHRM_TARGET: xoxys/${DRONE_REPO_NAME}
   when:
     status:
@@ -600,6 +600,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 9952ea94d9d4d8a7bb8854423d59e5d94af8c16aeb76fa28e01c9049fe13f950
+hmac: 4dfb2a774115993b57ef5aa20df8ce8ec299ac366bfceb4a8c1c5e834952c16a
 
 ...
