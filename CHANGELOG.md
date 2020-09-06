@@ -1,2 +1,3 @@
 - INTERNAL
   - upgrade CI pipeline to use Hugo v0.74.3
+  - publish to dockerhub and quay.io

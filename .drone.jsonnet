@@ -188,29 +188,48 @@ local PipelineBuildContainer(arch='amd64') = {
       image: 'plugins/docker:18-linux-' + arch,
       settings: {
         dry_run: true,
-        dockerfile: 'Dockerfile',
-        repo: 'xoxys/ansible-later',
+        dockerfile: 'docker/Dockerfile',
+        repo: 'xoxys/${DRONE_REPO_NAME}',
         username: { from_secret: 'docker_username' },
         password: { from_secret: 'docker_password' },
       },
+      depends_on: ['build'],
       when: {
         ref: ['refs/pull/**'],
       },
     },
     {
-      name: 'publish',
+      name: 'publish-dockerhub',
       image: 'plugins/docker:18-linux-' + arch,
       settings: {
         auto_tag: true,
         auto_tag_suffix: arch,
-        dockerfile: 'Dockerfile',
-        repo: 'xoxys/ansible-later',
+        dockerfile: 'docker/Dockerfile',
+        repo: 'xoxys/${DRONE_REPO_NAME}',
         username: { from_secret: 'docker_username' },
         password: { from_secret: 'docker_password' },
       },
       when: {
         ref: ['refs/heads/master', 'refs/tags/**'],
       },
+      depends_on: ['dryrun'],
+    },
+    {
+      name: 'publish-quay',
+      image: 'plugins/docker:18-linux-' + arch,
+      settings: {
+        auto_tag: true,
+        auto_tag_suffix: arch,
+        dockerfile: 'docker/Dockerfile',
+        registry: 'quay.io',
+        repo: 'quay.io/thegeeklab/${DRONE_REPO_NAME}',
+        username: { from_secret: 'quay_username' },
+        password: { from_secret: 'quay_password' },
+      },
+      when: {
+        ref: ['refs/heads/master', 'refs/tags/**'],
+      },
+      depends_on: ['dryrun'],
     },
   ],
   depends_on: [
@@ -337,25 +356,64 @@ local PipelineNotifications = {
   steps: [
     {
       image: 'plugins/manifest',
-      name: 'manifest',
+      name: 'manifest-dockerhub',
       settings: {
         ignore_missing: true,
         auto_tag: true,
         username: { from_secret: 'docker_username' },
         password: { from_secret: 'docker_password' },
-        spec: 'manifest.tmpl',
+        spec: 'docker/manifest.tmpl',
+      },
+      when: {
+        status: ['success'],
       },
     },
     {
-      name: 'readme',
-      image: 'sheogorath/readme-to-dockerhub',
+      image: 'plugins/manifest',
+      name: 'manifest-quay',
+      settings: {
+        ignore_missing: true,
+        auto_tag: true,
+        username: { from_secret: 'quay_username' },
+        password: { from_secret: 'quay_password' },
+        spec: 'docker/manifest-quay.tmpl',
+      },
+      when: {
+        status: ['success'],
+      },
+    },
+    {
+      name: 'pushrm-dockerhub',
+      pull: 'always',
+      image: 'chko/docker-pushrm:1',
       environment: {
-        DOCKERHUB_USERNAME: { from_secret: 'docker_username' },
-        DOCKERHUB_PASSWORD: { from_secret: 'docker_password' },
-        DOCKERHUB_REPO_PREFIX: 'xoxys',
-        DOCKERHUB_REPO_NAME: 'ansible-later',
-        README_PATH: 'README.md',
-        SHORT_DESCRIPTION: 'ansible-later - Lovely automation testing framework',
+        DOCKER_PASS: {
+          from_secret: 'docker_password',
+        },
+        DOCKER_USER: {
+          from_secret: 'docker_username',
+        },
+        PUSHRM_FILE: 'README.md',
+        PUSHRM_SHORT: 'ansible-doctor - Simple annotation based documentation for your roles',
+        PUSHRM_TARGET: 'xoxys/${DRONE_REPO_NAME}',
+      },
+      when: {
+        status: ['success'],
+      },
+    },
+    {
+      name: 'pushrm-quay',
+      pull: 'always',
+      image: 'chko/docker-pushrm:1',
+      environment: {
+        APIKEY__QUAY_IO: {
+          from_secret: 'quay_token',
+        },
+        PUSHRM_FILE: 'README.md',
+        PUSHRM_TARGET: 'quay.io/thegeeklab/${DRONE_REPO_NAME}',
+      },
+      when: {
+        status: ['success'],
       },
     },
     {
@@ -367,6 +425,9 @@ local PipelineNotifications = {
         template: 'Status: **{{ build.status }}**<br/> Build: [{{ repo.Owner }}/{{ repo.Name }}]({{ build.link }}) ({{ build.branch }}) by {{ build.author }}<br/> Message: {{ build.message }}',
         username: { from_secret: 'matrix_username' },
         password: { from_secret: 'matrix_password' },
+      },
+      when: {
+        status: ['success', 'failure'],
       },
     },
   ],
