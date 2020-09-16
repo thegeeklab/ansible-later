@@ -1,5 +1,6 @@
 """Example standards definition."""
 
+from ansiblelater.rules.deprecated import check_deprecated
 from ansiblelater.rules.ansiblefiles import check_become_user
 from ansiblelater.rules.ansiblefiles import check_braces_spaces
 from ansiblelater.rules.ansiblefiles import check_command_has_changes
@@ -26,6 +27,15 @@ from ansiblelater.rules.yamlfiles import check_yaml_has_content
 from ansiblelater.rules.yamlfiles import check_yaml_hyphens
 from ansiblelater.rules.yamlfiles import check_yaml_indent
 from ansiblelater.standard import Standard
+
+deprecated_features = Standard(
+    dict(
+        id="ANSIBLE9999",
+        name="Deprecated features should not be used",
+        check=check_deprecated,
+        types=["playbook", "task", "handler"]
+    )
+)
 
 tasks_should_be_separated = Standard(
     dict(
@@ -296,6 +306,7 @@ standards = [
     literal_bool_should_be_formatted,
     use_become_with_become_user,
     use_spaces_around_filters,
+    deprecated_features,
     # Lint
     files_should_not_contain_unnecessarily_empty_lines,
     files_should_be_indented,

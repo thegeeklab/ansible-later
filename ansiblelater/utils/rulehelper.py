@@ -64,7 +64,7 @@ def get_normalized_task(task, candidate, settings):
     return normalized, errors
 
 
-def get_normalized_tasks(candidate, settings):
+def get_normalized_tasks(candidate, settings, full=False):
     normalized = []
     errors = []
     try:
@@ -77,9 +77,16 @@ def get_normalized_tasks(candidate, settings):
                 # An empty `tags` block causes `None` to be returned if
                 # the `or []` is not present - `task.get("tags", [])`
                 # does not suffice.
-                if "skip_ansible_lint" in (task.get("tags") or []):
+
+                # Deprecated.
+                if "skip_ansible_lint" in (task.get("tags") or []) and not full:
                     # No need to normalize_task if we are skipping it.
                     continue
+
+                if "skip_ansible_later" in (task.get("tags") or []) and not full:
+                    # No need to normalize_task if we are skipping it.
+                    continue
+
                 normalized.append(
                     normalize_task(task, candidate.path, settings["ansible"]["custom_modules"])
                 )
