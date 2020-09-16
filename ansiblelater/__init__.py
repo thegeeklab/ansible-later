@@ -4,9 +4,9 @@ __author__ = "Robert Kaussow"
 __project__ = "ansible-later"
 __license__ = "MIT"
 __maintainer__ = "Robert Kaussow"
-__email__ = "mail@geeklabor.de"
+__email__ = "mail@thegeeklab.de"
 __url__ = "https://github.com/xoxys/ansible-later"
-__version__ = "0.3.7"
+__version__ = "0.3.8"
 
 from ansiblelater import logger
 
