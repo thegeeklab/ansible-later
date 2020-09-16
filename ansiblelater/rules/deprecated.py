@@ -11,7 +11,7 @@ def check_deprecated(candidate, settings):
 
     if not errors:
         for task in tasks:
-            if "skip_ansible_lint" in task.get("tags"):
+            if "skip_ansible_lint" in (task.get("tags") or []):
                 errors.append(
                     Error(
                         task["__line__"],
