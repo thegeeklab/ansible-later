@@ -1,6 +1,5 @@
 """Example standards definition."""
 
-from ansiblelater.rules.deprecated import check_deprecated
 from ansiblelater.rules.ansiblefiles import check_become_user
 from ansiblelater.rules.ansiblefiles import check_braces_spaces
 from ansiblelater.rules.ansiblefiles import check_command_has_changes
@@ -14,6 +13,7 @@ from ansiblelater.rules.ansiblefiles import check_name_format
 from ansiblelater.rules.ansiblefiles import check_named_task
 from ansiblelater.rules.ansiblefiles import check_shell_instead_command
 from ansiblelater.rules.ansiblefiles import check_unique_named_task
+from ansiblelater.rules.deprecated import check_deprecated
 from ansiblelater.rules.rolefiles import check_meta_main
 from ansiblelater.rules.rolefiles import check_scm_in_src
 from ansiblelater.rules.taskfiles import check_line_between_tasks
