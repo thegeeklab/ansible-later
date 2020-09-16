@@ -1,3 +1,3 @@
-- INTERNAL
-  - upgrade CI pipeline to use Hugo v0.74.3
-  - publish to dockerhub and quay.io
+- BUGFIX
+  - ANSIBLE0010 - allow `shell` module if `args.executable` is used
+    as this parameter is no longer support by command module

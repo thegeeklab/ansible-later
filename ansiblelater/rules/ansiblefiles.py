@@ -165,6 +165,11 @@ def check_shell_instead_command(candidate, settings):
     if not errors:
         for task in tasks:
             if task["action"]["__ansible_module__"] == "shell":
+                # skip processing if args.executable is used as this
+                # parameter is no longer support by command module
+                if "executable" in task["action"]:
+                    continue
+
                 if "cmd" in task["action"]:
                     cmd = task["action"].get("cmd", [])
                 else:
