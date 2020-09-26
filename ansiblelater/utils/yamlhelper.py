@@ -396,16 +396,26 @@ def _kv_to_dict(v):
 def normalize_task(task, filename, custom_modules=[]):
     """Ensure tasks have an action key and strings are converted to python objects."""
     ansible_action_type = task.get("__ansible_action_type__", "task")
-    ansible_action_meta = task.get("__ansible_action_meta__", dict())
     if "__ansible_action_type__" in task:
         del (task["__ansible_action_type__"])
 
+    # temp. extract metadata
+    ansible_meta = dict()
+    for key in ["__line__", "__file__", "__ansible_action_meta__"]:
+        default = None
+
+        if key == "__ansible_action_meta__":
+            default = dict()
+
+        ansible_meta[key] = task.pop(key, default)
+
     normalized = dict()
-    # TODO: Workaround for custom modules
+
     builtin = list(ansible.parsing.mod_args.BUILTIN_TASKS)
     builtin = list(set(builtin + custom_modules))
     ansible.parsing.mod_args.BUILTIN_TASKS = frozenset(builtin)
     mod_arg_parser = ModuleArgsParser(task)
+
     try:
         action, arguments, normalized["delegate_to"] = mod_arg_parser.parse()
     except AnsibleParserError as e:
@@ -435,7 +445,12 @@ def normalize_task(task, filename, custom_modules=[]):
 
     normalized[FILENAME_KEY] = filename
     normalized["__ansible_action_type__"] = ansible_action_type
-    normalized["__ansible_action_meta__"] = ansible_action_meta
+
+    # add back extracted metadata
+    for (k, v) in ansible_meta.items():
+        if v:
+            normalized[k] = v
+
     return normalized
 
 

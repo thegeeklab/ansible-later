@@ -1,2 +1,3 @@
 - BUGFIX
-  - fix issue if `tags` is not defined for a task object
+  - fix metadata handling to prevent parsing issues
+    on Ansible upstream functions (#35)
