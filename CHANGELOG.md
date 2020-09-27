@@ -1,3 +1,2 @@
-- BUGFIX
-  - fix metadata handling to prevent parsing issues
-    on Ansible upstream functions (#35)
+- INTERNAL
+  - migrate to thegeeklab namespace
