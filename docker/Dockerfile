@@ -2,7 +2,7 @@ FROM python:3.7-alpine
 
 LABEL maintainer="Robert Kaussow <mail@thegeeklab.de>" \
     org.label-schema.name="ansible-later" \
-    org.label-schema.vcs-url="https://github.com/xoxys/ansible-later" \
+    org.label-schema.vcs-url="https://github.com/thegeeklab/ansible-later" \
     org.label-schema.vendor="Robert Kaussow" \
     org.label-schema.schema-version="1.0"
 

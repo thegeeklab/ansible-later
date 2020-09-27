@@ -1,6 +1,6 @@
 repository:
   name: ansible-later
-  description: Ansible - Lovely Automation Testing Framework
+  description: Another best practice scanner for Ansible roles and playbooks
   homepage: https://ansible-later.geekdocs.de
   topics: ansible, ansible-later, ansible-review, best practice
 

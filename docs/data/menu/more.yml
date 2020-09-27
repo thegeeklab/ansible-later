@@ -1,10 +1,10 @@
 ---
 more:
   - name: Releases
-    ref: "https://github.com/xoxys/ansible-later/releases"
+    ref: "https://github.com/thegeeklab/ansible-later/releases"
     external: true
     icon: "download"
   - name: "View Source"
-    ref: "https://github.com/xoxys/ansible-later"
+    ref: "https://github.com/thegeeklab/ansible-later"
     external: true
     icon: "github"

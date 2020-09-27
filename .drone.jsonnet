@@ -189,7 +189,7 @@ local PipelineBuildContainer(arch='amd64') = {
       settings: {
         dry_run: true,
         dockerfile: 'docker/Dockerfile',
-        repo: 'xoxys/${DRONE_REPO_NAME}',
+        repo: 'thegeeklab/${DRONE_REPO_NAME}',
         username: { from_secret: 'docker_username' },
         password: { from_secret: 'docker_password' },
       },
@@ -205,7 +205,7 @@ local PipelineBuildContainer(arch='amd64') = {
         auto_tag: true,
         auto_tag_suffix: arch,
         dockerfile: 'docker/Dockerfile',
-        repo: 'xoxys/${DRONE_REPO_NAME}',
+        repo: 'thegeeklab/${DRONE_REPO_NAME}',
         username: { from_secret: 'docker_username' },
         password: { from_secret: 'docker_password' },
       },
@@ -292,7 +292,7 @@ local PipelineDocs = {
     },
     {
       name: 'link-validation',
-      image: 'xoxys/link-validator',
+      image: 'thegeeklab/link-validator',
       commands: [
         'link-validator -ro',
       ],
@@ -394,8 +394,8 @@ local PipelineNotifications = {
           from_secret: 'docker_username',
         },
         PUSHRM_FILE: 'README.md',
-        PUSHRM_SHORT: 'ansible-later - Lovely automation testing framework for Ansible',
-        PUSHRM_TARGET: 'xoxys/${DRONE_REPO_NAME}',
+        PUSHRM_SHORT: 'Another best practice scanner for Ansible roles and playbooks',
+        PUSHRM_TARGET: 'thegeeklab/${DRONE_REPO_NAME}',
       },
       when: {
         status: ['success'],
