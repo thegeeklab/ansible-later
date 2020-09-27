@@ -434,7 +434,7 @@ steps:
   image: byrnedo/alpine-curl
   commands:
   - mkdir -p docs/themes/hugo-geekdoc/
-  - curl -L https://github.com/xoxys/hugo-geekdoc/releases/latest/download/hugo-geekdoc.tar.gz | tar -xz -C docs/themes/hugo-geekdoc/ --strip-components=1
+  - curl -L https://github.com/thegeeklab/hugo-geekdoc/releases/latest/download/hugo-geekdoc.tar.gz | tar -xz -C docs/themes/hugo-geekdoc/ --strip-components=1
 
 - name: markdownlint
   image: node:lts-alpine
@@ -600,6 +600,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: b8c3b8467d34870d53e758175170f9602a5488da1fabf5d9bcb59a962a6b1398
+hmac: c698684952096d475443bdc0acf44b6c4c4fd45b928f36504fd79c7ec68b82a8
 
 ...
