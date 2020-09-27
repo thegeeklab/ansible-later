@@ -13,9 +13,7 @@ title: Documentation
 [![Source: GitHub](https://img.shields.io/badge/source-github-blue.svg?logo=github&logoColor=white)](https://github.com/thegeeklab/ansible-later)
 [![License: MIT](https://img.shields.io/github/license/thegeeklab/ansible-later)](https://github.com/thegeeklab/ansible-later/blob/master/LICENSE)
 
-This is a fork of Will Thames [ansible-review](https://github.com/willthames/ansible-review) so credits goes to him for his work on ansible-review and ansible-lint.
+ansible-later is a best practice scanner and linting tool. In most cases, if you write Ansible roles in a team, it helps to have a coding or best practice guideline in place. This will make Ansible roles more readable for all maintainers and can reduce the troubleshooting time.
 
-_ansible-later_ is a best practice scanner and linting tool. In most cases, if you write Ansible roles in a team, it helps to have a coding or best practice guideline in place. This will make Ansible roles more readable for all maintainers and can reduce the troubleshooting time.
-
-_ansible-later_ does **not** ensure that your role will work as expected. For Deployment test you can use other tools
+ansible-later does **not** ensure that your role will work as expected. For Deployment test you can use other tools
 like [molecule](https://github.com/ansible/molecule).
