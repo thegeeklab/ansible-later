@@ -1,2 +1,2 @@
-- INTERNAL
-  - migrate to thegeeklab namespace
+- BUGFIX
+  - fix missing `__ansible_action_meta__` in normalized tasks (https://github.com/thegeeklab/ansible-later/issues/37)

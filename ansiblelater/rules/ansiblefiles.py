@@ -194,7 +194,7 @@ def check_command_has_changes(candidate, settings):
             if task["action"]["__ansible_module__"] in commands:
                 if (
                     "changed_when" not in task and "when" not in task
-                    and "when" not in task["__ansible_action_meta__"]
+                    and "when" not in task.get("__ansible_action_meta__", [])
                     and "creates" not in task["action"] and "removes" not in task["action"]
                 ):
                     errors.append(Error(task["__line__"], description))
