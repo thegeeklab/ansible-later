@@ -13,6 +13,8 @@ main:
         ref: "/configuration/defaults"
       - name: CLI options
         ref: "/configuration/cli"
+      - name: Exclude tasks
+        ref: "/configuration/excludes"
   - name: Usage
     ref: "/usage"
   - name: Included rules
