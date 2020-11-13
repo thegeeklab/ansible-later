@@ -8,7 +8,7 @@ platform:
 
 steps:
 - name: flake8
-  image: python:3.8
+  image: python:3.9
   commands:
   - pip install -r dev-requirements.txt -qq
   - pip install -qq .
@@ -83,8 +83,21 @@ steps:
   depends_on:
   - clone
 
+- name: python39-pytest
+  image: python:3.9
+  commands:
+  - pip install -r dev-requirements.txt -qq
+  - pip install -qq .
+  - pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail
+  - ansible-later --help
+  - ansible-later --version
+  environment:
+    PY_COLORS: 1
+  depends_on:
+  - clone
+
 - name: codecov
-  image: python:3.8
+  image: python:3.9
   commands:
   - pip install codecov -qq
   - codecov --required -X gcov
@@ -117,7 +130,7 @@ platform:
 
 steps:
 - name: bandit
-  image: python:3.8
+  image: python:3.9
   commands:
   - pip install -r dev-requirements.txt -qq
   - pip install -qq .
@@ -144,7 +157,7 @@ platform:
 
 steps:
 - name: build
-  image: python:3.8
+  image: python:3.9
   commands:
   - python setup.py sdist bdist_wheel
 
@@ -200,7 +213,7 @@ platform:
 
 steps:
 - name: build
-  image: python:3.8
+  image: python:3.9
   commands:
   - python setup.py bdist_wheel
 
@@ -276,7 +289,7 @@ platform:
 
 steps:
 - name: build
-  image: python:3.8
+  image: python:3.9
   commands:
   - python setup.py bdist_wheel
 
@@ -352,7 +365,7 @@ platform:
 
 steps:
 - name: build
-  image: python:3.8
+  image: python:3.9
   commands:
   - python setup.py bdist_wheel
 
@@ -431,10 +444,9 @@ concurrency:
 
 steps:
 - name: assets
-  image: byrnedo/alpine-curl
+  image: thegeeklab/alpine-tools
   commands:
-  - mkdir -p docs/themes/hugo-geekdoc/
-  - curl -L https://github.com/thegeeklab/hugo-geekdoc/releases/latest/download/hugo-geekdoc.tar.gz | tar -xz -C docs/themes/hugo-geekdoc/ --strip-components=1
+  - make doc
 
 - name: markdownlint
   image: node:lts-alpine
@@ -600,6 +612,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: c698684952096d475443bdc0acf44b6c4c4fd45b928f36504fd79c7ec68b82a8
+hmac: 6acd5ac50b0b72bac4369915f173bb9ee4a279923cfbef91909feceadf07ee35
 
 ...
