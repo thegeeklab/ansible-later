@@ -506,11 +506,16 @@ steps:
     source: docs/public/
     strip_prefix: docs/public/
     target: /${DRONE_REPO_NAME}
+  when:
+    ref:
+    - refs/heads/master
+    - refs/tags/**
 
 trigger:
   ref:
   - refs/heads/master
   - refs/tags/**
+  - refs/pull/**
 
 depends_on:
 - build-package
@@ -612,6 +617,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 6acd5ac50b0b72bac4369915f173bb9ee4a279923cfbef91909feceadf07ee35
+hmac: deb1e9385bfbdf528f4663dd0d9ed45c3c45c7d62a42a51156a8b2847352e230
 
 ...
