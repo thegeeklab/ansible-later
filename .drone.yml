@@ -664,4 +664,8 @@ trigger:
 depends_on:
 - docs
 
+---
+kind: signature
+hmac: 6b2e64dbe8293ee2ad2128f6e35f5be97f0e5e3ca3f902ee89d8af68f48b671d
+
 ...
