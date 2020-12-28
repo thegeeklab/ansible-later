@@ -69,7 +69,6 @@ pydocstyle = "^5.1.1"
 pytest = "^6.2.1"
 pytest-cov = "^2.10.1"
 pytest-mock = "^3.4.0"
-wheel = "^0.36.2"
 yapf = "^0.30.0"
 
 [tool.poetry.extras]

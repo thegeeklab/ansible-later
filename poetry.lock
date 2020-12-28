@@ -689,7 +689,7 @@ ansible-base = ["ansible-base"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6.0"
-content-hash = "0b1ffb2e3c052af62df296fcc2be7a681eeefaeff12614c951937c32fe28bb28"
+content-hash = "5ca590e3f4a5b4fae72a71d47d367b99394350c147d48d2d30327fbabec012b1"
 
 [metadata.files]
 ansible = [
