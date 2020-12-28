@@ -12,7 +12,7 @@ steps:
   commands:
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
-  - poetry install -q
+  - poetry install -q -E ansible-base
   - poetry run flake8 ./ansiblelater
   environment:
     PY_COLORS: 1
@@ -44,7 +44,7 @@ steps:
   image: python:3.6
   commands:
   - pip install poetry poetry-dynamic-versioning -qq
-  - poetry install -q
+  - poetry install -q -E ansible-base
   - poetry run pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail
   - poetry version
   - poetry run ansible-later --help
@@ -57,7 +57,7 @@ steps:
   image: python:3.7
   commands:
   - pip install poetry poetry-dynamic-versioning -qq
-  - poetry install -q
+  - poetry install -q -E ansible-base
   - poetry run pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail
   - poetry version
   - poetry run ansible-later --help
@@ -70,7 +70,7 @@ steps:
   image: python:3.8
   commands:
   - pip install poetry poetry-dynamic-versioning -qq
-  - poetry install -q
+  - poetry install -q -E ansible-base
   - poetry run pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail
   - poetry version
   - poetry run ansible-later --help
@@ -83,7 +83,7 @@ steps:
   image: python:3.9
   commands:
   - pip install poetry poetry-dynamic-versioning -qq
-  - poetry install -q
+  - poetry install -q -E ansible-base
   - poetry run pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail
   - poetry version
   - poetry run ansible-later --help
@@ -133,7 +133,7 @@ steps:
   commands:
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
-  - poetry install -q
+  - poetry install -q -E ansible-base
   - poetry run bandit -r ./ansiblelater -x ./ansiblelater/test
   environment:
     PY_COLORS: 1
@@ -666,6 +666,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: f039be0892759b19796f490abe2d3b220309cd76899c6dfd43466ea23398dd07
+hmac: 6aa288d8d3f9bfc56dde4898d967f13c7f00f70d6fb52add80649bb6af15dafe
 
 ...

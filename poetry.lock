@@ -3,7 +3,7 @@ name = "ansible"
 version = "2.10.4"
 description = "Radically simple IT automation"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*"
 
 [package.dependencies]
@@ -14,7 +14,7 @@ name = "ansible-base"
 version = "2.10.4"
 description = "Radically simple IT automation"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*"
 
 [package.dependencies]
@@ -89,7 +89,7 @@ name = "cffi"
 version = "1.14.4"
 description = "Foreign Function Interface for Python calling C code."
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [package.dependencies]
@@ -119,7 +119,7 @@ name = "cryptography"
 version = "3.3.1"
 description = "cryptography is a package which provides cryptographic recipes and primitives to Python developers."
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*"
 
 [package.dependencies]
@@ -337,7 +337,7 @@ name = "jinja2"
 version = "2.11.2"
 description = "A very fast and expressive template engine."
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [package.dependencies]
@@ -369,7 +369,7 @@ name = "markupsafe"
 version = "1.1.1"
 description = "Safely add untrusted strings to HTML/XML markup."
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*"
 
 [[package]]
@@ -464,7 +464,7 @@ name = "pycparser"
 version = "2.20"
 description = "C parser in Python"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
@@ -682,10 +682,14 @@ python-versions = ">=3.6"
 docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pytest-cov", "jaraco.test (>=3.2.0)", "jaraco.itertools", "func-timeout", "pytest-black (>=0.3.7)", "pytest-mypy"]
 
+[extras]
+ansible = ["ansible"]
+ansible-base = ["ansible-base"]
+
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6.0"
-content-hash = "f1621f72227f6a5195fc42b7090361de9f8f3a5b63a708554a989cc1f4ac9923"
+content-hash = "0b1ffb2e3c052af62df296fcc2be7a681eeefaeff12614c951937c32fe28bb28"
 
 [metadata.files]
 ansible = [

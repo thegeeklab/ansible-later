@@ -14,7 +14,7 @@ ADD dist/ansible_later-*.whl /
 RUN apk --update add --virtual .build-deps build-base libffi-dev libressl-dev && \
     apk --update add git && \
     pip install --upgrade --no-cache-dir pip && \
-    pip install --no-cache-dir ansible_later-*.whl && \
+    pip install --no-cache-dir ansible_later-*.whl[ansible-base] && \
     apk del .build-deps && \
     rm -f ansible_later-*.whl && \
     rm -rf /var/cache/apk/* && \
