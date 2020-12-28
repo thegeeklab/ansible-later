@@ -10,9 +10,10 @@ steps:
 - name: flake8
   image: python:3.9
   commands:
-  - pip install -r dev-requirements.txt -qq
-  - pip install -qq .
-  - flake8 ./ansiblelater
+  - git fetch -tq
+  - pip install poetry poetry-dynamic-versioning -qq
+  - poetry install -q
+  - poetry run flake8 ./ansiblelater
   environment:
     PY_COLORS: 1
 
@@ -34,14 +35,19 @@ platform:
   arch: amd64
 
 steps:
+- name: fetch
+  image: python:3.9
+  commands:
+  - git fetch -tq
+
 - name: python35-pytest
   image: python:3.5
   commands:
-  - pip install -r dev-requirements.txt -qq
-  - pip install -qq .
-  - pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail
-  - ansible-later --help
-  - ansible-later --version
+  - pip install poetry poetry-dynamic-versioning -qq
+  - poetry install -q
+  - poetry run pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail
+  - poetry version
+  - poetry run ansible-later --help
   environment:
     PY_COLORS: 1
   depends_on:
@@ -50,11 +56,11 @@ steps:
 - name: python36-pytest
   image: python:3.6
   commands:
-  - pip install -r dev-requirements.txt -qq
-  - pip install -qq .
-  - pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail
-  - ansible-later --help
-  - ansible-later --version
+  - pip install poetry poetry-dynamic-versioning -qq
+  - poetry install -q
+  - poetry run pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail
+  - poetry version
+  - poetry run ansible-later --help
   environment:
     PY_COLORS: 1
   depends_on:
@@ -63,11 +69,11 @@ steps:
 - name: python37-pytest
   image: python:3.7
   commands:
-  - pip install -r dev-requirements.txt -qq
-  - pip install -qq .
-  - pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail
-  - ansible-later --help
-  - ansible-later --version
+  - pip install poetry poetry-dynamic-versioning -qq
+  - poetry install -q
+  - poetry run pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail
+  - poetry version
+  - poetry run ansible-later --help
   environment:
     PY_COLORS: 1
   depends_on:
@@ -76,11 +82,11 @@ steps:
 - name: python38-pytest
   image: python:3.8
   commands:
-  - pip install -r dev-requirements.txt -qq
-  - pip install -qq .
-  - pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail
-  - ansible-later --help
-  - ansible-later --version
+  - pip install poetry poetry-dynamic-versioning -qq
+  - poetry install -q
+  - poetry run pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail
+  - poetry version
+  - poetry run ansible-later --help
   environment:
     PY_COLORS: 1
   depends_on:
@@ -89,11 +95,11 @@ steps:
 - name: python39-pytest
   image: python:3.9
   commands:
-  - pip install -r dev-requirements.txt -qq
-  - pip install -qq .
-  - pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail
-  - ansible-later --help
-  - ansible-later --version
+  - pip install poetry poetry-dynamic-versioning -qq
+  - poetry install -q
+  - poetry run pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail
+  - poetry version
+  - poetry run ansible-later --help
   environment:
     PY_COLORS: 1
   depends_on:
@@ -138,9 +144,10 @@ steps:
 - name: bandit
   image: python:3.9
   commands:
-  - pip install -r dev-requirements.txt -qq
-  - pip install -qq .
-  - bandit -r ./ansiblelater -x ./ansiblelater/test
+  - git fetch -tq
+  - pip install poetry poetry-dynamic-versioning -qq
+  - poetry install -q
+  - poetry run bandit -r ./ansiblelater -x ./ansiblelater/test
   environment:
     PY_COLORS: 1
 
@@ -168,7 +175,9 @@ steps:
 - name: build
   image: python:3.9
   commands:
-  - python setup.py sdist bdist_wheel
+  - git fetch -tq
+  - pip install poetry poetry-dynamic-versioning -qq
+  - poetry build
 
 - name: checksum
   image: alpine
@@ -191,13 +200,15 @@ steps:
     - refs/tags/**
 
 - name: publish-pypi
-  image: plugins/pypi
-  settings:
-    password:
+  image: python:3.9
+  commands:
+  - git fetch -tq
+  - pip install poetry poetry-dynamic-versioning -qq
+  - poetry publish -n
+  environment:
+    POETRY_HTTP_BASIC_PYPI_PASSWORD:
       from_secret: pypi_password
-    repository: https://upload.pypi.org/legacy/
-    skip_build: true
-    username:
+    POETRY_HTTP_BASIC_PYPI_USERNAME:
       from_secret: pypi_username
   when:
     ref:
@@ -227,7 +238,9 @@ steps:
 - name: build
   image: python:3.9
   commands:
-  - python setup.py bdist_wheel
+  - git fetch -tq
+  - pip install poetry poetry-dynamic-versioning -qq
+  - poetry build
 
 - name: dryrun
   image: plugins/docker:19
@@ -312,7 +325,9 @@ steps:
 - name: build
   image: python:3.9
   commands:
-  - python setup.py bdist_wheel
+  - git fetch -tq
+  - pip install poetry poetry-dynamic-versioning -qq
+  - poetry build
 
 - name: dryrun
   image: plugins/docker:19
@@ -397,7 +412,9 @@ steps:
 - name: build
   image: python:3.9
   commands:
-  - python setup.py bdist_wheel
+  - git fetch -tq
+  - pip install poetry poetry-dynamic-versioning -qq
+  - poetry build
 
 - name: dryrun
   image: plugins/docker:19
@@ -662,6 +679,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: ee188eafcf82509ebf2c7ea729e399d4ea0e52071e650835f7a1f49b0b3e5cc7
+hmac: e4769957c0f74e3e94d504d92b80cb32e181d06eab5730b8b61a8aa65fcc8c87
 
 ...
