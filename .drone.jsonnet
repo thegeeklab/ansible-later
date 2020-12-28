@@ -12,7 +12,7 @@ local PythonVersion(pyversion='3.6') = {
     'poetry run ansible-later --help',
   ],
   depends_on: [
-    'clone',
+    'fetch',
   ],
 };
 
