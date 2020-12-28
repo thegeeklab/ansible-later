@@ -12,7 +12,7 @@ steps:
   commands:
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
-  - poetry install -q
+  - poetry install -q -E ansible-base
   - poetry run flake8 ./ansiblelater
   environment:
     PY_COLORS: 1
@@ -44,53 +44,53 @@ steps:
   image: python:3.6
   commands:
   - pip install poetry poetry-dynamic-versioning -qq
-  - poetry install -q
+  - poetry install -q -E ansible-base
   - poetry run pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail
   - poetry version
   - poetry run ansible-later --help
   environment:
     PY_COLORS: 1
   depends_on:
-  - clone
+  - fetch
 
 - name: python37-pytest
   image: python:3.7
   commands:
   - pip install poetry poetry-dynamic-versioning -qq
-  - poetry install -q
+  - poetry install -q -E ansible-base
   - poetry run pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail
   - poetry version
   - poetry run ansible-later --help
   environment:
     PY_COLORS: 1
   depends_on:
-  - clone
+  - fetch
 
 - name: python38-pytest
   image: python:3.8
   commands:
   - pip install poetry poetry-dynamic-versioning -qq
-  - poetry install -q
+  - poetry install -q -E ansible-base
   - poetry run pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail
   - poetry version
   - poetry run ansible-later --help
   environment:
     PY_COLORS: 1
   depends_on:
-  - clone
+  - fetch
 
 - name: python39-pytest
   image: python:3.9
   commands:
   - pip install poetry poetry-dynamic-versioning -qq
-  - poetry install -q
+  - poetry install -q -E ansible-base
   - poetry run pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail
   - poetry version
   - poetry run ansible-later --help
   environment:
     PY_COLORS: 1
   depends_on:
-  - clone
+  - fetch
 
 - name: codecov
   image: python:3.9
@@ -133,7 +133,7 @@ steps:
   commands:
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
-  - poetry install -q
+  - poetry install -q -E ansible-base
   - poetry run bandit -r ./ansiblelater -x ./ansiblelater/test
   environment:
     PY_COLORS: 1
@@ -666,6 +666,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: f039be0892759b19796f490abe2d3b220309cd76899c6dfd43466ea23398dd07
+hmac: eaff1a423a2b5218072b02e07b60be3fab4aa4da5908ddd750469fa9b15434a4
 
 ...
