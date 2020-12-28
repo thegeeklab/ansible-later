@@ -40,19 +40,6 @@ steps:
   commands:
   - git fetch -tq
 
-- name: python35-pytest
-  image: python:3.5
-  commands:
-  - pip install poetry poetry-dynamic-versioning -qq
-  - poetry install -q
-  - poetry run pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail
-  - poetry version
-  - poetry run ansible-later --help
-  environment:
-    PY_COLORS: 1
-  depends_on:
-  - clone
-
 - name: python36-pytest
   image: python:3.6
   commands:
@@ -115,10 +102,10 @@ steps:
       from_secret: codecov_token
     PY_COLORS: 1
   depends_on:
-  - python35-pytest
   - python36-pytest
   - python37-pytest
   - python38-pytest
+  - python39-pytest
 
 image_pull_secrets:
 - docker_config
@@ -676,9 +663,5 @@ trigger:
 
 depends_on:
 - docs
-
----
-kind: signature
-hmac: e4769957c0f74e3e94d504d92b80cb32e181d06eab5730b8b61a8aa65fcc8c87
 
 ...
