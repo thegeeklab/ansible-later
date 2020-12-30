@@ -44,7 +44,7 @@ When you add new standards, you should increment the version of your standards. 
 
 To add standards that are advisory, don't set the version. These will cause a message to be displayed but won't constitute a failure. When a standard version is higher than declared version, a message will be displayed 'WARN: Future standard' and won't constitute a failure.
 
-An example standards file is available [here](https://github.com/thegeeklab/ansible-later/blob/master/ansiblelater/data/standards.py).
+An example standards file is available [here](https://github.com/thegeeklab/ansible-later/blob/main/ansiblelater/data/standards.py).
 
 If you only want to check one or two standards quickly (perhaps you want to review your entire code base for deprecated bare words), you can use the `-s` flag with the name of your standard. You can pass `-s` multiple times.
 

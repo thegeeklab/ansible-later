@@ -40,7 +40,7 @@ local PipelineLint = {
     },
   ],
   trigger: {
-    ref: ['refs/heads/master', 'refs/tags/**', 'refs/pull/**'],
+    ref: ['refs/heads/main', 'refs/tags/**', 'refs/pull/**'],
   },
 };
 
@@ -87,7 +87,7 @@ local PipelineTest = {
     'lint',
   ],
   trigger: {
-    ref: ['refs/heads/master', 'refs/tags/**', 'refs/pull/**'],
+    ref: ['refs/heads/main', 'refs/tags/**', 'refs/pull/**'],
   },
 };
 
@@ -118,7 +118,7 @@ local PipelineSecurity = {
     'test',
   ],
   trigger: {
-    ref: ['refs/heads/master', 'refs/tags/**', 'refs/pull/**'],
+    ref: ['refs/heads/main', 'refs/tags/**', 'refs/pull/**'],
   },
 };
 
@@ -182,7 +182,7 @@ local PipelineBuildPackage = {
     'security',
   ],
   trigger: {
-    ref: ['refs/heads/master', 'refs/tags/**', 'refs/pull/**'],
+    ref: ['refs/heads/main', 'refs/tags/**', 'refs/pull/**'],
   },
 };
 
@@ -233,7 +233,7 @@ local PipelineBuildContainer(arch='amd64') = {
         password: { from_secret: 'docker_password' },
       },
       when: {
-        ref: ['refs/heads/master', 'refs/tags/**'],
+        ref: ['refs/heads/main', 'refs/tags/**'],
       },
       depends_on: ['dryrun'],
     },
@@ -251,7 +251,7 @@ local PipelineBuildContainer(arch='amd64') = {
         password: { from_secret: 'quay_password' },
       },
       when: {
-        ref: ['refs/heads/master', 'refs/tags/**'],
+        ref: ['refs/heads/main', 'refs/tags/**'],
       },
       depends_on: ['dryrun'],
     },
@@ -260,7 +260,7 @@ local PipelineBuildContainer(arch='amd64') = {
     'security',
   ],
   trigger: {
-    ref: ['refs/heads/master', 'refs/tags/**', 'refs/pull/**'],
+    ref: ['refs/heads/main', 'refs/tags/**', 'refs/pull/**'],
   },
 };
 
@@ -358,7 +358,7 @@ local PipelineDocs = {
         target: '/${DRONE_REPO_NAME}',
       },
       when: {
-        ref: ['refs/heads/master', 'refs/tags/**'],
+        ref: ['refs/heads/main', 'refs/tags/**'],
       },
     },
   ],
@@ -369,7 +369,7 @@ local PipelineDocs = {
     'build-container-arm',
   ],
   trigger: {
-    ref: ['refs/heads/master', 'refs/tags/**', 'refs/pull/**'],
+    ref: ['refs/heads/main', 'refs/tags/**', 'refs/pull/**'],
   },
 };
 
@@ -463,7 +463,7 @@ local PipelineNotifications = {
     'docs',
   ],
   trigger: {
-    ref: ['refs/heads/master', 'refs/tags/**'],
+    ref: ['refs/heads/main', 'refs/tags/**'],
     status: ['success', 'failure'],
   },
 };

@@ -11,7 +11,7 @@ Another best practice scanner for Ansible roles and playbooks
 [![Codecov](https://img.shields.io/codecov/c/github/thegeeklab/ansible-later)](https://codecov.io/gh/thegeeklab/ansible-later)
 [![GitHub contributors](https://img.shields.io/github/contributors/thegeeklab/ansible-later)](https://github.com/thegeeklab/ansible-later/graphs/contributors)
 [![Source: GitHub](https://img.shields.io/badge/source-github-blue.svg?logo=github&logoColor=white)](https://github.com/thegeeklab/ansible-later)
-[![License: MIT](https://img.shields.io/github/license/thegeeklab/ansible-later)](https://github.com/thegeeklab/ansible-later/blob/master/LICENSE)
+[![License: MIT](https://img.shields.io/github/license/thegeeklab/ansible-later)](https://github.com/thegeeklab/ansible-later/blob/main/LICENSE)
 
 ansible-later is a best practice scanner and linting tool. In most cases, if you write Ansible roles in a team, it helps to have a coding or best practice guideline in place. This will make Ansible roles more readable for all maintainers and can reduce the troubleshooting time.
 
@@ -30,10 +30,10 @@ You can find the full documentation at [https://ansible-later.geekdocs.de](https
 ## Contributors
 
 Special thanks goes to all [contributors](https://github.com/thegeeklab/ansible-later/graphs/contributors). If you would like to contribute,
-please see the [instructions](https://github.com/thegeeklab/ansible-later/blob/master/CONTRIBUTING.md).
+please see the [instructions](https://github.com/thegeeklab/ansible-later/blob/main/CONTRIBUTING.md).
 
 ansible-later is a fork of Will Thames [ansible-review](https://github.com/willthames/ansible-review). Thanks for your work on ansible-review and ansible-lint.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/thegeeklab/ansible-later/blob/master/LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/thegeeklab/ansible-later/blob/main/LICENSE) file for details.
