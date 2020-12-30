@@ -120,6 +120,8 @@ def check_command_instead_of_module(candidate, settings):
             if task["action"]["__ansible_module__"] in commands:
                 if "cmd" in task["action"]:
                     first_cmd_arg = task["action"]["cmd"].split()[0]
+                elif "argv" in task["action"]:
+                    first_cmd_arg = task["action"]["argv"][0]
                 else:
                     first_cmd_arg = task["action"]["__ansible_arguments__"][0]
 
