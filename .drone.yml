@@ -55,7 +55,7 @@ steps:
   commands:
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry install -q -E ansible-base
-  - poetry run pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail
+  - poetry run pytest
   - poetry version
   - poetry run ansible-later --help
   environment:
@@ -68,7 +68,7 @@ steps:
   commands:
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry install -q -E ansible-base
-  - poetry run pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail
+  - poetry run pytest
   - poetry version
   - poetry run ansible-later --help
   environment:
@@ -81,7 +81,7 @@ steps:
   commands:
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry install -q -E ansible-base
-  - poetry run pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail
+  - poetry run pytest
   - poetry version
   - poetry run ansible-later --help
   environment:
@@ -94,7 +94,7 @@ steps:
   commands:
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry install -q -E ansible-base
-  - poetry run pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail
+  - poetry run pytest
   - poetry version
   - poetry run ansible-later --help
   environment:
@@ -676,6 +676,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 7cc52c7f4b527cdcc18a460dac532cc3a207a09f75a6bdd92a114492b002dffb
+hmac: e7ac87d93823a4609173c9629e8e975b60128a7526b3eb5417f7d93ede9d7049
 
 ...

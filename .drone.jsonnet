@@ -7,7 +7,7 @@ local PythonVersion(pyversion='3.6') = {
   commands: [
     'pip install poetry poetry-dynamic-versioning -qq',
     'poetry install -q -E ansible-base',
-    'poetry run pytest ansiblelater --cov=ansiblelater --cov-append --no-cov-on-fail',
+    'poetry run pytest',
     'poetry version',
     'poetry run ansible-later --help',
   ],
