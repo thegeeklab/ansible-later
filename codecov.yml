@@ -1,0 +1,21 @@
+codecov:
+  require_ci_to_pass: true
+coverage:
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 5%
+        branches:
+          - main
+        if_ci_failed: error
+        informational: false
+        only_pulls: false
+    patch:
+      default:
+        target: auto
+        threshold: 5%
+        branches:
+          - main
+        if_ci_failed: error
+        only_pulls: false
