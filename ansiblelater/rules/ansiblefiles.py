@@ -24,6 +24,8 @@ def check_braces_spaces(candidate, settings):
 
     if not errors:
         for i, line in yamllines:
+            if "!unsafe" in line:
+                continue
             match = braces.findall(line)
             if match:
                 for item in match:
