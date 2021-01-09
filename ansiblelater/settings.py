@@ -3,6 +3,7 @@
 import os
 
 import anyconfig
+import jsonschema.exceptions
 import pathspec
 from appdirs import AppDirs
 from jsonschema._utils import format_as_index
@@ -159,8 +160,11 @@ class Settings(object):
         try:
             anyconfig.validate(config, self.schema, ac_schema_safe=False)
             return True
-        except Exception as e:
-            schema_error = "Failed validating '{validator}' in schema{schema}".format(
+        except jsonschema.exceptions.ValidationError as e:
+            schema_error = (
+                "Error while loading configuration:\n"
+                "Failed validating '{validator}' in schema{schema}"
+            ).format(
                 validator=e.validator, schema=format_as_index(list(e.relative_schema_path)[:-1])
             )
             utils.sysexit_with_message(
