@@ -1,15 +1,13 @@
 """Checks related to generic YAML syntax (yamllint)."""
 
-import codecs
 import os
-
-import yaml
 
 from ansiblelater.command.candidates import Error
 from ansiblelater.command.candidates import Result
 from ansiblelater.utils.rulehelper import get_action_tasks
 from ansiblelater.utils.rulehelper import get_normalized_task
 from ansiblelater.utils.rulehelper import get_normalized_yaml
+from ansiblelater.utils.rulehelper import get_raw_yaml
 from ansiblelater.utils.rulehelper import run_yamllint
 
 
@@ -17,7 +15,7 @@ def check_yaml_has_content(candidate, settings):
     lines, errors = get_normalized_yaml(candidate, settings)
     description = "the file appears to have no useful content"
 
-    if not lines and not errors:
+    if (lines and len(lines) == 0) and not errors:
         errors.append(Error(None, description))
 
     return Result(candidate.path, errors)
@@ -53,19 +51,19 @@ def check_native_yaml(candidate, settings):
 
 def check_yaml_empty_lines(candidate, settings):
     options = "rules: {{empty-lines: {conf}}}".format(conf=settings["yamllint"]["empty-lines"])
-    errors = run_yamllint(candidate.path, options)
+    errors = run_yamllint(candidate, options)
     return Result(candidate.path, errors)
 
 
 def check_yaml_indent(candidate, settings):
     options = "rules: {{indentation: {conf}}}".format(conf=settings["yamllint"]["indentation"])
-    errors = run_yamllint(candidate.path, options)
+    errors = run_yamllint(candidate, options)
     return Result(candidate.path, errors)
 
 
 def check_yaml_hyphens(candidate, settings):
     options = "rules: {{hyphens: {conf}}}".format(conf=settings["yamllint"]["hyphens"])
-    errors = run_yamllint(candidate.path, options)
+    errors = run_yamllint(candidate, options)
     return Result(candidate.path, errors)
 
 
@@ -73,19 +71,19 @@ def check_yaml_document_start(candidate, settings):
     options = "rules: {{document-start: {conf}}}".format(
         conf=settings["yamllint"]["document-start"]
     )
-    errors = run_yamllint(candidate.path, options)
+    errors = run_yamllint(candidate, options)
     return Result(candidate.path, errors)
 
 
 def check_yaml_document_end(candidate, settings):
     options = "rules: {{document-end: {conf}}}".format(conf=settings["yamllint"]["document-end"])
-    errors = run_yamllint(candidate.path, options)
+    errors = run_yamllint(candidate, options)
     return Result(candidate.path, errors)
 
 
 def check_yaml_colons(candidate, settings):
     options = "rules: {{colons: {conf}}}".format(conf=settings["yamllint"]["colons"])
-    errors = run_yamllint(candidate.path, options)
+    errors = run_yamllint(candidate, options)
     return Result(candidate.path, errors)
 
 
@@ -96,12 +94,6 @@ def check_yaml_file(candidate, settings):
     if os.path.isfile(filename) and os.path.splitext(filename)[1][1:] != "yml":
         errors.append(Error(None, "file does not have a .yml extension"))
     elif os.path.isfile(filename) and os.path.splitext(filename)[1][1:] == "yml":
-        with codecs.open(filename, mode="rb", encoding="utf-8") as f:
-            try:
-                yaml.safe_load(f)
-            except Exception as e:
-                errors.append(
-                    Error(e.problem_mark.line + 1, "syntax error: {msg}".format(msg=e.problem))
-                )
+        content, errors = get_raw_yaml(candidate, settings)
 
     return Result(candidate.path, errors)

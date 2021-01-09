@@ -37,6 +37,7 @@ class Candidate(object):
         self.filetype = type(self).__name__.lower()
         self.expected_version = True
         self.standards = self._get_standards(settings, standards)
+        self.faulty = False
 
         try:
             with codecs.open(filename, mode="rb", encoding="utf-8") as f:

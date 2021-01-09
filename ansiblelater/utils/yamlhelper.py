@@ -544,7 +544,7 @@ def parse_yaml_linenumbers(data, filename):
         loader = AnsibleLoader(data, **kwargs)
         loader.compose_node = compose_node
         loader.construct_mapping = construct_mapping
-        data = loader.get_single_data()
+        data = loader.get_single_data() or []
     except (yaml.parser.ParserError, yaml.scanner.ScannerError) as e:
         raise LaterError("syntax error", e)
     except (yaml.composer.ComposerError) as e:
