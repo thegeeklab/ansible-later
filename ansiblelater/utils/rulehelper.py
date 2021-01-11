@@ -15,6 +15,7 @@ from .yamlhelper import action_tasks
 from .yamlhelper import normalize_task
 from .yamlhelper import normalized_yaml
 from .yamlhelper import parse_yaml_linenumbers
+from .yamlhelper import UnsafeTag
 
 
 def get_tasks(candidate, settings):
@@ -160,6 +161,9 @@ def get_raw_yaml(candidate, settings):
     if not candidate.faulty:
         try:
             with codecs.open(candidate.path, mode="rb", encoding="utf-8") as f:
+                yaml.add_constructor(
+                    UnsafeTag.yaml_tag, UnsafeTag.yaml_constructor, Loader=yaml.SafeLoader
+                )
                 content = yaml.safe_load(f)
         except yaml.YAMLError as e:
             errors.append(
@@ -176,6 +180,9 @@ def run_yamllint(candidate, options="extends: default"):
     if not candidate.faulty:
         try:
             with codecs.open(candidate.path, mode="rb", encoding="utf-8") as f:
+                yaml.add_constructor(
+                    UnsafeTag.yaml_tag, UnsafeTag.yaml_constructor, Loader=yaml.SafeLoader
+                )
                 yaml.safe_load(f)
 
                 for problem in linter.run(f, YamlLintConfig(options)):

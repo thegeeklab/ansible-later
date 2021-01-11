@@ -576,3 +576,16 @@ def normalized_yaml(file, options):
     except (yaml.parser.ParserError, yaml.scanner.ScannerError) as e:
         raise LaterError("syntax error", e)
     return lines
+
+
+class UnsafeTag:
+    """Handle custom yaml unsafe tag."""
+
+    yaml_tag = u"!unsafe"
+
+    def __init__(self, value):
+        self.unsafe = value
+
+    @staticmethod
+    def yaml_constructor(loader, node):
+        return loader.construct_scalar(node)
