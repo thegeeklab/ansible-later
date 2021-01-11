@@ -11,11 +11,11 @@ from ansiblelater.command.candidates import Error
 from ansiblelater.exceptions import LaterAnsibleError
 from ansiblelater.exceptions import LaterError
 
+from .yamlhelper import UnsafeTag
 from .yamlhelper import action_tasks
 from .yamlhelper import normalize_task
 from .yamlhelper import normalized_yaml
 from .yamlhelper import parse_yaml_linenumbers
-from .yamlhelper import UnsafeTag
 
 
 def get_tasks(candidate, settings):
