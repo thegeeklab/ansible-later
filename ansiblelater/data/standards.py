@@ -4,6 +4,7 @@ from ansiblelater.rules.ansiblefiles import check_become_user
 from ansiblelater.rules.ansiblefiles import check_braces_spaces
 from ansiblelater.rules.ansiblefiles import check_command_has_changes
 from ansiblelater.rules.ansiblefiles import check_command_instead_of_module
+from ansiblelater.rules.ansiblefiles import check_command_instead_of_argument
 from ansiblelater.rules.ansiblefiles import check_compare_to_literal_bool
 from ansiblelater.rules.ansiblefiles import check_empty_string_compare
 from ansiblelater.rules.ansiblefiles import check_filter_separation
@@ -178,7 +179,7 @@ literal_bool_should_be_formatted = Standard(
 use_become_with_become_user = Standard(
     dict(
         id="ANSIBLE0015",
-        name="become should be combined with become_user",
+        name="Become should be combined with become_user",
         check=check_become_user,
         version="0.1",
         types=["playbook", "task", "handler"]
@@ -188,10 +189,20 @@ use_become_with_become_user = Standard(
 use_spaces_around_filters = Standard(
     dict(
         id="ANSIBLE0016",
-        name="jinja2 filters should be separated with spaces",
+        name="Jinja2 filters should be separated with spaces",
         check=check_filter_separation,
         version="0.1",
         types=["playbook", "task", "handler", "rolevars", "hostvars", "groupvars"]
+    )
+)
+
+commands_should_not_be_used_in_place_of_argument = Standard(
+    dict(
+        id="ANSIBLE0017",
+        name="Commands should not be used in place of module arguments",
+        check=check_command_instead_of_argument,
+        version="0.2",
+        types=["playbook", "task", "handler"]
     )
 )
 
@@ -306,6 +317,7 @@ standards = [
     literal_bool_should_be_formatted,
     use_become_with_become_user,
     use_spaces_around_filters,
+    commands_should_not_be_used_in_place_of_argument,
     deprecated_features,
     # Lint
     files_should_not_contain_unnecessarily_empty_lines,

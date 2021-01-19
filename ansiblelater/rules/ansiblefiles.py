@@ -10,6 +10,7 @@ from ansiblelater.command.candidates import Template
 from ansiblelater.utils import count_spaces
 from ansiblelater.utils.rulehelper import get_normalized_tasks
 from ansiblelater.utils.rulehelper import get_normalized_yaml
+from ansiblelater.utils.rulehelper import get_first_cmd_arg
 
 
 def check_braces_spaces(candidate, settings):
@@ -120,13 +121,7 @@ def check_command_instead_of_module(candidate, settings):
     if not errors:
         for task in tasks:
             if task["action"]["__ansible_module__"] in commands:
-                if "cmd" in task["action"]:
-                    first_cmd_arg = task["action"]["cmd"].split()[0]
-                elif "argv" in task["action"]:
-                    first_cmd_arg = task["action"]["argv"][0]
-                else:
-                    first_cmd_arg = task["action"]["__ansible_arguments__"][0]
-
+                first_cmd_arg = get_first_cmd_arg(task)
                 executable = os.path.basename(first_cmd_arg)
                 if (
                     first_cmd_arg and executable in modules and task["action"].get("warn", True)
@@ -202,6 +197,59 @@ def check_command_has_changes(candidate, settings):
                     and "creates" not in task["action"] and "removes" not in task["action"]
                 ):
                     errors.append(Error(task["__line__"], description))
+
+    return Result(candidate.path, errors)
+
+
+def check_command_instead_of_argument(candidate, settings):
+    # Copyright (c) 2013-2014 Will Thames <will@thames.id.au>
+    #
+    # Permission is hereby granted, free of charge, to any person obtaining a copy
+    # of this software and associated documentation files (the "Software"), to deal
+    # in the Software without restriction, including without limitation the rights
+    # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    # copies of the Software, and to permit persons to whom the Software is
+    # furnished to do so, subject to the following conditions:
+    #
+    # The above copyright notice and this permission notice shall be included in
+    # all copies or substantial portions of the Software.
+    #
+    # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    # THE SOFTWARE.
+
+    tasks, errors = get_normalized_tasks(candidate, settings)
+    commands = ["command", "shell", "raw"]
+    arguments = {
+        'chown': 'owner',
+        'chmod': 'mode',
+        'chgrp': 'group',
+        'ln': 'state=link',
+        'mkdir': 'state=directory',
+        'rmdir': 'state=absent',
+        'rm': 'state=absent'
+    }
+    description = "{exec} used in place of file modules argument {arg}"
+
+    if not errors:
+        for task in tasks:
+            if task["action"]["__ansible_module__"] in commands:
+                first_cmd_arg = get_first_cmd_arg(task)
+                executable = os.path.basename(first_cmd_arg)
+
+                if (
+                    first_cmd_arg and executable in arguments and task["action"].get("warn", True)
+                ):
+                    errors.append(
+                        Error(
+                            task["__line__"],
+                            description.format(exec=executable, arg=arguments[executable])
+                        )
+                    )
 
     return Result(candidate.path, errors)
 

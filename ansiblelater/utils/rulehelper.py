@@ -194,3 +194,14 @@ def run_yamllint(candidate, options="extends: default"):
             candidate.faulty = True
 
     return errors
+
+
+def get_first_cmd_arg(task):
+    if "cmd" in task["action"]:
+        first_cmd_arg = task["action"]["cmd"].split()[0]
+    elif "argv" in task["action"]:
+        first_cmd_arg = task["action"]["argv"][0]
+    else:
+        first_cmd_arg = task["action"]["__ansible_arguments__"][0]
+
+    return first_cmd_arg
