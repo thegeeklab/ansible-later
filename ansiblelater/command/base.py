@@ -46,6 +46,7 @@ def get_standards(filepath):
         )
 
     if getattr(standards, "ansible_later_min_version", None) and \
+            utils.get_property("__version__") != "0.0.0" and \
             LooseVersion(standards.ansible_later_min_version) > LooseVersion(
                 utils.get_property("__version__")):
         utils.sysexit_with_message(
