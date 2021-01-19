@@ -89,7 +89,7 @@ def get_normalized_tasks(candidate, settings, full=False):
     normalized = []
     errors = []
 
-    if candidate.faulty:
+    if not candidate.faulty:
         try:
             with codecs.open(candidate.path, mode="rb", encoding="utf-8") as f:
                 yamllines = parse_yaml_linenumbers(f, candidate.path)
