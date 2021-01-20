@@ -8,9 +8,9 @@ from ansiblelater.command.candidates import Error
 from ansiblelater.command.candidates import Result
 from ansiblelater.command.candidates import Template
 from ansiblelater.utils import count_spaces
+from ansiblelater.utils.rulehelper import get_first_cmd_arg
 from ansiblelater.utils.rulehelper import get_normalized_tasks
 from ansiblelater.utils.rulehelper import get_normalized_yaml
-from ansiblelater.utils.rulehelper import get_first_cmd_arg
 
 
 def check_braces_spaces(candidate, settings):
@@ -225,13 +225,13 @@ def check_command_instead_of_argument(candidate, settings):
     tasks, errors = get_normalized_tasks(candidate, settings)
     commands = ["command", "shell", "raw"]
     arguments = {
-        'chown': 'owner',
-        'chmod': 'mode',
-        'chgrp': 'group',
-        'ln': 'state=link',
-        'mkdir': 'state=directory',
-        'rmdir': 'state=absent',
-        'rm': 'state=absent'
+        "chown": "owner",
+        "chmod": "mode",
+        "chgrp": "group",
+        "ln": "state=link",
+        "mkdir": "state=directory",
+        "rmdir": "state=absent",
+        "rm": "state=absent"
     }
     description = "{exec} used in place of file modules argument {arg}"
 
