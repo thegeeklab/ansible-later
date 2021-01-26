@@ -5,7 +5,7 @@ class CheckBecomeUser(StandardBase):
 
     sid = "ANSIBLE0015"
     description = "Become should be combined with become_user"
-    helptext = "the task has 'become:' enabled but 'become_user:' is missing"
+    helptext = "the task has `become` enabled but `become_user` is missing"
     version = "0.1"
     types = ["playbook", "task", "handler"]
 
