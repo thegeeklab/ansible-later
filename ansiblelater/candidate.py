@@ -6,11 +6,11 @@ import os
 import re
 from distutils.version import LooseVersion
 
-from six import iteritems
-
 from ansiblelater import LOG
 from ansiblelater import utils
 from ansiblelater.logger import flag_extra
+from ansiblelater.standard import SingleStandards
+from ansiblelater.standard import StandardBase
 
 try:
     # Ansible 2.4 import of module loader
@@ -36,8 +36,9 @@ class Candidate(object):
         self.vault = False
         self.filetype = type(self).__name__.lower()
         self.expected_version = True
-        self.standards = self._get_standards(settings, standards)
         self.faulty = False
+        self.config = settings.config
+        self.settings = settings
 
         try:
             with codecs.open(filename, mode="rb", encoding="utf-8") as f:
@@ -46,9 +47,7 @@ class Candidate(object):
         except UnicodeDecodeError:
             self.binary = True
 
-        self.version = self._get_version(settings)
-
-    def _get_version(self, settings):
+    def _get_version(self):
         path = self.path
         version = None
 
@@ -97,45 +96,45 @@ class Candidate(object):
 
         return version
 
-    def _get_standards(self, settings, standards):
+    def _filter_standards(self):
         target_standards = []
-        includes = settings.config["rules"]["filter"]
-        excludes = settings.config["rules"]["exclude_filter"]
+        includes = self.config["rules"]["filter"]
+        excludes = self.config["rules"]["exclude_filter"]
 
         if len(includes) == 0:
-            includes = [s.id for s in standards]
+            includes = [s.sid for s in self.standards]
 
-        for standard in standards:
-            if standard.id in includes and standard.id not in excludes:
+        for standard in self.standards:
+            if standard.sid in includes and standard.sid not in excludes:
                 target_standards.append(standard)
 
         return target_standards
 
-    def review(self, settings, lines=None):
+    def review(self, lines=None):
         errors = 0
+        self.standards = SingleStandards(self.config["rules"]["standards"]).rules
+        self.version = self._get_version()
 
-        for standard in self.standards:
+        for standard in self._filter_standards():
             if type(self).__name__.lower() not in standard.types:
                 continue
 
-            result = standard.check(self, settings.config)
+            result = standard.check(self, self.config)
 
             if not result:
                 utils.sysexit_with_message(
-                    "Standard '{}' returns an empty result object.".format(
-                        standard.check.__name__
-                    )
+                    "Standard '{id}' returns an empty result object.".format(id=standard.sid)
                 )
 
             labels = {
                 "tag": "review",
-                "standard": standard.name,
+                "standard": standard.description,
                 "file": self.path,
                 "passed": True
             }
 
-            if standard.id and standard.id.strip():
-                labels["id"] = standard.id
+            if standard.sid and standard.sid.strip():
+                labels["sid"] = standard.sid
 
             for err in [
                 err for err in result.errors if not err.lineno
@@ -143,14 +142,14 @@ class Candidate(object):
             ]:  # noqa
                 err_labels = copy.copy(labels)
                 err_labels["passed"] = False
-                if isinstance(err, Error):
+                if isinstance(err, StandardBase.Error):
                     err_labels.update(err.to_dict())
 
                 if not standard.version:
                     LOG.warning(
-                        "{id}Best practice '{name}' not met:\n{path}:{error}".format(
-                            id=self._format_id(standard.id),
-                            name=standard.name,
+                        "{sid}Best practice '{description}' not met:\n{path}:{error}".format(
+                            sid=self._format_id(standard.sid),
+                            description=standard.description,
                             path=self.path,
                             error=err
                         ),
@@ -158,9 +157,9 @@ class Candidate(object):
                     )
                 elif LooseVersion(standard.version) > LooseVersion(self.version):
                     LOG.warning(
-                        "{id}Future standard '{name}' not met:\n{path}:{error}".format(
-                            id=self._format_id(standard.id),
-                            name=standard.name,
+                        "{sid}Future standard '{description}' not met:\n{path}:{error}".format(
+                            sid=self._format_id(standard.sid),
+                            description=standard.description,
                             path=self.path,
                             error=err
                         ),
@@ -168,9 +167,9 @@ class Candidate(object):
                     )
                 else:
                     LOG.error(
-                        "{id}Standard '{name}' not met:\n{path}:{error}".format(
-                            id=self._format_id(standard.id),
-                            name=standard.name,
+                        "{sid}Standard '{description}' not met:\n{path}:{error}".format(
+                            sid=self._format_id(standard.sid),
+                            description=standard.description,
                             path=self.path,
                             error=err
                         ),
@@ -179,6 +178,44 @@ class Candidate(object):
                     errors = errors + 1
 
         return errors
+
+    @staticmethod
+    def classify(filename, settings={}, standards=[]):
+        parentdir = os.path.basename(os.path.dirname(filename))
+        basename = os.path.basename(filename)
+
+        if parentdir in ["tasks"]:
+            return Task(filename, settings, standards)
+        if parentdir in ["handlers"]:
+            return Handler(filename, settings, standards)
+        if parentdir in ["vars", "defaults"]:
+            return RoleVars(filename, settings, standards)
+        if "group_vars" in filename.split(os.sep):
+            return GroupVars(filename, settings, standards)
+        if "host_vars" in filename.split(os.sep):
+            return HostVars(filename, settings, standards)
+        if parentdir in ["meta"]:
+            return Meta(filename, settings, standards)
+        if (
+            parentdir in ["library", "lookup_plugins", "callback_plugins", "filter_plugins"]
+            or filename.endswith(".py")
+        ):
+            return Code(filename, settings, standards)
+        if "inventory" == basename or "hosts" == basename or parentdir in ["inventories"]:
+            return Inventory(filename, settings, standards)
+        if "rolesfile" in basename or "requirements" in basename:
+            return Rolesfile(filename, settings, standards)
+        if "Makefile" in basename:
+            return Makefile(filename, settings, standards)
+        if "templates" in filename.split(os.sep) or basename.endswith(".j2"):
+            return Template(filename, settings, standards)
+        if "files" in filename.split(os.sep):
+            return File(filename, settings, standards)
+        if basename.endswith(".yml") or basename.endswith(".yaml"):
+            return Playbook(filename, settings, standards)
+        if "README" in basename:
+            return Doc(filename, settings, standards)
+        return None
 
     def _format_id(self, standard_id):
         if standard_id and standard_id.strip():
@@ -314,82 +351,3 @@ class Rolesfile(Unversioned):
     """Object classified as Ansible roles file."""
 
     pass
-
-
-class Error(object):
-    """Default error object created if a rule failed."""
-
-    def __init__(self, lineno, message, error_type=None, **kwargs):
-        """
-        Initialize a new error object and returns None.
-
-        :param lineno: Line number where the error from de rule occures
-        :param message: Detailed error description provided by the rule
-
-        """
-        self.lineno = lineno
-        self.message = message
-        self.kwargs = kwargs
-        for (key, value) in iteritems(kwargs):
-            setattr(self, key, value)
-
-    def __repr__(self):  # noqa
-        if self.lineno:
-            return "{no}: {msg}".format(no=self.lineno, msg=self.message)
-        else:
-            return " {msg}".format(msg=self.message)
-
-    def to_dict(self):
-        result = dict(lineno=self.lineno, message=self.message)
-        for (key, value) in iteritems(self.kwargs):
-            result[key] = value
-        return result
-
-
-class Result(object):
-    """Generic result object."""
-
-    def __init__(self, candidate, errors=None):
-        self.candidate = candidate
-        self.errors = errors or []
-
-    def message(self):
-        return "\n".join(["{0}:{1}".format(self.candidate, error) for error in self.errors])
-
-
-def classify(filename, settings={}, standards=[]):
-    parentdir = os.path.basename(os.path.dirname(filename))
-    basename = os.path.basename(filename)
-
-    if parentdir in ["tasks"]:
-        return Task(filename, settings, standards)
-    if parentdir in ["handlers"]:
-        return Handler(filename, settings, standards)
-    if parentdir in ["vars", "defaults"]:
-        return RoleVars(filename, settings, standards)
-    if "group_vars" in filename.split(os.sep):
-        return GroupVars(filename, settings, standards)
-    if "host_vars" in filename.split(os.sep):
-        return HostVars(filename, settings, standards)
-    if parentdir in ["meta"]:
-        return Meta(filename, settings, standards)
-    if (
-        parentdir in ["library", "lookup_plugins", "callback_plugins", "filter_plugins"]
-        or filename.endswith(".py")
-    ):
-        return Code(filename, settings, standards)
-    if "inventory" == basename or "hosts" == basename or parentdir in ["inventories"]:
-        return Inventory(filename, settings, standards)
-    if "rolesfile" in basename or "requirements" in basename:
-        return Rolesfile(filename, settings, standards)
-    if "Makefile" in basename:
-        return Makefile(filename, settings, standards)
-    if "templates" in filename.split(os.sep) or basename.endswith(".j2"):
-        return Template(filename, settings, standards)
-    if "files" in filename.split(os.sep):
-        return File(filename, settings, standards)
-    if basename.endswith(".yml") or basename.endswith(".yaml"):
-        return Playbook(filename, settings, standards)
-    if "README" in basename:
-        return Doc(filename, settings, standards)
-    return None

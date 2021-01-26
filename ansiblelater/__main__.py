@@ -8,8 +8,9 @@ import sys
 from ansiblelater import LOG
 from ansiblelater import __version__
 from ansiblelater import logger
-from ansiblelater.command import base
-from ansiblelater.command import candidates
+from ansiblelater.candidate import Candidate
+from ansiblelater.settings import Settings
+from ansiblelater.standard import SingleStandards
 
 
 def main():
@@ -48,20 +49,18 @@ def main():
 
     args = parser.parse_args().__dict__
 
-    settings = base.get_settings(args)
+    settings = Settings(args=args)
     config = settings.config
 
     logger.update_logger(LOG, config["logging"]["level"], config["logging"]["json"])
-
-    files = config["rules"]["files"]
-    standards = base.get_standards(config["rules"]["standards"])
+    SingleStandards(config["rules"]["standards"]).rules
 
     workers = max(multiprocessing.cpu_count() - 2, 2)
     p = multiprocessing.Pool(workers)
     tasks = []
-    for filename in files:
+    for filename in config["rules"]["files"]:
         lines = None
-        candidate = candidates.classify(filename, settings, standards)
+        candidate = Candidate.classify(filename, settings)
         if candidate:
             if candidate.binary:
                 LOG.info("Not reviewing binary file {name}".format(name=filename))
@@ -73,7 +72,7 @@ def main():
                 LOG.info("Reviewing {candidate} lines {no}".format(candidate=candidate, no=lines))
             else:
                 LOG.info("Reviewing all of {candidate}".format(candidate=candidate))
-                tasks.append((candidate, settings, lines))
+                tasks.append((candidate, lines))
         else:
             LOG.info("Couldn't classify file {name}".format(name=filename))
 
@@ -90,8 +89,8 @@ def main():
 
 
 def _review_wrapper(args):
-    (candidate, settings, lines) = args
-    return candidate.review(settings, lines)
+    (candidate, lines) = args
+    return candidate.review(lines)
 
 
 if __name__ == "__main__":

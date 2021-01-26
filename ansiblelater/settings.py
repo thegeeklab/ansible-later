@@ -105,7 +105,7 @@ class Settings(object):
         return defaults
 
     def _get_defaults(self):
-        rules_dir = os.path.join(resource_filename("ansiblelater", "data"))
+        rules_dir = os.path.join(resource_filename("ansiblelater", "rules"))
         defaults = {
             "rules": {
                 "standards": rules_dir,

@@ -1,4 +1,5 @@
 from ansiblelater import Standard
+from ansiblelater.rules import check_line_between_tasks
 from ansiblelater.rules.ansiblefiles import check_braces_spaces
 from ansiblelater.rules.ansiblefiles import check_command_has_changes
 from ansiblelater.rules.ansiblefiles import check_command_instead_of_module
@@ -11,7 +12,6 @@ from ansiblelater.rules.ansiblefiles import check_shell_instead_command
 from ansiblelater.rules.ansiblefiles import check_unique_named_task
 from ansiblelater.rules.rolefiles import check_meta_main
 from ansiblelater.rules.rolefiles import check_scm_in_src
-from ansiblelater.rules.taskfiles import check_line_between_tasks
 from ansiblelater.rules.yamlfiles import check_native_yaml
 from ansiblelater.rules.yamlfiles import check_yaml_colons
 from ansiblelater.rules.yamlfiles import check_yaml_document_start
