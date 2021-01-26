@@ -1,5 +1,6 @@
-from ansiblelater.standard import StandardBase
 from nested_lookup import nested_lookup
+
+from ansiblelater.standard import StandardBase
 
 
 class CheckMetaMain(StandardBase):
@@ -17,6 +18,6 @@ class CheckMetaMain(StandardBase):
         if not errors:
             for key in keys:
                 if not nested_lookup(key, content):
-                    errors.append(self.Error(None, self.description.format(key=key)))
+                    errors.append(self.Error(None, self.helptext.format(key=key)))
 
         return self.Result(candidate.path, errors)

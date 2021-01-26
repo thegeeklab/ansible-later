@@ -1,8 +1,9 @@
-from ansiblelater.standard import StandardBase
 from ansible.parsing.yaml.objects import AnsibleMapping
 
+from ansiblelater.standard import StandardBase
 
-class CheckScmInScr(StandardBase):
+
+class CheckScmInSrc(StandardBase):
 
     sid = "ANSIBLE0005"
     description = "Use `scm:` key rather than `src: scm+url`"

@@ -1,7 +1,7 @@
 import re
 
-from ansiblelater.standard import StandardBase
 from ansiblelater.candidate import Template
+from ansiblelater.standard import StandardBase
 
 
 class CheckEmptyStringCompare(StandardBase):

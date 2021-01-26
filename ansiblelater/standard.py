@@ -324,7 +324,7 @@ class StandardLoader():
 
             try:
                 spec.loader.exec_module(module)
-            except ImportError as e:
+            except (ImportError, NameError) as e:
                 sysexit_with_message(
                     "Failed to load roles file {module}: \n {msg}".format(
                         msg=str(e), module=filename

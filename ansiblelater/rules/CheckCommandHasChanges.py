@@ -6,9 +6,8 @@ class CheckCommandHasChanges(StandardBase):
     sid = "ANSIBLE0011"
     description = "Commands should be idempotent"
     helptext = (
-        "commands should either read information (and thus set changed_when) or not "
-        "do something if it has already been done (using creates/removes) "
-        "or only do it if another check has a particular result (when)"
+        "commands should only read while using `changed_when` or try to be "
+        "idempotent while using controls like `creates`, `removes` or `when`"
     )
     version = "0.1"
     types = ["playbook", "task"]
