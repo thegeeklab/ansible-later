@@ -26,7 +26,15 @@ def main():
         "--rules-dir",
         dest="rules.standards",
         metavar="RULES",
+        action="append",
         help="directory of standard rules"
+    )
+    parser.add_argument(
+        "-B",
+        "--no-buildin",
+        dest="rules.buildin",
+        action="store_false",
+        help="disables build-in standard rules"
     )
     parser.add_argument(
         "-s",
@@ -59,6 +67,8 @@ def main():
 
     settings = Settings(args=args)
     config = settings.config
+
+    print(config["rules"]["standards"])
 
     logger.update_logger(LOG, config["logging"]["level"], config["logging"]["json"])
     SingleStandards(config["rules"]["standards"]).rules

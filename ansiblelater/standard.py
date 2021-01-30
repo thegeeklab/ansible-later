@@ -314,29 +314,30 @@ class StandardLoader():
     def __init__(self, source):
         self.rules = []
 
-        for p in pathlib.Path(source).glob("*.py"):
-            filename = os.path.splitext(os.path.basename(p))[0]
-            if not re.match(r"^[A-Za-z]+$", filename):
-                continue
+        for s in source:
+            for p in pathlib.Path(s).glob("*.py"):
+                filename = os.path.splitext(os.path.basename(p))[0]
+                if not re.match(r"^[A-Za-z]+$", filename):
+                    continue
 
-            spec = importlib.util.spec_from_file_location(filename, p)
-            module = importlib.util.module_from_spec(spec)
+                spec = importlib.util.spec_from_file_location(filename, p)
+                module = importlib.util.module_from_spec(spec)
 
-            try:
-                spec.loader.exec_module(module)
-            except (ImportError, NameError) as e:
-                sysexit_with_message(
-                    "Failed to load roles file {module}: \n {msg}".format(
-                        msg=str(e), module=filename
+                try:
+                    spec.loader.exec_module(module)
+                except (ImportError, NameError) as e:
+                    sysexit_with_message(
+                        "Failed to load roles file {module}: \n {msg}".format(
+                            msg=str(e), module=filename
+                        )
                     )
-                )
 
-            try:
-                for name, obj in inspect.getmembers(module):
-                    if self._is_plugin(obj):
-                        self.rules.append(obj())
-            except TypeError as e:
-                sysexit_with_message("Failed to load roles file: \n {msg}".format(msg=str(e)))
+                try:
+                    for name, obj in inspect.getmembers(module):
+                        if self._is_plugin(obj):
+                            self.rules.append(obj())
+                except TypeError as e:
+                    sysexit_with_message("Failed to load roles file: \n {msg}".format(msg=str(e)))
 
         self.validate()
 
