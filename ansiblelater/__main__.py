@@ -19,15 +19,20 @@ def main():
         description="Validate Ansible files against best practice guideline"
     )
     parser.add_argument(
-        "-c", "--config", dest="config_file", help="location of configuration file"
+        "-c", "--config", dest="config_file", metavar="CONFIG", help="path to configuration file"
     )
     parser.add_argument(
-        "-r", "--rules", dest="rules.standards", help="location of standards rules"
+        "-r",
+        "--rules-dir",
+        dest="rules.standards",
+        metavar="RULES",
+        help="directory of standard rules"
     )
     parser.add_argument(
         "-s",
         "--standards",
         dest="rules.filter",
+        metavar="FILTER",
         action="append",
         help="limit standards to given ID's"
     )
@@ -35,6 +40,7 @@ def main():
         "-x",
         "--exclude-standards",
         dest="rules.exclude_filter",
+        metavar="EXCLUDE_FILTER",
         action="append",
         help="exclude standards by given ID's"
     )
@@ -45,7 +51,9 @@ def main():
         "-q", dest="logging.level", action="append_const", const=1, help="decrease log level"
     )
     parser.add_argument("rules.files", nargs="*")
-    parser.add_argument("--version", action="version", version="%(prog)s {}".format(__version__))
+    parser.add_argument(
+        "-V", "--version", action="version", version="%(prog)s {}".format(__version__)
+    )
 
     args = parser.parse_args().__dict__
 
