@@ -6,20 +6,13 @@ import os
 import re
 from distutils.version import LooseVersion
 
+from ansible.plugins.loader import module_loader
+
 from ansiblelater import LOG
 from ansiblelater import utils
 from ansiblelater.logger import flag_extra
 from ansiblelater.standard import SingleStandards
 from ansiblelater.standard import StandardBase
-
-try:
-    # Ansible 2.4 import of module loader
-    from ansible.plugins.loader import module_loader
-except ImportError:
-    try:
-        from ansible.plugins import module_loader
-    except ImportError:
-        from ansible.utils import module_finder as module_loader
 
 
 class Candidate(object):
