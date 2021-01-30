@@ -68,8 +68,6 @@ def main():
     settings = Settings(args=args)
     config = settings.config
 
-    print(config["rules"]["standards"])
-
     logger.update_logger(LOG, config["logging"]["level"], config["logging"]["json"])
     SingleStandards(config["rules"]["standards"]).rules
 
