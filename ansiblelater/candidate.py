@@ -122,9 +122,12 @@ class Candidate(object):
             result = standard.check(self, self.config)
 
             if not result:
-                utils.sysexit_with_message(
-                    "Standard '{id}' returns an empty result object.".format(id=standard.sid)
+                LOG.error(
+                    "Standard '{id}' returns an empty result object. Check failed!".format(
+                        id=standard.sid
+                    )
                 )
+                continue
 
             labels = {
                 "tag": "review",
