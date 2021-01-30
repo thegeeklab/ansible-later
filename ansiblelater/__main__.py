@@ -75,7 +75,6 @@ def main():
     p = multiprocessing.Pool(workers)
     tasks = []
     for filename in config["rules"]["files"]:
-        lines = None
         candidate = Candidate.classify(filename, settings)
         if candidate:
             if candidate.binary:
@@ -84,11 +83,9 @@ def main():
             if candidate.vault:
                 LOG.info("Not reviewing vault file {name}".format(name=filename))
                 continue
-            if lines:
-                LOG.info("Reviewing {candidate} lines {no}".format(candidate=candidate, no=lines))
             else:
                 LOG.info("Reviewing all of {candidate}".format(candidate=candidate))
-                tasks.append((candidate, lines))
+                tasks.append(candidate)
         else:
             LOG.info("Couldn't classify file {name}".format(name=filename))
 
@@ -104,9 +101,8 @@ def main():
     sys.exit(return_code)
 
 
-def _review_wrapper(args):
-    (candidate, lines) = args
-    return candidate.review(lines)
+def _review_wrapper(candidate):
+    return candidate.review()
 
 
 if __name__ == "__main__":

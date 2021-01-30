@@ -136,10 +136,7 @@ class Candidate(object):
             if standard.sid and standard.sid.strip():
                 labels["sid"] = standard.sid
 
-            for err in [
-                err for err in result.errors if not err.lineno
-                or utils.is_line_in_ranges(err.lineno, utils.lines_ranges(lines))
-            ]:  # noqa
+            for err in result.errors:
                 err_labels = copy.copy(labels)
                 err_labels["passed"] = False
                 if isinstance(err, StandardBase.Error):
