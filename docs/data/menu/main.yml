@@ -21,8 +21,6 @@ main:
     ref: "/included_rules"
   - name: Build your own rules
     sub:
-      - name: Standards file
-        ref: "/build_rules/standards_file"
       - name: Candidates
         ref: "/build_rules/candidates"
       - name: Standards checks

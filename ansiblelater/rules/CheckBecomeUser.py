@@ -1,12 +1,6 @@
----
-title: Minimal standard checks
----
+from ansiblelater.standard import StandardBase
 
-A typical standards check will look like:
 
-<!-- prettier-ignore-start -->
-<!-- spellchecker-disable -->
-{{< highlight Python "linenos=table" >}}
 class CheckBecomeUser(StandardBase):
 
     sid = "ANSIBLE0015"
@@ -26,8 +20,3 @@ class CheckBecomeUser(StandardBase):
                     errors.append(self.Error(task["__line__"], self.helptext))
 
         return self.Result(candidate.path, errors)
-{{< /highlight >}}
-<!-- spellchecker-enable -->
-<!-- prettier-ignore-end -->
-
-They return a `Result` object, which contains a possibly empty list of `Error` objects. `Error` objects are formed of a line number and a message. If the error applies to the whole file being reviewed, set the line number to `None`.

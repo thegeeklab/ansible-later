@@ -8,8 +8,9 @@ import sys
 from ansiblelater import LOG
 from ansiblelater import __version__
 from ansiblelater import logger
-from ansiblelater.command import base
-from ansiblelater.command import candidates
+from ansiblelater.candidate import Candidate
+from ansiblelater.settings import Settings
+from ansiblelater.standard import SingleStandards
 
 
 def main():
@@ -18,15 +19,28 @@ def main():
         description="Validate Ansible files against best practice guideline"
     )
     parser.add_argument(
-        "-c", "--config", dest="config_file", help="location of configuration file"
+        "-c", "--config", dest="config_file", metavar="CONFIG", help="path to configuration file"
     )
     parser.add_argument(
-        "-r", "--rules", dest="rules.standards", help="location of standards rules"
+        "-r",
+        "--rules-dir",
+        dest="rules.standards",
+        metavar="RULES",
+        action="append",
+        help="directory of standard rules"
+    )
+    parser.add_argument(
+        "-B",
+        "--no-buildin",
+        dest="rules.buildin",
+        action="store_false",
+        help="disables build-in standard rules"
     )
     parser.add_argument(
         "-s",
         "--standards",
         dest="rules.filter",
+        metavar="FILTER",
         action="append",
         help="limit standards to given ID's"
     )
@@ -34,6 +48,7 @@ def main():
         "-x",
         "--exclude-standards",
         dest="rules.exclude_filter",
+        metavar="EXCLUDE_FILTER",
         action="append",
         help="exclude standards by given ID's"
     )
@@ -44,24 +59,23 @@ def main():
         "-q", dest="logging.level", action="append_const", const=1, help="decrease log level"
     )
     parser.add_argument("rules.files", nargs="*")
-    parser.add_argument("--version", action="version", version="%(prog)s {}".format(__version__))
+    parser.add_argument(
+        "-V", "--version", action="version", version="%(prog)s {}".format(__version__)
+    )
 
     args = parser.parse_args().__dict__
 
-    settings = base.get_settings(args)
+    settings = Settings(args=args)
     config = settings.config
 
     logger.update_logger(LOG, config["logging"]["level"], config["logging"]["json"])
-
-    files = config["rules"]["files"]
-    standards = base.get_standards(config["rules"]["standards"])
+    SingleStandards(config["rules"]["standards"]).rules
 
     workers = max(multiprocessing.cpu_count() - 2, 2)
     p = multiprocessing.Pool(workers)
     tasks = []
-    for filename in files:
-        lines = None
-        candidate = candidates.classify(filename, settings, standards)
+    for filename in config["rules"]["files"]:
+        candidate = Candidate.classify(filename, settings)
         if candidate:
             if candidate.binary:
                 LOG.info("Not reviewing binary file {name}".format(name=filename))
@@ -69,11 +83,9 @@ def main():
             if candidate.vault:
                 LOG.info("Not reviewing vault file {name}".format(name=filename))
                 continue
-            if lines:
-                LOG.info("Reviewing {candidate} lines {no}".format(candidate=candidate, no=lines))
             else:
                 LOG.info("Reviewing all of {candidate}".format(candidate=candidate))
-                tasks.append((candidate, settings, lines))
+                tasks.append(candidate)
         else:
             LOG.info("Couldn't classify file {name}".format(name=filename))
 
@@ -89,9 +101,8 @@ def main():
     sys.exit(return_code)
 
 
-def _review_wrapper(args):
-    (candidate, settings, lines) = args
-    return candidate.review(settings, lines)
+def _review_wrapper(candidate):
+    return candidate.review()
 
 
 if __name__ == "__main__":
