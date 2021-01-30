@@ -32,3 +32,4 @@ Reviews are nothing without some rules or standards against which to review. ans
 | CheckBecomeUser               | ANSIBLE0015 | `become` should be always used combined with `become_user`.       |                                                                      |
 | CheckFilterSeparation         | ANSIBLE0016 | Jinja2 filters should be separated with spaces.                   |                                                                      |
 | CheckCommandInsteadOfArgument | ANSIBLE0017 | Commands should not be used in place of module arguments.         |                                                                      |
+| CheckMissingFilePermission    | ANSIBLE0018 | File permissions unset or incorrect.                              |                                                                      |
