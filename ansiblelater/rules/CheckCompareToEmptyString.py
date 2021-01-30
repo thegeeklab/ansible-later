@@ -4,7 +4,7 @@ from ansiblelater.candidate import Template
 from ansiblelater.standard import StandardBase
 
 
-class CheckEmptyStringCompare(StandardBase):
+class CheckCompareToEmptyString(StandardBase):
 
     sid = "ANSIBLE0012"
     description = "Don't compare to empty string \"\""

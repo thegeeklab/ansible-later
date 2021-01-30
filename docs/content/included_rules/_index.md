@@ -26,7 +26,7 @@ Reviews are nothing without some rules or standards against which to review. ans
 | CheckInstallUseLatest         | ANSIBLE0009 | Package managers should not install with state=latest.            |                                                                      |
 | CheckShellInsteadCommand      | ANSIBLE0010 | Use Shell only when piping, redirecting or chaining commands.     |                                                                      |
 | CheckCommandHasChanges        | ANSIBLE0011 | Commands should be idempotent and only used with some checks.     |                                                                      |
-| CheckEmptyStringCompare       | ANSIBLE0012 | Don't compare to "" - use `when: var` or `when: not var`.         |                                                                      |
+| CheckCompareToEmptyString     | ANSIBLE0012 | Don't compare to "" - use `when: var` or `when: not var`.         |                                                                      |
 | CheckCompareToLiteralBool     | ANSIBLE0013 | Don't compare to True/False - use `when: var` or `when: not var`. |                                                                      |
 | CheckLiteralBoolFormat        | ANSIBLE0014 | Literal bools should be written as `True/False` or `yes/no`.      | forbidden values are `true false TRUE FALSE Yes No YES NO`           |
 | CheckBecomeUser               | ANSIBLE0015 | `become` should be always used combined with `become_user`.       |                                                                      |
