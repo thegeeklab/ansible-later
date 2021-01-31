@@ -37,3 +37,4 @@ Reviews are nothing without some rules or standards against which to review. ans
 | CheckGitHasVersion            | ANSIBLE0020 | Git checkouts should use explicit version.                        |                                                                      |
 | CheckMetaChangeFromDefault    | ANSIBLE0021 | Roles meta/main.yml default values should be changed.             |                                                                      |
 | CheckWhenFormat               | ANSIBLE0022 | Don't use Jinja2 in `when`.                                       |                                                                      |
+| CheckNestedJinja              | ANSIBLE0023 | Don't use nested Jinja2 pattern.                                  |                                                                      |
