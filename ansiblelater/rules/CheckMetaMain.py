@@ -16,8 +16,12 @@ class CheckMetaMain(StandardBase):
         keys = ["author", "description", "min_ansible_version", "platforms", "dependencies"]
 
         if not errors:
+            has_galaxy_info = (isinstance(content, dict) and "galaxy_info" in content.keys())
+            if not has_galaxy_info:
+                errors.append(self.Error(None, self.helptext.format(key="galaxy_info")))
+
             for key in keys:
-                if not nested_lookup(key, content):
+                if has_galaxy_info and not nested_lookup(key, content.get("galaxy_info", {})):
                     errors.append(self.Error(None, self.helptext.format(key=key)))
 
         return self.Result(candidate.path, errors)
