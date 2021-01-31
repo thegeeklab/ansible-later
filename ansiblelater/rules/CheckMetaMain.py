@@ -7,7 +7,7 @@ class CheckMetaMain(StandardBase):
 
     sid = "ANSIBLE0002"
     description = "Roles must contain suitable meta/main.yml"
-    helptext = "file should contain '{key}' key"
+    helptext = "file should contain `{key}` key"
     version = "0.1"
     types = ["meta"]
 
