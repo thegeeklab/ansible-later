@@ -29,10 +29,11 @@ Reviews are nothing without some rules or standards against which to review. ans
 | CheckCompareToEmptyString     | ANSIBLE0012 | Don't compare to "" - use `when: var` or `when: not var`.         |                                                                      |
 | CheckCompareToLiteralBool     | ANSIBLE0013 | Don't compare to True/False - use `when: var` or `when: not var`. |                                                                      |
 | CheckLiteralBoolFormat        | ANSIBLE0014 | Literal bools should be written as `True/False` or `yes/no`.      | forbidden values are `true false TRUE FALSE Yes No YES NO`           |
-| CheckBecomeUser               | ANSIBLE0015 | `become` should be always used combined with `become_user`.       |                                                                      |
+| CheckBecomeUser               | ANSIBLE0015 | Become should be combined with become_user.                       |                                                                      |
 | CheckFilterSeparation         | ANSIBLE0016 | Jinja2 filters should be separated with spaces.                   |                                                                      |
 | CheckCommandInsteadOfArgument | ANSIBLE0017 | Commands should not be used in place of module arguments.         |                                                                      |
 | CheckFilePermissionMissing    | ANSIBLE0018 | File permissions unset or incorrect.                              |                                                                      |
 | CheckFilePermissionOctal      | ANSIBLE0019 | Octal file permissions must contain leading zero or be a string.  |                                                                      |
 | CheckGitHasVersion            | ANSIBLE0020 | Git checkouts should use explicit version.                        |                                                                      |
 | CheckMetaChangeFromDefault    | ANSIBLE0021 | Roles meta/main.yml default values should be changed.             |                                                                      |
+| CheckWhenFormat               | ANSIBLE0022 | Don't use Jinja2 in `when`.                                       |                                                                      |
