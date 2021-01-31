@@ -34,4 +34,5 @@ Reviews are nothing without some rules or standards against which to review. ans
 | CheckCommandInsteadOfArgument | ANSIBLE0017 | Commands should not be used in place of module arguments.         |                                                                      |
 | CheckFilePermissionMissing    | ANSIBLE0018 | File permissions unset or incorrect.                              |                                                                      |
 | CheckFilePermissionOctal      | ANSIBLE0019 | Octal file permissions must contain leading zero or be a string.  |                                                                      |
-| CheckGitHasVersion            | ANSIBLE0020 | Git checkouts should use explicit version                         |                                                                      |
+| CheckGitHasVersion            | ANSIBLE0020 | Git checkouts should use explicit version.                        |                                                                      |
+| CheckMetaChangeFromDefault    | ANSIBLE0021 | Roles meta/main.yml default values should be changed.             |                                                                      |
