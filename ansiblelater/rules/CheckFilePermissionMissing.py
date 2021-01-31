@@ -20,7 +20,7 @@
 from ansiblelater.standard import StandardBase
 
 
-class CheckMissingFilePermission(StandardBase):
+class CheckFilePermissionMissing(StandardBase):
 
     sid = "ANSIBLE0018"
     description = "File permissions unset or incorrect"
@@ -55,7 +55,7 @@ class CheckMissingFilePermission(StandardBase):
 
         if not errors:
             for task in tasks:
-                if not self._check_mode(task):
+                if self._check_mode(task):
                     errors.append(
                         self.Error(
                             task["__line__"],
@@ -82,7 +82,7 @@ class CheckMissingFilePermission(StandardBase):
             create = task["action"].get("create", self._create_modules[module])
             return create and mode is None
 
-        # A file that doesn"t exist cannot have a mode
+        # A file that doesn't exist cannot have a mode
         if task["action"].get("state", None) == "absent":
             return False
 
@@ -95,8 +95,7 @@ class CheckMissingFilePermission(StandardBase):
             return False
 
         # The file module does not create anything when state==file (default)
-        if module == "file" and \
-                task["action"].get("state", "file") == "file":
+        if module == "file" and task["action"].get("state", "file") == "file":
             return False
 
         # replace module is the only one that has a valid default preserve
