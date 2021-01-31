@@ -36,7 +36,7 @@ class CheckChangedInWhen(StandardBase):
                 when = None
 
                 if task["__ansible_action_type__"] == "task":
-                    when = task.get('when')
+                    when = task.get("when")
 
                 if isinstance(when, str):
                     when = [when]
@@ -54,5 +54,5 @@ class CheckChangedInWhen(StandardBase):
             return False
 
         return any(
-            changed in item for changed in ['.changed', '|changed', '["changed"]', "['changed']"]
+            changed in item for changed in [".changed", "|changed", '["changed"]', "['changed']"]
         )
