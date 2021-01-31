@@ -13,7 +13,7 @@ Another best practice scanner for Ansible roles and playbooks
 [![Source: GitHub](https://img.shields.io/badge/source-github-blue.svg?logo=github&logoColor=white)](https://github.com/thegeeklab/ansible-later)
 [![License: MIT](https://img.shields.io/github/license/thegeeklab/ansible-later)](https://github.com/thegeeklab/ansible-later/blob/main/LICENSE)
 
-ansible-later is a best practice scanner and linting tool. In most cases, if you write Ansible roles in a team, it helps to have a coding or best practice guideline in place. This will make Ansible roles more readable for all maintainers and can reduce the troubleshooting time. As ansible-later aims to be a fast and simple linter for your Ansible resources we might be not that feature completed as required in some situations. If you need a more in-depth analyze you can take a look at [ansible-lint](https://github.com/ansible-community/ansible-lint).
+ansible-later is a best practice scanner and linting tool. In most cases, if you write Ansible roles in a team, it helps to have a coding or best practice guideline in place. This will make Ansible roles more readable for all maintainers and can reduce the troubleshooting time. As ansible-later aims to be a fast and easy to use linting tool for your Ansible resources, we might not be that feature completed as required in some situations. If you need a more in-depth analysis you can take a look at [ansible-lint](https://github.com/ansible-community/ansible-lint).
 
 ansible-later does **not** ensure that your role will work as expected. For deployment tests you can use other tools like [molecule](https://github.com/ansible/molecule).
 
