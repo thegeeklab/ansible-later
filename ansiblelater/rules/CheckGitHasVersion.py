@@ -34,8 +34,8 @@ class CheckGitHasVersion(StandardBase):
         if not errors:
             for task in tasks:
                 if (
-                    task['action']['__ansible_module__'] == 'git'
-                    and task['action'].get('version', 'HEAD') == 'HEAD'
+                    task["action"]["__ansible_module__"] == "git"
+                    and task["action"].get("version", "HEAD") == "HEAD"
                 ):
                     errors.append(self.Error(task["__line__"], self.helptext))
 
