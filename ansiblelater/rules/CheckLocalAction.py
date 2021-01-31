@@ -16,7 +16,7 @@ class CheckLocalAction(StandardBase):
 
         if not errors:
             for i, line in yamllines:
-                if 'local_action' in line:
+                if "local_action" in line:
                     errors.append(self.Error(i, self.helptext))
 
         return self.Result(candidate.path, errors)
