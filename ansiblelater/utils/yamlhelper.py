@@ -531,7 +531,11 @@ def parse_yaml_linenumbers(data, filename):
         return node
 
     def construct_mapping(node, deep=False):
-        mapping = AnsibleConstructor.construct_mapping(loader, node, deep=deep)
+        try:
+            mapping = AnsibleConstructor.construct_mapping(loader, node, deep=deep)
+        except yaml.constructor.ConstructorError as e:
+            raise LaterError("syntax error", e)
+
         if hasattr(node, "__line__"):
             mapping[LINE_NUMBER_KEY] = node.__line__
         else:
