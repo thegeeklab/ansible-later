@@ -39,3 +39,4 @@ Reviews are nothing without some rules or standards against which to review. ans
 | CheckWhenFormat               | ANSIBLE0022 | Don't use Jinja2 in `when`.                                       |                                                                      |
 | CheckNestedJinja              | ANSIBLE0023 | Don't use nested Jinja2 pattern.                                  |                                                                      |
 | CheckLocalAction              | ANSIBLE0024 | Don't use local_action.                                           |                                                                      |
+| CheckRelativeRolePaths        | ANSIBLE0025 | Don't use a relative path in a role.                              |                                                                      |
