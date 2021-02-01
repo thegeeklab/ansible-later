@@ -43,6 +43,13 @@ class Candidate(object):
     def _get_version(self):
         path = self.path
         version = None
+        config_version = self.config["rules"]["version"].strip()
+
+        if config_version:
+            version_config_re = re.compile(r"([\d.]+)")
+            match = version_config_re.match(config_version)
+            if match:
+                version = match.group(1)
 
         if not self.binary:
             if isinstance(self, RoleFile):
@@ -54,11 +61,10 @@ class Candidate(object):
                         break
                     parentdir = os.path.dirname(parentdir)
 
-            version_re = re.compile(r"^# Standards:\s*([\d.]+)")
-
+            version_file_re = re.compile(r"^# Standards:\s*([\d.]+)")
             with codecs.open(path, mode="rb", encoding="utf-8") as f:
                 for line in f:
-                    match = version_re.match(line)
+                    match = version_file_re.match(line)
                     if match:
                         version = match.group(1)
 

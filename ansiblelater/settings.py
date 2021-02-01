@@ -121,7 +121,8 @@ class Settings(object):
                 "filter": [],
                 "exclude_filter": [],
                 "ignore_dotfiles": True,
-                "exclude_files": []
+                "exclude_files": [],
+                "version": ""
             },
             "logging": {
                 "level": "WARNING",
