@@ -13,6 +13,7 @@ ansible:
   # Modules which are bundled with the role and placed in a './library'
   # directory will be auto-detected and don't need to be added to this list.
   custom_modules: []
+
   # Settings for variable formatting rule (ANSIBLE0004)
   double-braces:
     max-spaces-inside: 1
@@ -24,12 +25,16 @@ ansible:
 logging:
   # You can enable JSON logging if a parsable output is required
   json: False
+
   # Possible options debug | info | warning | error | critical
   level: "warning"
 
 # Global settings for all defined rules
 rules:
-  # list of files to exclude
+  # Disable build-in rules if required
+  buildin: True
+
+  # List of files to exclude
   exclude_files: []
   # Examples:
   #  - molecule/
@@ -45,8 +50,13 @@ rules:
   # All dotfiles (including hidden folders) are excluded by default.
   # You can disable this setting and handle dotfiles by yourself with `exclude_files`.
   ignore_dotfiles: True
-  # Path to the folder containing your custom standards file
-  standards: ansiblelater/data
+
+  # List of directories to load standard rules from (defaults to build-in)
+  standards: []
+
+  # Standard version to use. Standard version set in a roles meta file
+  # or playbook will takes precedence.
+  version:
 
 # Block to control included yamllint rules.
 # See https://yamllint.readthedocs.io/en/stable/rules.html
