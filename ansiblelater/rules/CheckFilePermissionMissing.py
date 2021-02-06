@@ -58,14 +58,7 @@ class CheckFilePermissionMissing(StandardBase):
         if not errors:
             for task in tasks:
                 if self._check_mode(task):
-                    errors.append(
-                        self.Error(
-                            task["__line__"],
-                            self.helptext.format(
-                                preserve_modules=", ".join(self._preserve_modules)
-                            )
-                        )
-                    )
+                    errors.append(self.Error(task["__line__"], self.helptext))
 
         return self.Result(candidate.path, errors)
 
