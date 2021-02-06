@@ -17,6 +17,8 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
+import re
+
 from ansiblelater.standard import StandardBase
 
 
@@ -70,6 +72,7 @@ class CheckFilePermissionMissing(StandardBase):
     def _check_mode(self, task):
         module = task["action"]["__ansible_module__"]
         mode = task["action"].get("mode", None)
+        state = task["action"].get("state", "file")
 
         if module not in self._modules and \
                 module not in self._create_modules:
@@ -82,12 +85,17 @@ class CheckFilePermissionMissing(StandardBase):
             create = task["action"].get("create", self._create_modules[module])
             return create and mode is None
 
+        # If Jinja syntax is used state can not be validated
+        jinja = re.compile("{{(.*?)}}")
+        if jinja.findall(state):
+            return False
+
         # A file that doesn't exist cannot have a mode
-        if task["action"].get("state", None) == "absent":
+        if state == "absent":
             return False
 
         # A symlink always has mode 0o777
-        if task["action"].get("state", None) == "link":
+        if state == "link":
             return False
 
         # Recurse on a directory does not allow for an uniform mode
@@ -95,7 +103,7 @@ class CheckFilePermissionMissing(StandardBase):
             return False
 
         # The file module does not create anything when state==file (default)
-        if module == "file" and task["action"].get("state", "file") == "file":
+        if module == "file" and state == "file":
             return False
 
         # replace module is the only one that has a valid default preserve
