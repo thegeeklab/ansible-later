@@ -200,7 +200,7 @@ class Candidate(object):
             or filename.endswith(".py")
         ):
             return Code(filename, settings, standards)
-        if "inventory" == basename or "hosts" == basename or parentdir in ["inventories"]:
+        if basename == "inventory" or basename == "hosts" or parentdir in ["inventories"]:
             return Inventory(filename, settings, standards)
         if "rolesfile" in basename or "requirements" in basename:
             return Rolesfile(filename, settings, standards)

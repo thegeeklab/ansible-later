@@ -28,7 +28,7 @@ class CheckShellInsteadCommand(StandardBase):
                         cmd = " ".join(task["action"].get("__ansible_arguments__", []))
 
                     unjinja = re.sub(r"\{\{[^\}]*\}\}", "JINJA_VAR", cmd)
-                    if not any([ch in unjinja for ch in "&|<>;$\n*[]{}?"]):
+                    if not any(ch in unjinja for ch in "&|<>;$\n*[]{}?"):
                         errors.append(self.Error(task["__line__"], self.helptext))
 
         return self.Result(candidate.path, errors)

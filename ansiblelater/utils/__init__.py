@@ -63,7 +63,7 @@ def lines_ranges(lines_spec):
 
 
 def is_line_in_ranges(line, ranges):
-    return not ranges or any([line in r for r in ranges])
+    return not ranges or any(line in r for r in ranges)
 
 
 def safe_load(string):
