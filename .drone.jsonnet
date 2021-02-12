@@ -205,7 +205,7 @@ local PipelineBuildContainer(arch='amd64') = {
   steps: [
     {
       name: 'build',
-      image: 'python:3.9',
+      image: 'python:3.9-alpine',
       commands: [
         'git fetch -tq',
         'apk --update add build-base libffi-dev musl-dev libressl-dev python3-dev cargo',

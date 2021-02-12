@@ -221,7 +221,7 @@ platform:
 
 steps:
 - name: build
-  image: python:3.9
+  image: python:3.9-alpine
   commands:
   - git fetch -tq
   - apk --update add build-base libffi-dev musl-dev libressl-dev python3-dev cargo
@@ -301,7 +301,7 @@ platform:
 
 steps:
 - name: build
-  image: python:3.9
+  image: python:3.9-alpine
   commands:
   - git fetch -tq
   - apk --update add build-base libffi-dev musl-dev libressl-dev python3-dev cargo
@@ -381,7 +381,7 @@ platform:
 
 steps:
 - name: build
-  image: python:3.9
+  image: python:3.9-alpine
   commands:
   - git fetch -tq
   - apk --update add build-base libffi-dev musl-dev libressl-dev python3-dev cargo
@@ -633,6 +633,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: fb45f29383167cc10adb6f1974a3bfff0065069e427b92df839e564a640b92c4
+hmac: 7ae4592067ffae92305b62cf0301524b095bf98e2ce2293689c9ee4c17e545f9
 
 ...
