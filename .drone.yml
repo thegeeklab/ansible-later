@@ -164,7 +164,6 @@ steps:
   image: python:3.9
   commands:
   - git fetch -tq
-  - pip install --upgrade --no-cache-dir pip
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry build
 
@@ -225,6 +224,7 @@ steps:
   image: python:3.9
   commands:
   - git fetch -tq
+  - pip install --upgrade --no-cache-dir pip
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry build
 
@@ -303,6 +303,7 @@ steps:
   image: python:3.9
   commands:
   - git fetch -tq
+  - pip install --upgrade --no-cache-dir pip
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry build
 
@@ -381,6 +382,7 @@ steps:
   image: python:3.9
   commands:
   - git fetch -tq
+  - pip install --upgrade --no-cache-dir pip
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry build
 
@@ -628,6 +630,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: a22e8c0311dcbba41bd58ced82cd745bdd90657ea86b24a3156f4211e9ffa251
+hmac: bff49ff6d536931d39439be1bddc783d39d93e50e0f88d08f1304246dde533bb
 
 ...
