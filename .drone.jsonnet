@@ -145,6 +145,7 @@ local PipelineBuildPackage = {
       image: 'python:3.9',
       commands: [
         'git fetch -tq',
+        'pip install --upgrade --no-cache-dir pip',
         'pip install poetry poetry-dynamic-versioning -qq',
         'poetry build',
       ],

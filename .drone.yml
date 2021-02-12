@@ -164,6 +164,7 @@ steps:
   image: python:3.9
   commands:
   - git fetch -tq
+  - pip install --upgrade --no-cache-dir pip
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry build
 
@@ -627,6 +628,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 8f92e71a88657fb107c79b586a62cbabc3b45328d3ec5b9a2ab2cc39ec7ce4b7
+hmac: a22e8c0311dcbba41bd58ced82cd745bdd90657ea86b24a3156f4211e9ffa251
 
 ...
