@@ -208,6 +208,7 @@ local PipelineBuildContainer(arch='amd64') = {
       image: 'python:3.9',
       commands: [
         'git fetch -tq',
+        'apk --update add build-base libffi-dev musl-dev libressl-dev python3-dev cargo',
         'pip install --upgrade --no-cache-dir pip',
         'pip install poetry poetry-dynamic-versioning -qq',
         'poetry build',
