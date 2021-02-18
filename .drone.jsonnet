@@ -6,6 +6,7 @@ local PythonVersion(pyversion='3.6') = {
   },
   commands: [
     'pip install poetry poetry-dynamic-versioning -qq',
+    'poetry config experimental.new-installer false',
     'poetry install -E ansible-base',
     'poetry run pytest',
     'poetry version',
@@ -205,11 +206,12 @@ local PipelineBuildContainer(arch='amd64') = {
   steps: [
     {
       name: 'build',
-      image: 'python:3.9',
+      image: 'python:3.9-alpine',
       commands: [
-        'apk --update --quiet add py3-cryptography',
+        'apk --update --quiet add build-base libressl-dev python3-dev py3-cryptography git',
         'git fetch -tq',
         'pip install poetry poetry-dynamic-versioning -qq',
+        'poetry config virtualenvs.create false',
         'poetry build',
       ],
     },
