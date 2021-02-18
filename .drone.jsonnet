@@ -34,6 +34,7 @@ local PipelineLint = {
       commands: [
         'git fetch -tq',
         'pip install poetry poetry-dynamic-versioning -qq',
+        'poetry config experimental.new-installer false',
         'poetry install',
         'poetry run yapf -dr ./ansiblelater',
       ],
@@ -201,7 +202,7 @@ local PipelineBuildContainer(arch='amd64') = {
     name: 'build',
     image: 'python:3.9-alpine',
     commands: [
-      'apk add -Uq --no-cache build-base libressl-dev libffi-dev musl-dev python3-dev git',
+      'apk add -Uq --no-cache build-base libressl-dev libffi-dev musl-dev python3-dev git cargo',
       'git fetch -tq',
       'pip install poetry poetry-dynamic-versioning -qq',
       'poetry build',

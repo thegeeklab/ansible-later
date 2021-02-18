@@ -12,6 +12,7 @@ steps:
   commands:
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
+  - poetry config experimental.new-installer false
   - poetry install
   - poetry run yapf -dr ./ansiblelater
   environment:
@@ -383,7 +384,7 @@ steps:
 - name: build
   image: python:3.9-alpine
   commands:
-  - apk add -Uq --no-cache build-base libressl-dev libffi-dev musl-dev python3-dev git
+  - apk add -Uq --no-cache build-base libressl-dev libffi-dev musl-dev python3-dev git cargo
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry build
@@ -632,6 +633,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 92f435089cc4dc3fb325ede4c3747df95617b134804cdb8ba33263f230f7a9ab
+hmac: 9f3f7d2400e3b0ad7137f760d27d5aab09a13432124ad3291dd1e0046d3c2f91
 
 ...
