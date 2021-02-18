@@ -12,7 +12,7 @@ steps:
   commands:
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
-  - poetry install -q
+  - poetry install
   - poetry run yapf -dr ./ansiblelater
   environment:
     PY_COLORS: 1
@@ -22,7 +22,7 @@ steps:
   commands:
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
-  - poetry install -q -E ansible-base
+  - poetry install -E ansible-base
   - poetry run flake8 ./ansiblelater
   environment:
     PY_COLORS: 1
@@ -51,7 +51,7 @@ steps:
   image: python:3.6
   commands:
   - pip install poetry poetry-dynamic-versioning -qq
-  - poetry install -q -E ansible-base
+  - poetry install -E ansible-base
   - poetry run pytest
   - poetry version
   - poetry run ansible-later --help
@@ -64,7 +64,7 @@ steps:
   image: python:3.7
   commands:
   - pip install poetry poetry-dynamic-versioning -qq
-  - poetry install -q -E ansible-base
+  - poetry install -E ansible-base
   - poetry run pytest
   - poetry version
   - poetry run ansible-later --help
@@ -77,7 +77,7 @@ steps:
   image: python:3.8
   commands:
   - pip install poetry poetry-dynamic-versioning -qq
-  - poetry install -q -E ansible-base
+  - poetry install -E ansible-base
   - poetry run pytest
   - poetry version
   - poetry run ansible-later --help
@@ -90,7 +90,7 @@ steps:
   image: python:3.9
   commands:
   - pip install poetry poetry-dynamic-versioning -qq
-  - poetry install -q -E ansible-base
+  - poetry install -E ansible-base
   - poetry run pytest
   - poetry version
   - poetry run ansible-later --help
@@ -137,7 +137,7 @@ steps:
   commands:
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
-  - poetry install -q -E ansible-base
+  - poetry install -E ansible-base
   - poetry run bandit -r ./ansiblelater -x ./ansiblelater/test
   environment:
     PY_COLORS: 1
@@ -633,6 +633,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 115e84e28c15acf303b5c60c1cee4d57323a4a758f6994688f4df183e472822d
+hmac: a3c1fab4fd9b55b5c90d443ade4979500139863a28e417e679ef9157909217ce
 
 ...
