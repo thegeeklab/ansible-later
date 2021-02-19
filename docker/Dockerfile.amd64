@@ -8,6 +8,7 @@ LABEL org.opencontainers.image.source="https://github.com/thegeeklab/ansible-lat
 LABEL org.opencontainers.image.documentation="https://ansible-later.geekdocs.de/"
 
 ENV PY_COLORS=1
+ENV CARGO_NET_GIT_FETCH_WITH_CLI=true
 
 ADD dist/ansible_later-*.whl /
 

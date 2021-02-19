@@ -6,6 +6,7 @@ local PythonVersion(pyversion='3.6') = {
   },
   commands: [
     'pip install poetry poetry-dynamic-versioning -qq',
+    'poetry config experimental.new-installer false',
     'poetry install -E ansible-base',
     'poetry run pytest',
     'poetry version',
@@ -33,6 +34,7 @@ local PipelineLint = {
       commands: [
         'git fetch -tq',
         'pip install poetry poetry-dynamic-versioning -qq',
+        'poetry config experimental.new-installer false',
         'poetry install',
         'poetry run yapf -dr ./ansiblelater',
       ],
@@ -196,24 +198,35 @@ local PipelineBuildPackage = {
 };
 
 local PipelineBuildContainer(arch='amd64') = {
+  local build = if arch == 'arm' then [{
+    name: 'build',
+    image: 'python:3.9-alpine',
+    commands: [
+      'apk add -Uq --no-cache build-base libressl-dev libffi-dev musl-dev python3-dev git cargo',
+      'git fetch -tq',
+      'pip install poetry poetry-dynamic-versioning -qq',
+      'poetry build',
+    ],
+    environment: {
+      CARGO_NET_GIT_FETCH_WITH_CLI: true,
+    },
+  }] else [{
+    name: 'build',
+    image: 'python:3.9',
+    commands: [
+      'git fetch -tq',
+      'pip install poetry poetry-dynamic-versioning -qq',
+      'poetry build',
+    ],
+  }],
+
   kind: 'pipeline',
   name: 'build-container-' + arch,
   platform: {
     os: 'linux',
     arch: arch,
   },
-  steps: [
-    {
-      name: 'build',
-      image: 'python:3.9-alpine',
-      commands: [
-        'apk --update --quiet add build-base libffi-dev musl-dev libressl-dev python3-dev cargo git',
-        'git fetch -tq',
-        'pip install --upgrade --no-cache-dir pip',
-        'pip install poetry poetry-dynamic-versioning -qq',
-        'poetry build',
-      ],
-    },
+  steps: build + [
     {
       name: 'dryrun',
       image: 'thegeeklab/drone-docker:19',
