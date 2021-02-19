@@ -388,6 +388,8 @@ steps:
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry build
+  environment:
+    CARGO_NET_GIT_FETCH_WITH_CLI: true
 
 - name: dryrun
   image: thegeeklab/drone-docker:19
@@ -633,6 +635,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 9f3f7d2400e3b0ad7137f760d27d5aab09a13432124ad3291dd1e0046d3c2f91
+hmac: b3355b546c9c55cb7c83d1a6b2ae59ec4177e6495b050bc8ecae62bb7a61eceb
 
 ...
