@@ -107,3 +107,5 @@ docs/themes/
 docs/public/
 resources/_gen/
 
+# Misc
+CHANGELOG.md
