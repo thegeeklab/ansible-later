@@ -593,3 +593,16 @@ class UnsafeTag:
     @staticmethod
     def yaml_constructor(loader, node):
         return loader.construct_scalar(node)
+
+
+class VaultTag:
+    """Handle custom yaml vault tag."""
+
+    yaml_tag = u"!vault"
+
+    def __init__(self, value):
+        self.unsafe = value
+
+    @staticmethod
+    def yaml_constructor(loader, node):
+        return loader.construct_scalar(node)

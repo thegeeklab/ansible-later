@@ -20,6 +20,7 @@ from ansiblelater.exceptions import LaterError
 from ansiblelater.utils import Singleton
 from ansiblelater.utils import sysexit_with_message
 from ansiblelater.utils.yamlhelper import UnsafeTag
+from ansiblelater.utils.yamlhelper import VaultTag
 from ansiblelater.utils.yamlhelper import action_tasks
 from ansiblelater.utils.yamlhelper import normalize_task
 from ansiblelater.utils.yamlhelper import normalized_yaml
@@ -223,6 +224,9 @@ class StandardBase(object, metaclass=StandardExtendedMeta):
                     yaml.add_constructor(
                         UnsafeTag.yaml_tag, UnsafeTag.yaml_constructor, Loader=yaml.SafeLoader
                     )
+                    yaml.add_constructor(
+                        VaultTag.yaml_tag, VaultTag.yaml_constructor, Loader=yaml.SafeLoader
+                    )
                     content = yaml.safe_load(f)
             except yaml.YAMLError as e:
                 errors.append(
@@ -243,6 +247,9 @@ class StandardBase(object, metaclass=StandardExtendedMeta):
                 with codecs.open(candidate.path, mode="rb", encoding="utf-8") as f:
                     yaml.add_constructor(
                         UnsafeTag.yaml_tag, UnsafeTag.yaml_constructor, Loader=yaml.SafeLoader
+                    )
+                    yaml.add_constructor(
+                        VaultTag.yaml_tag, VaultTag.yaml_constructor, Loader=yaml.SafeLoader
                     )
                     yaml.safe_load(f)
 
