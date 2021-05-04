@@ -1,6 +1,7 @@
 """Standard definition."""
 
 import codecs
+import copy
 import importlib
 import inspect
 import os
@@ -118,7 +119,7 @@ class StandardBase(object, metaclass=StandardExtendedMeta):
         if not candidate.faulty:
             try:
                 normalized = normalize_task(
-                    task, candidate.path, settings["ansible"]["custom_modules"]
+                    copy.copy(task), candidate.path, settings["ansible"]["custom_modules"]
                 )
             except LaterError as ex:
                 e = ex.original
