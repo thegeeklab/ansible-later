@@ -332,9 +332,9 @@ local PipelineDocs = {
     },
     {
       name: 'testbuild',
-      image: 'klakegg/hugo:0.83.1-ext-alpine-ci',
+      image: 'thegeeklab/hugo:0.83.1',
       commands: [
-        'hugo-official -s docs/ -b http://localhost/',
+        'hugo -s docs/ -b http://localhost/',
       ],
     },
     {
@@ -349,9 +349,9 @@ local PipelineDocs = {
     },
     {
       name: 'build',
-      image: 'klakegg/hugo:0.83.1-ext-alpine-ci',
+      image: 'thegeeklab/hugo:0.83.1',
       commands: [
-        'hugo-official -s docs/',
+        'hugo -s docs/',
       ],
     },
     {
