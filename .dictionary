@@ -11,3 +11,15 @@ JSON
 reviewable
 changeset
 non-tty
+RoleVars
+GroupVars
+subdirectories
+HostVars
+Rolesfile
+Makefile
+Jinja2
+ANSIBLE([0-9]{4})
+LINT([0-9]{4})
+SCM
+bools
+Check[A-Z].+
