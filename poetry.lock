@@ -11,7 +11,7 @@ ansible-core = ">=2.11.0,<2.12"
 
 [[package]]
 name = "ansible-base"
-version = "2.10.9"
+version = "2.10.10"
 description = "Radically simple IT automation"
 category = "main"
 optional = true
@@ -714,14 +714,14 @@ ansible-base = ["ansible-base"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6.0"
-content-hash = "e9061f7187984719dfdf0f94c3c2a0c9d64f96ce9c4e88e127ff51055d81ebf5"
+content-hash = "0984bbfc8a82159d500b71595bdb05ccb5c98dd76fa40c7078cbb04e9d0a7067"
 
 [metadata.files]
 ansible = [
     {file = "ansible-4.0.0.tar.gz", hash = "sha256:6f67ca5c634e4721d1f8e206dc71d60d1a114d147945355bfc902bd37eb07080"},
 ]
 ansible-base = [
-    {file = "ansible-base-2.10.9.tar.gz", hash = "sha256:04635d3e08fc29358c76b8e7f1e9db0ce443fb09ce30b2acc6cacaad165f2151"},
+    {file = "ansible-base-2.10.10.tar.gz", hash = "sha256:7744b68ed81de948853304b8104b63651c5d6b03571aee972c83379aa6b7de10"},
 ]
 ansible-core = [
     {file = "ansible-core-2.11.0.tar.gz", hash = "sha256:9470ceb710711eacd75f1bcae802af036ab2a6c2cd5a13bfcb50b2d89667c9c5"},
