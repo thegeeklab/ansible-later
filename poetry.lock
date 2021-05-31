@@ -1,13 +1,13 @@
 [[package]]
 name = "ansible"
-version = "3.4.0"
+version = "4.0.0"
 description = "Radically simple IT automation"
 category = "main"
 optional = true
 python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*"
 
 [package.dependencies]
-ansible-base = ">=2.10.9,<2.11"
+ansible-core = ">=2.11.0,<2.12"
 
 [[package]]
 name = "ansible-base"
@@ -22,6 +22,21 @@ cryptography = "*"
 jinja2 = "*"
 packaging = "*"
 PyYAML = "*"
+
+[[package]]
+name = "ansible-core"
+version = "2.11.0"
+description = "Radically simple IT automation"
+category = "main"
+optional = true
+python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*"
+
+[package.dependencies]
+cryptography = "*"
+jinja2 = "*"
+packaging = "*"
+PyYAML = "*"
+resolvelib = ">=0.5.3,<0.6.0"
 
 [[package]]
 name = "anyconfig"
@@ -566,6 +581,20 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*"
 
 [[package]]
+name = "resolvelib"
+version = "0.5.5"
+description = "Resolve abstract dependencies into concrete ones"
+category = "main"
+optional = true
+python-versions = "*"
+
+[package.extras]
+examples = ["html5lib", "packaging", "pygraphviz", "requests"]
+lint = ["black", "flake8"]
+release = ["setl", "towncrier"]
+test = ["commentjson", "packaging", "pytest"]
+
+[[package]]
 name = "six"
 version = "1.16.0"
 description = "Python 2 and 3 compatibility utilities"
@@ -685,14 +714,17 @@ ansible-base = ["ansible-base"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6.0"
-content-hash = "1a8c007041a039c900746bf339eee129a264382cde05f91d702a830bc4ede27f"
+content-hash = "e9061f7187984719dfdf0f94c3c2a0c9d64f96ce9c4e88e127ff51055d81ebf5"
 
 [metadata.files]
 ansible = [
-    {file = "ansible-3.4.0.tar.gz", hash = "sha256:ca34e2c0c3f92cad5e528c94c133e620845feb11cc62f42e98d28271fe5bd924"},
+    {file = "ansible-4.0.0.tar.gz", hash = "sha256:6f67ca5c634e4721d1f8e206dc71d60d1a114d147945355bfc902bd37eb07080"},
 ]
 ansible-base = [
     {file = "ansible-base-2.10.9.tar.gz", hash = "sha256:04635d3e08fc29358c76b8e7f1e9db0ce443fb09ce30b2acc6cacaad165f2151"},
+]
+ansible-core = [
+    {file = "ansible-core-2.11.0.tar.gz", hash = "sha256:9470ceb710711eacd75f1bcae802af036ab2a6c2cd5a13bfcb50b2d89667c9c5"},
 ]
 anyconfig = [
     {file = "anyconfig-0.11.0-py2.py3-none-any.whl", hash = "sha256:47507d96ff31059a9c5783d3e3a5def88c4069bd4af56e9828ee0f0cca2ed2d2"},
@@ -1040,6 +1072,10 @@ pyyaml = [
     {file = "PyYAML-5.4.1-cp39-cp39-win32.whl", hash = "sha256:49d4cdd9065b9b6e206d0595fee27a96b5dd22618e7520c33204a4a3239d5b10"},
     {file = "PyYAML-5.4.1-cp39-cp39-win_amd64.whl", hash = "sha256:c20cfa2d49991c8b4147af39859b167664f2ad4561704ee74c1de03318e898db"},
     {file = "PyYAML-5.4.1.tar.gz", hash = "sha256:607774cbba28732bfa802b54baa7484215f530991055bb562efbed5b2f20a45e"},
+]
+resolvelib = [
+    {file = "resolvelib-0.5.5-py2.py3-none-any.whl", hash = "sha256:b0143b9d074550a6c5163a0f587e49c49017434e3cdfe853941725f5455dd29c"},
+    {file = "resolvelib-0.5.5.tar.gz", hash = "sha256:123de56548c90df85137425a3f51eb93df89e2ba719aeb6a8023c032758be950"},
 ]
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
