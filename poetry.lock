@@ -25,7 +25,7 @@ PyYAML = "*"
 
 [[package]]
 name = "ansible-core"
-version = "2.11.0"
+version = "2.11.1"
 description = "Radically simple IT automation"
 category = "main"
 optional = true
@@ -302,7 +302,7 @@ typing-extensions = {version = ">=3.7.4.0", markers = "python_version < \"3.8\""
 
 [[package]]
 name = "importlib-metadata"
-version = "4.3.1"
+version = "4.5.0"
 description = "Read metadata from Python packages"
 category = "main"
 optional = false
@@ -722,7 +722,7 @@ ansible-base = [
     {file = "ansible-base-2.10.10.tar.gz", hash = "sha256:7744b68ed81de948853304b8104b63651c5d6b03571aee972c83379aa6b7de10"},
 ]
 ansible-core = [
-    {file = "ansible-core-2.11.0.tar.gz", hash = "sha256:9470ceb710711eacd75f1bcae802af036ab2a6c2cd5a13bfcb50b2d89667c9c5"},
+    {file = "ansible-core-2.11.1.tar.gz", hash = "sha256:7e75827a94d47d1c3e1930d708f0ef637a3ab9a21f757aaf55deab6e9f47c682"},
 ]
 anyconfig = [
     {file = "anyconfig-0.11.0-py2.py3-none-any.whl", hash = "sha256:47507d96ff31059a9c5783d3e3a5def88c4069bd4af56e9828ee0f0cca2ed2d2"},
@@ -916,8 +916,8 @@ gitpython = [
     {file = "GitPython-3.1.17.tar.gz", hash = "sha256:ee24bdc93dce357630764db659edaf6b8d664d4ff5447ccfeedd2dc5c253f41e"},
 ]
 importlib-metadata = [
-    {file = "importlib_metadata-4.3.1-py3-none-any.whl", hash = "sha256:c2e27fa8b6c8b34ebfcd4056ae2ca290e36250d1fbeceec85c1c67c711449fac"},
-    {file = "importlib_metadata-4.3.1.tar.gz", hash = "sha256:2d932ea08814f745863fd20172fe7de4794ad74567db78f2377343e24520a5b6"},
+    {file = "importlib_metadata-4.5.0-py3-none-any.whl", hash = "sha256:833b26fb89d5de469b24a390e9df088d4e52e4ba33b01dc5e0e4f41b81a16c00"},
+    {file = "importlib_metadata-4.5.0.tar.gz", hash = "sha256:b142cc1dd1342f31ff04bb7d022492b09920cb64fed867cd3ea6f80fe3ebd139"},
 ]
 iniconfig = [
     {file = "iniconfig-1.1.1-py2.py3-none-any.whl", hash = "sha256:011e24c64b7f47f6ebd835bb12a743f2fbe9a26d4cecaa7f53bc4f35ee9da8b3"},
