@@ -21,7 +21,7 @@ class CheckNativeYaml(StandardBase):
 
                 action = normal_form["action"]["__ansible_module__"]
                 arguments = [
-                    bytes(x, "utf-8").decode("unicode_escape")
+                    bytes(x, "utf-8").decode("utf8", "ignore")
                     for x in normal_form["action"]["__ansible_arguments__"]
                 ]
                 # Cope with `set_fact` where task["set_fact"] is None
@@ -30,7 +30,7 @@ class CheckNativeYaml(StandardBase):
                 if isinstance(task[action], dict):
                     continue
                 # strip additional newlines off task[action]
-                task_action = bytes(repr(task[action].strip()), "utf-8").decode("unicode_escape")
-                if task_action.strip("'").strip('"').split() != arguments:
+                task_action = bytes(task[action].strip(), "utf-8").decode("utf8", "ignore")
+                if task_action.split() != arguments:
                     errors.append(self.Error(task["__line__"], self.helptext))
         return self.Result(candidate.path, errors)
