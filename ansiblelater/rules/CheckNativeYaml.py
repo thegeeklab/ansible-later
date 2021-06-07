@@ -30,7 +30,7 @@ class CheckNativeYaml(StandardBase):
                 if isinstance(task[action], dict):
                     continue
                 # strip additional newlines off task[action]
-                task_action = bytes(task[action].strip(), "utf-8").decode("unicode_escape")
+                task_action = bytes(repr(task[action].strip()), "utf-8").decode("unicode_escape")
                 if task_action.split() != arguments:
                     errors.append(self.Error(task["__line__"], self.helptext))
         return self.Result(candidate.path, errors)
