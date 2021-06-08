@@ -31,6 +31,6 @@ class CheckNativeYaml(StandardBase):
                     continue
                 # strip additional newlines off task[action]
                 task_action = bytes(task[action].strip(), "utf-8").decode("utf8", "ignore")
-                if task_action.split() != arguments:
+                if list(filter(lambda a: a != "\\", task_action.split())) != arguments:
                     errors.append(self.Error(task["__line__"], self.helptext))
         return self.Result(candidate.path, errors)
