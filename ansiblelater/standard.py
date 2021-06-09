@@ -246,14 +246,6 @@ class StandardBase(object, metaclass=StandardExtendedMeta):
         if not candidate.faulty:
             try:
                 with codecs.open(candidate.path, mode="rb", encoding="utf-8") as f:
-                    yaml.add_constructor(
-                        UnsafeTag.yaml_tag, UnsafeTag.yaml_constructor, Loader=yaml.SafeLoader
-                    )
-                    yaml.add_constructor(
-                        VaultTag.yaml_tag, VaultTag.yaml_constructor, Loader=yaml.SafeLoader
-                    )
-                    yaml.safe_load(f)
-
                     for problem in linter.run(f, YamlLintConfig(options)):
                         errors.append(StandardBase.Error(problem.line, problem.desc))
             except yaml.YAMLError as e:
