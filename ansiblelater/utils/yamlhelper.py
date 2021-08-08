@@ -26,7 +26,6 @@ import imp
 import os
 
 import ansible.parsing.mod_args
-import six
 import yaml
 from ansible import constants
 from ansible.errors import AnsibleError
@@ -346,7 +345,7 @@ def _rolepath(basedir, role):
 
     if constants.DEFAULT_ROLES_PATH:
         search_locations = constants.DEFAULT_ROLES_PATH
-        if isinstance(search_locations, six.string_types):
+        if isinstance(search_locations, str):
             search_locations = search_locations.split(os.pathsep)
         for loc in search_locations:
             loc = os.path.expanduser(loc)

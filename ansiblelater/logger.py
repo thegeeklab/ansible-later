@@ -7,7 +7,6 @@ from distutils.util import strtobool
 
 import colorama
 from pythonjsonlogger import jsonlogger
-from six import iteritems
 
 CONSOLE_FORMAT = "{}%(levelname)s:{} %(message)s"
 JSON_FORMAT = "(asctime) (levelname) (message)"
@@ -34,7 +33,7 @@ def flag_extra(extra):
     flagged = dict()
 
     if isinstance(extra, dict):
-        for key, value in iteritems(extra):
+        for key, value in extra.items():
             flagged["later_" + key] = value
 
     return flagged
