@@ -677,7 +677,7 @@ python-versions = "*"
 
 [[package]]
 name = "yamllint"
-version = "1.26.2"
+version = "1.26.3"
 description = "A linter for YAML files."
 category = "main"
 optional = false
@@ -714,7 +714,7 @@ ansible-base = ["ansible-base"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6.0"
-content-hash = "1781e56a30f9ccfbda80716a304745cf437176caeb7f760c97f3bb6d7e2902e1"
+content-hash = "cb4fae500c0e6407d78fa36b231c8f3cc9ccd3095bddf06f5349655eee2d7ded"
 
 [metadata.files]
 ansible = [
@@ -1154,7 +1154,7 @@ unidiff = [
     {file = "unidiff-0.6.0.tar.gz", hash = "sha256:90c5214e9a357ff4b2fee19d91e77706638e3e00592a732d9405ea4e93da981f"},
 ]
 yamllint = [
-    {file = "yamllint-1.26.2.tar.gz", hash = "sha256:0b08a96750248fdf21f1e8193cb7787554ef75ed57b27f621cd6b3bf09af11a1"},
+    {file = "yamllint-1.26.3.tar.gz", hash = "sha256:3934dcde484374596d6b52d8db412929a169f6d9e52e20f9ade5bf3523d9b96e"},
 ]
 yapf = [
     {file = "yapf-0.31.0-py2.py3-none-any.whl", hash = "sha256:e3a234ba8455fe201eaa649cdac872d590089a18b661e39bbac7020978dd9c2e"},
