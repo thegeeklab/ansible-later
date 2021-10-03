@@ -65,6 +65,7 @@ pydocstyle = "6.1.1"
 pytest = "6.2.5"
 pytest-cov = "2.12.1"
 pytest-mock = "3.6.1"
+tomli = "1.2.1"
 yapf = "0.31.0"
 
 [tool.poetry.extras]
