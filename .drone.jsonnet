@@ -1,4 +1,4 @@
-local PythonVersion(pyversion='3.6') = {
+local PythonVersion(pyversion='3.7') = {
   name: 'python' + std.strReplace(pyversion, '.', '') + '-pytest',
   image: 'python:' + pyversion,
   environment: {
@@ -73,7 +73,6 @@ local PipelineTest = {
         'git fetch -tq',
       ],
     },
-    PythonVersion(pyversion='3.6'),
     PythonVersion(pyversion='3.7'),
     PythonVersion(pyversion='3.8'),
     PythonVersion(pyversion='3.9'),
@@ -89,7 +88,6 @@ local PipelineTest = {
         'codecov --required -X gcov',
       ],
       depends_on: [
-        'python36-pytest',
         'python37-pytest',
         'python38-pytest',
         'python39-pytest',
