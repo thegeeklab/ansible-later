@@ -9,7 +9,7 @@ import colorama
 from pythonjsonlogger import jsonlogger
 
 CONSOLE_FORMAT = "{}%(levelname)s:{} %(message)s"
-JSON_FORMAT = "(asctime) (levelname) (message)"
+JSON_FORMAT = "%(asctime)s %(levelname)s %(message)s"
 
 
 def to_bool(string):
