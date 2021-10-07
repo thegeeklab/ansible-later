@@ -134,6 +134,7 @@ class Settings(object):
                     "min-spaces-inside": 1,
                     "max-spaces-inside": 1,
                 },
+                "literal-bools": ["True", "False", "yes", "no"],
             },
             "yamllint": {
                 "empty-lines": {

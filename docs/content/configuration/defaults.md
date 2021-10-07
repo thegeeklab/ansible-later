@@ -19,6 +19,13 @@ ansible:
     max-spaces-inside: 1
     min-spaces-inside: 1
 
+  # List of allowed literal bools (ANSIBLE0014)
+  literal-bools:
+    - "True"
+    - "False"
+    - "yes"
+    - "no"
+
 # Global logging configuration
 # If you would like to force colored output (e.g. non-tty)
 # set environment variable `PY_COLORS=1`
