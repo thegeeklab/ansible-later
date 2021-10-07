@@ -18,7 +18,7 @@ Reviews are nothing without some rules or standards against which to review. ans
 | CheckLineBetweenTasks         | ANSIBLE0001 | Single tasks should be separated by an empty line.                |                                                                      |
 | CheckMetaMain                 | ANSIBLE0002 | Meta file should contain a basic subset of parameters.            | author, description, min_ansible_version, platforms, dependencies    |
 | CheckUniqueNamedTask          | ANSIBLE0003 | Tasks and handlers must be uniquely named within a file.          |                                                                      |
-| CheckBraces                   | ANSIBLE0004 | YAML should use consistent number of spaces around variables.     |                                                                      |
+| CheckBraces                   | ANSIBLE0004 | YAML should use consistent number of spaces around variables.     | {double-braces: max-spaces-inside: 1, min-spaces-inside: 1}          |
 | CheckScmInSrc                 | ANSIBLE0005 | Use SCM key rather than `src: scm+url` in requirements file.      |                                                                      |
 | CheckNamedTask                | ANSIBLE0006 | Tasks and handlers must be named.                                 | excludes: meta, debug, include\_\*, import\_\*, block                |
 | CheckNameFormat               | ANSIBLE0007 | Name of tasks and handlers must be formatted.                     | formats: first letter capital                                        |
@@ -28,7 +28,7 @@ Reviews are nothing without some rules or standards against which to review. ans
 | CheckCommandHasChanges        | ANSIBLE0011 | Commands should be idempotent and only used with some checks.     |                                                                      |
 | CheckCompareToEmptyString     | ANSIBLE0012 | Don't compare to "" - use `when: var` or `when: not var`.         |                                                                      |
 | CheckCompareToLiteralBool     | ANSIBLE0013 | Don't compare to True/False - use `when: var` or `when: not var`. |                                                                      |
-| CheckLiteralBoolFormat        | ANSIBLE0014 | Literal bools should be written as `True/False` or `yes/no`.      | forbidden values are `true false TRUE FALSE Yes No YES NO`           |
+| CheckLiteralBoolFormat        | ANSIBLE0014 | Literal bools should be consistent.                               | {literal-bools: [True, False, yes, no]}                              |
 | CheckBecomeUser               | ANSIBLE0015 | Become should be combined with become_user.                       |                                                                      |
 | CheckFilterSeparation         | ANSIBLE0016 | Jinja2 filters should be separated with spaces.                   |                                                                      |
 | CheckCommandInsteadOfArgument | ANSIBLE0017 | Commands should not be used in place of module arguments.         |                                                                      |
