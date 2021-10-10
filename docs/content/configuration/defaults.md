@@ -56,6 +56,12 @@ rules:
   # Exclude given rule ID's from checks
   exclude_filter: []
 
+  # List of rule ID's that should be displayed as a warning instead of an error. By default,
+  # only rules whose version is higher than the current default version are marked as warnings.
+  # This list allows to degrade errors to warnings for each rule.
+  warning_filter:
+    - "ANSIBLE9999"
+
   # All dotfiles (including hidden folders) are excluded by default.
   # You can disable this setting and handle dotfiles by yourself with `exclude_files`.
   ignore_dotfiles: True
