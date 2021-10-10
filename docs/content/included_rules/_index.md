@@ -2,7 +2,7 @@
 title: Included rules
 ---
 
-Reviews are nothing without some rules or standards against which to review. ansible-later comes with a couple of built-in checks explained in the following table.
+Reviews are uselsess without some rules or standards to check against. ansible-later comes with a set of built-in checks, which are explained in the following table.
 
 | Rule                          | ID          | Description                                                       | Parameter                                                            |
 | ----------------------------- | ----------- | ----------------------------------------------------------------- | -------------------------------------------------------------------- |
@@ -20,7 +20,7 @@ Reviews are nothing without some rules or standards against which to review. ans
 | CheckUniqueNamedTask          | ANSIBLE0003 | Tasks and handlers must be uniquely named within a file.          |                                                                      |
 | CheckBraces                   | ANSIBLE0004 | YAML should use consistent number of spaces around variables.     | {double-braces: max-spaces-inside: 1, min-spaces-inside: 1}          |
 | CheckScmInSrc                 | ANSIBLE0005 | Use SCM key rather than `src: scm+url` in requirements file.      |                                                                      |
-| CheckNamedTask                | ANSIBLE0006 | Tasks and handlers must be named.                                 | excludes: meta, debug, include\_\*, import\_\*, block                |
+| CheckNamedTask                | ANSIBLE0006 | Tasks and handlers must be named.                                 | {named-task-exclude: [meta, debug, block, include\_\*, import\_\*]}  |
 | CheckNameFormat               | ANSIBLE0007 | Name of tasks and handlers must be formatted.                     | formats: first letter capital                                        |
 | CheckCommandInsteadofModule   | ANSIBLE0008 | Commands should not be used in place of modules.                  |                                                                      |
 | CheckInstallUseLatest         | ANSIBLE0009 | Package managers should not install with state=latest.            |                                                                      |

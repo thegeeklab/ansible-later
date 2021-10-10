@@ -136,6 +136,16 @@ class Settings(object):
                     "max-spaces-inside": 1,
                 },
                 "literal-bools": ["True", "False", "yes", "no"],
+                "named-task-exclude": [
+                    "meta",
+                    "debug",
+                    "block",
+                    "include_role",
+                    "import_role",
+                    "include_tasks",
+                    "import_tasks",
+                    "include_vars",
+                ]
             },
             "yamllint": {
                 "empty-lines": {
