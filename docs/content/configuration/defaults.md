@@ -2,6 +2,8 @@
 title: Default settings
 ---
 
+The default configuration is used if no other value is specified. Each option can be [overridden](/configuration/) in several ways.
+
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <!-- spellchecker-disable -->
