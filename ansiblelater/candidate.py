@@ -195,8 +195,10 @@ class Candidate(object):
             return GroupVars(filename, settings, standards)
         if "host_vars" in filename.split(os.sep):
             return HostVars(filename, settings, standards)
-        if parentdir in ["meta"]:
+        if parentdir in ["meta"] and "main" in basename:
             return Meta(filename, settings, standards)
+        if parentdir in ["meta"] and "argument_specs" in basename:
+            return ArgumentSpecs(filename, settings, standards)
         if (
             parentdir in ["library", "lookup_plugins", "callback_plugins", "filter_plugins"]
             or filename.endswith(".py")
@@ -308,6 +310,12 @@ class RoleVars(RoleFile):
 
 class Meta(RoleFile):
     """Object classified as Ansible meta file."""
+
+    pass
+
+
+class ArgumentSpecs(RoleFile):
+    """Object classified as Ansible roles argument specs file."""
 
     pass
 
