@@ -30,15 +30,16 @@ ansible:
 
   # List of tasks that don't need to be named (ANSIBLE0006).
   # You have to specify every single task type, globs or wildcard will not work!
-  named-task-exclude:
-    - "meta"
-    - "debug"
-    - "block"
-    - "include_role"
-    - "include_tasks"
-    - "include_vars"
-    - "import_role"
-    - "import_tasks"
+  named-task
+    exclude:
+      - "meta"
+      - "debug"
+      - "block"
+      - "include_role"
+      - "include_tasks"
+      - "include_vars"
+      - "import_role"
+      - "import_tasks"
 
 # Global logging configuration
 # If you would like to force colored output (e.g. non-tty)

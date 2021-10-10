@@ -11,7 +11,7 @@ class CheckNamedTask(StandardBase):
 
     def check(self, candidate, settings):
         tasks, errors = self.get_normalized_tasks(candidate, settings)
-        nameless_tasks = settings["ansible"]["named-task-exclude"]
+        nameless_tasks = settings["ansible"]["named-task"]["exclude"]
 
         if not errors:
             for task in tasks:
