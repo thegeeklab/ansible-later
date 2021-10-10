@@ -165,16 +165,18 @@ class Candidate(object):
                         extra=flag_extra(err_labels)
                     )
                 else:
-                    LOG.error(
-                        "{sid}Standard '{description}' not met:\n{path}:{error}".format(
-                            sid=self._format_id(standard.sid),
-                            description=standard.description,
-                            path=self.path,
-                            error=err
-                        ),
-                        extra=flag_extra(err_labels)
+                    msg = "{sid}Standard '{description}' not met:\n{path}:{error}".format(
+                        sid=self._format_id(standard.sid),
+                        description=standard.description,
+                        path=self.path,
+                        error=err
                     )
-                    errors = errors + 1
+
+                    if standard.sid not in self.config["rules"]["warning_filter"]:
+                        LOG.error(msg, extra=flag_extra(err_labels))
+                        errors = errors + 1
+                    else:
+                        LOG.warning(msg, extra=flag_extra(err_labels))
 
         return errors
 
