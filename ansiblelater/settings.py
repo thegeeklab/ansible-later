@@ -148,6 +148,9 @@ class Settings(object):
                         "include_vars",
                     ],
                 },
+                "native-yaml": {
+                    "exclude": [],
+                },
             },
             "yamllint": {
                 "empty-lines": {

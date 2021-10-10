@@ -13,7 +13,7 @@ Reviews are useless without some rules or standards to check against. ansible-la
 | CheckYamlColons               | LINT0005    | YAML should use consistent number of spaces around colons.        | {colons: {max-spaces-before: 0, max-spaces-after: 1}}                  |
 | CheckYamlFile                 | LINT0006    | Roles file should be in YAML format.                              |                                                                        |
 | CheckYamlHasContent           | LINT0007    | Files should contain useful content.                              |                                                                        |
-| CheckNativeYaml               | LINT0008    | Use YAML format for tasks and handlers rather than key=value.     |                                                                        |
+| CheckNativeYaml               | LINT0008    | Use YAML format for tasks and handlers rather than key=value.     | {native-yaml: {exclude: []}}                                           |
 | CheckYamlDocumentEnd          | LINT0009    | YAML should contain document end marker.                          | {document-end: {present: true}}                                        |
 | CheckLineBetweenTasks         | ANSIBLE0001 | Single tasks should be separated by an empty line.                |                                                                        |
 | CheckMetaMain                 | ANSIBLE0002 | Meta file should contain a basic subset of parameters.            | author, description, min_ansible_version, platforms, dependencies      |
