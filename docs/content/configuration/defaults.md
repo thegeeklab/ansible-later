@@ -5,6 +5,9 @@ title: Default settings
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <!-- spellchecker-disable -->
+
+Configure ansible-later using a `.later.yml` file or [globally](/configuration).
+
 {{< highlight YAML "linenos=table" >}}
 ---
 ansible:
