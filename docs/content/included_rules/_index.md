@@ -2,7 +2,7 @@
 title: Included rules
 ---
 
-Reviews are uselsess without some rules or standards to check against. ansible-later comes with a set of built-in checks, which are explained in the following table.
+Reviews are useless without some rules or standards to check against. ansible-later comes with a set of built-in checks, which are explained in the following table.
 
 | Rule                          | ID          | Description                                                       | Parameter                                                              |
 | ----------------------------- | ----------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------- |
