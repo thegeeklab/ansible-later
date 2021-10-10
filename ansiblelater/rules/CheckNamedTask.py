@@ -11,12 +11,12 @@ class CheckNamedTask(StandardBase):
 
     def check(self, candidate, settings):
         tasks, errors = self.get_normalized_tasks(candidate, settings)
-        nameless_tasks = settings["ansible"]["named-task"]["exclude"]
+        exclude_modules = settings["ansible"]["named-task"]["exclude"]
 
         if not errors:
             for task in tasks:
                 module = task["action"]["__ansible_module__"]
-                if ("name" not in task or not task["name"]) and module not in nameless_tasks:
+                if ("name" not in task or not task["name"]) and module not in exclude_modules:
                     errors.append(
                         self.Error(task["__line__"], self.helptext.format(module=module))
                     )

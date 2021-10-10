@@ -28,9 +28,9 @@ ansible:
     - "yes"
     - "no"
 
-  # List of tasks that don't need to be named (ANSIBLE0006).
-  # You have to specify every single task type, globs or wildcard will not work!
-  named-task
+  # List of modules that don't need to be named (ANSIBLE0006).
+  # You must specify each individual module name, globs or wildcards do not work!
+  named-task:
     exclude:
       - "meta"
       - "debug"
@@ -40,6 +40,11 @@ ansible:
       - "include_vars"
       - "import_role"
       - "import_tasks"
+
+  # List of modules that are allowed to use the key=value format instead of the native YAML format (LINT0008).
+  # You must specify each individual module name, globs or wildcards do not work!
+  native-yaml:
+    exclude: []
 
 # Global logging configuration
 # If you would like to force colored output (e.g. non-tty)
