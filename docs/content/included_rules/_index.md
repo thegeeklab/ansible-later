@@ -15,7 +15,7 @@ Reviews are useless without some rules or standards to check against. ansible-la
 | CheckYamlHasContent           | LINT0007    | Files should contain useful content.                              |                                                                        |
 | CheckNativeYaml               | LINT0008    | Use YAML format for tasks and handlers rather than key=value.     | {native-yaml: {exclude: []}}                                           |
 | CheckYamlDocumentEnd          | LINT0009    | YAML should contain document end marker.                          | {document-end: {present: true}}                                        |
-| CheckLineBetweenTasks         | ANSIBLE0001 | Single tasks should be separated by an empty line.                |                                                                        |
+| CheckTaskSeparation           | ANSIBLE0001 | Single tasks should be separated by an empty line.                |                                                                        |
 | CheckMetaMain                 | ANSIBLE0002 | Meta file should contain a basic subset of parameters.            | author, description, min_ansible_version, platforms, dependencies      |
 | CheckUniqueNamedTask          | ANSIBLE0003 | Tasks and handlers must be uniquely named within a file.          |                                                                        |
 | CheckBraces                   | ANSIBLE0004 | YAML should use consistent number of spaces around variables.     | {double-braces: max-spaces-inside: 1, min-spaces-inside: 1}            |
