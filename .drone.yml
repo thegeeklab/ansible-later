@@ -23,7 +23,7 @@ steps:
     commands:
       - git fetch -tq
       - pip install poetry poetry-dynamic-versioning -qq
-      - poetry install -E ansible-base
+      - poetry install -E ansible-core
       - poetry run flake8 ./ansiblelater
     environment:
       PY_COLORS: 1
@@ -53,7 +53,7 @@ steps:
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry config experimental.new-installer false
-      - poetry install -E ansible-base
+      - poetry install -E ansible-core
       - poetry run pytest
       - poetry version
       - poetry run ansible-later --help
@@ -67,7 +67,7 @@ steps:
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry config experimental.new-installer false
-      - poetry install -E ansible-base
+      - poetry install -E ansible-core
       - poetry run pytest
       - poetry version
       - poetry run ansible-later --help
@@ -81,7 +81,7 @@ steps:
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry config experimental.new-installer false
-      - poetry install -E ansible-base
+      - poetry install -E ansible-core
       - poetry run pytest
       - poetry version
       - poetry run ansible-later --help
@@ -95,7 +95,7 @@ steps:
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry config experimental.new-installer false
-      - poetry install -E ansible-base
+      - poetry install -E ansible-core
       - poetry run pytest
       - poetry version
       - poetry run ansible-later --help
@@ -142,7 +142,7 @@ steps:
     commands:
       - git fetch -tq
       - pip install poetry poetry-dynamic-versioning -qq
-      - poetry install -E ansible-base
+      - poetry install -E ansible-core
       - poetry run bandit -r ./ansiblelater -x ./ansiblelater/test
     environment:
       PY_COLORS: 1
@@ -647,6 +647,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: a2bced882da541e336f413df113c0317eb4d1ca6f3164624e11069cfad699586
+hmac: 978f8129485afdd50c04d9cf48b9cb7835ea4152d4688004d887827260fc7426
 
 ...
