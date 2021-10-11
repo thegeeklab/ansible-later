@@ -23,7 +23,7 @@ class CheckTaskSeparation(StandardBase):
         task_regex = re.compile(r"-\sname:(.*)")
         prevline = "#file_start_marker"
 
-        allowed_prevline = ["---", "tasks:", "pre_tasks:", "post_tasks:", "block:"]
+        allowed_prevline = ["---", "tasks:", "pre_tasks:", "post_tasks:", "block:", "rescue:"]
 
         errors = task_errors + line_errors
         if not errors:
