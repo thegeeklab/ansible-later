@@ -7,7 +7,7 @@ local PythonVersion(pyversion='3.7') = {
   commands: [
     'pip install poetry poetry-dynamic-versioning -qq',
     'poetry config experimental.new-installer false',
-    'poetry install -E ansible-base',
+    'poetry install -E ansible-core',
     'poetry run pytest',
     'poetry version',
     'poetry run ansible-later --help',
@@ -48,7 +48,7 @@ local PipelineLint = {
       commands: [
         'git fetch -tq',
         'pip install poetry poetry-dynamic-versioning -qq',
-        'poetry install -E ansible-base',
+        'poetry install -E ansible-core',
         'poetry run flake8 ./ansiblelater',
       ],
     },
@@ -121,7 +121,7 @@ local PipelineSecurity = {
       commands: [
         'git fetch -tq',
         'pip install poetry poetry-dynamic-versioning -qq',
-        'poetry install -E ansible-base',
+        'poetry install -E ansible-core',
         'poetry run bandit -r ./ansiblelater -x ./ansiblelater/test',
       ],
     },
