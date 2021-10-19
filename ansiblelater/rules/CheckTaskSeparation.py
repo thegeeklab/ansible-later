@@ -24,7 +24,14 @@ class CheckTaskSeparation(StandardBase):
         prevline = "#file_start_marker"
 
         allowed_prevline = [
-            "---", "tasks:", "pre_tasks:", "post_tasks:", "block:", "rescue:", "always:"
+            "---",
+            "handlers:",
+            "tasks:",
+            "pre_tasks:",
+            "post_tasks:",
+            "block:",
+            "rescue:",
+            "always:",
         ]
 
         errors = task_errors + line_errors
