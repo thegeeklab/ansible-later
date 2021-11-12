@@ -51,7 +51,7 @@ unidiff = "0.7.0"
 yamllint = "1.26.3"
 
 [tool.poetry.dev-dependencies]
-bandit = "1.7.0"
+bandit = "1.7.1"
 flake8-blind-except = "0.2.0"
 flake8-builtins = "1.5.3"
 flake8-docstrings = "1.6.0"
