@@ -88,7 +88,6 @@ local PipelineTest = {
         'codecov --required -X gcov',
       ],
       depends_on: [
-        'python37-pytest',
         'python38-pytest',
         'python39-pytest',
         'python310-pytest',
