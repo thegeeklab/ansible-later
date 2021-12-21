@@ -337,7 +337,7 @@ local PipelineDocs = {
     },
     {
       name: 'testbuild',
-      image: 'thegeeklab/hugo:0.83.1',
+      image: 'thegeeklab/hugo:0.91.0',
       commands: [
         'hugo -s docs/ -b http://localhost/',
       ],
@@ -354,7 +354,7 @@ local PipelineDocs = {
     },
     {
       name: 'build',
-      image: 'thegeeklab/hugo:0.83.1',
+      image: 'thegeeklab/hugo:0.91.0',
       commands: [
         'hugo -s docs/',
       ],
