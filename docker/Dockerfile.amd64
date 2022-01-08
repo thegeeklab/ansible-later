@@ -1,4 +1,4 @@
-FROM python:3.10-alpine@sha256:bed0a5fe5b7d996b0678abf4fb2f0d5f3d5078cda951ccdc068ffbddb555e727
+FROM amd64/python:3.10-slim
 
 LABEL maintainer="Robert Kaussow <mail@thegeeklab.de>"
 LABEL org.opencontainers.image.authors="Robert Kaussow <mail@thegeeklab.de>"
@@ -12,13 +12,12 @@ ENV CARGO_NET_GIT_FETCH_WITH_CLI=true
 
 ADD dist/ansible_later-*.whl /
 
-RUN apk --update add --virtual .build-deps build-base libffi-dev musl-dev openssl-dev python3-dev cargo && \
-    apk --update add git && \
+RUN apt update && \
     pip install --upgrade --no-cache-dir pip && \
     pip install --no-cache-dir $(find / -name "ansible_later-*.whl")[ansible] && \
-    apk del .build-deps && \
     rm -f ansible_later-*.whl && \
-    rm -rf /var/cache/apk/* && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /tmp/* && \
     rm -rf /root/.cache/
 
 USER root
