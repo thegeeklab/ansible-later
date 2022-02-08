@@ -65,7 +65,7 @@ pydocstyle = "6.1.1"
 pytest = "7.0.0"
 pytest-cov = "3.0.0"
 pytest-mock = "3.7.0"
-tomli = "2.0.0"
+tomli = "2.0.1"
 yapf = "0.32.0"
 toml = "0.10.2"
 
