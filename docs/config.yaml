@@ -18,11 +18,17 @@ markup:
     startLevel: 1
 
 params:
+  description: >
+    ansible-later is a fast and extensible best practice scanner and linting tool for Ansible resources
+    to enforce a coding or best practice guideline.
+  images:
+    - "socialmedia2.png"
+
   geekdocMenuBundle: true
   geekdocToC: 3
 
   geekdocRepo: https://github.com/thegeeklab/ansible-later
-  geekdocEditPath: edit/main/docs/content
+  geekdocEditPath: edit/main/docs
 
   geekdocDateFormat: "Jan 2, 2006"
   geekdocSearch: true
