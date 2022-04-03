@@ -26,14 +26,13 @@ resolvelib = ">=0.5.3,<0.6.0"
 
 [[package]]
 name = "anyconfig"
-version = "0.12.0"
+version = "0.13.0"
 description = "Library provides common APIs to load and dump configuration files in various formats"
 category = "main"
 optional = false
 python-versions = "*"
 
 [package.extras]
-devel = ["coveralls", "flake8 (<3.5.0)", "mock", "nose", "pylint", "pycodestyle (<2.4.0)"]
 query = ["jmespath"]
 schema = ["jsonschema"]
 template = ["jinja2"]
@@ -701,7 +700,7 @@ ansible-core = ["ansible-core"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8.0"
-content-hash = "25546b14ea220b073f48f8a5c8782c3b4a563ac39def01caf5cb54fabe77bd86"
+content-hash = "75423affea6ecf680688cd527112557c3be447b614c45a871eabdb37f3f88d1a"
 
 [metadata.files]
 ansible = [
@@ -711,8 +710,8 @@ ansible-core = [
     {file = "ansible-core-2.12.4.tar.gz", hash = "sha256:827af75985a6f04b980bd371027bf038cb187640628557298acb9983a8f2c2da"},
 ]
 anyconfig = [
-    {file = "anyconfig-0.12.0-py2.py3-none-any.whl", hash = "sha256:2119065ad835d0e4cbcb26a58fab0705952c5657c05fa90ef7a11cdecbbafb1f"},
-    {file = "anyconfig-0.12.0.tar.gz", hash = "sha256:3091d7675740686fade85755537f2a7c6ccefa8659c5bb56174e02ded74b96d5"},
+    {file = "anyconfig-0.13.0-py2.py3-none-any.whl", hash = "sha256:17cb189938d6cda4d21a2dabcd63db86658d2556e767dfd4835b1011544a1f8e"},
+    {file = "anyconfig-0.13.0.tar.gz", hash = "sha256:03ff2e1762af388fbbbed1c1ab7f9f1ec006a91da7db3a68b963da6e7795d2ac"},
 ]
 appdirs = [
     {file = "appdirs-1.4.4-py2.py3-none-any.whl", hash = "sha256:a841dacd6b99318a741b166adb07e19ee71a274450e68237b4650ca1055ab128"},
