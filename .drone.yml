@@ -484,12 +484,12 @@ steps:
   - name: testbuild
     image: thegeeklab/hugo:0.97.3
     commands:
-      - hugo --panicOnWarning -s docs/ -b http://localhost/
+      - hugo --panicOnWarning -s docs/ -b http://localhost:8000/
 
   - name: link-validation
     image: thegeeklab/link-validator
     commands:
-      - link-validator -ro
+      - link-validator --nice --external --skip-file .linkcheckignore
     environment:
       LINK_VALIDATOR_BASE_DIR: docs/public
 
@@ -632,6 +632,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 43c78fd91bfeae9f192c5e5c30a5bc74288dc82747fb58fb529c1520fc3c0d90
+hmac: 3dfdeb9f62ed88a15805bb3b068836ccb0d3f1f610ea674643458fda582fb3b8
 
 ...
