@@ -5,7 +5,8 @@
     {
       "description": "Ansible base dependencies",
       "groupName": "ansible packages",
-      "matchPackageNames": ["ansible", "ansible-core"]
+      "matchPackageNames": ["ansible", "ansible-core"],
+      "matchUpdateTypes": ["patch"]
     }
   ]
 }
