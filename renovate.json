@@ -5,7 +5,7 @@
     {
       "description": "Ansible base dependencies",
       "matchPackageNames": ["ansible", "ansible-core"],
-      "separateMajorMinor": true
+      "separateMinorPatch": true
     }
   ]
 }
