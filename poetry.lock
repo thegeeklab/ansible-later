@@ -11,7 +11,7 @@ ansible-core = ">=2.12.6,<2.13.0"
 
 [[package]]
 name = "ansible-core"
-version = "2.12.6"
+version = "2.12.7"
 description = "Radically simple IT automation"
 category = "main"
 optional = true
@@ -699,14 +699,14 @@ ansible-core = ["ansible-core"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8.0"
-content-hash = "d61a6c6cce090d573239f4f4f14b0157d5360812b3b33402a772fc05d43e4602"
+content-hash = "af9d7701988e5453b8c4bcc2d2bd60bd528d46bd902460e4bd5a4762726279b2"
 
 [metadata.files]
 ansible = [
     {file = "ansible-5.9.0.tar.gz", hash = "sha256:6f2f762fca6cff0401a6d2119b8ba3b2f111ea1a93fd203c86df09bc75570f18"},
 ]
 ansible-core = [
-    {file = "ansible-core-2.12.6.tar.gz", hash = "sha256:5f366e851159d8f72ce68d32b8c0edda56ee537c01e9f68eca382bd1510af65d"},
+    {file = "ansible-core-2.12.7.tar.gz", hash = "sha256:a31c1b0a3e2efedcb4c48cf95d36aa0ab19cef40eba1719ddb0d92ba1a9cf62a"},
 ]
 anyconfig = [
     {file = "anyconfig-0.13.0-py2.py3-none-any.whl", hash = "sha256:17cb189938d6cda4d21a2dabcd63db86658d2556e767dfd4835b1011544a1f8e"},
