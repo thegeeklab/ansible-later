@@ -654,7 +654,7 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "unidiff"
-version = "0.7.3"
+version = "0.7.4"
 description = "Unified diff parsing/metadata extraction library."
 category = "main"
 optional = false
@@ -699,7 +699,7 @@ ansible-core = ["ansible-core"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8.0"
-content-hash = "1b9db4ae555bbba913484a59fcc13e9df3da6465f475390f8b180960161aa1b8"
+content-hash = "d04ee60a2cba8e02231c303aa8f8f5411b200d2cc20ed16a2a60e6da1e2ac54f"
 
 [metadata.files]
 ansible = [
@@ -1126,8 +1126,8 @@ toolz = [
     {file = "toolz-0.11.2.tar.gz", hash = "sha256:6b312d5e15138552f1bda8a4e66c30e236c831b612b2bf0005f8a1df10a4bc33"},
 ]
 unidiff = [
-    {file = "unidiff-0.7.3-py2.py3-none-any.whl", hash = "sha256:33152364004b455e11afd67e2d2d6bb8f2c20b28a289b443f2c7b84be18c24cb"},
-    {file = "unidiff-0.7.3.tar.gz", hash = "sha256:d5f2e53a9a00db3224a8c36349b5380e0e22d1aec6c694b14fb9483ee93c6205"},
+    {file = "unidiff-0.7.4-py2.py3-none-any.whl", hash = "sha256:688622add422f84a873498cc4ff9bf50da5ea6c23dea908f19d2190fa39a8e39"},
+    {file = "unidiff-0.7.4.tar.gz", hash = "sha256:2bbcbc986e1fb97f04b1d7b864aa6002ab02f4d8a996bf03aa6e5a81447d1fc5"},
 ]
 yamllint = [
     {file = "yamllint-1.26.3.tar.gz", hash = "sha256:3934dcde484374596d6b52d8db412929a169f6d9e52e20f9ade5bf3523d9b96e"},
