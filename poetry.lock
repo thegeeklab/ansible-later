@@ -343,7 +343,7 @@ i18n = ["Babel (>=2.7)"]
 
 [[package]]
 name = "jsonschema"
-version = "4.6.0"
+version = "4.6.1"
 description = "An implementation of JSON Schema validation for Python"
 category = "main"
 optional = false
@@ -699,7 +699,7 @@ ansible-core = ["ansible-core"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8.0"
-content-hash = "d04ee60a2cba8e02231c303aa8f8f5411b200d2cc20ed16a2a60e6da1e2ac54f"
+content-hash = "8f800d428bae2ba47911a556ea05404f71b68e9c63a0d1a6b410e144d0202b29"
 
 [metadata.files]
 ansible = [
@@ -919,8 +919,8 @@ jinja2 = [
     {file = "Jinja2-3.1.2.tar.gz", hash = "sha256:31351a702a408a9e7595a8fc6150fc3f43bb6bf7e319770cbc0db9df9437e852"},
 ]
 jsonschema = [
-    {file = "jsonschema-4.6.0-py3-none-any.whl", hash = "sha256:1c92d2db1900b668201f1797887d66453ab1fbfea51df8e4b46236689c427baf"},
-    {file = "jsonschema-4.6.0.tar.gz", hash = "sha256:9d6397ba4a6c0bf0300736057f649e3e12ecbc07d3e81a0dacb72de4e9801957"},
+    {file = "jsonschema-4.6.1-py3-none-any.whl", hash = "sha256:5eb781753403847fb320f05e9ab2191725b58c5e7f97f1bed63285ca423159bc"},
+    {file = "jsonschema-4.6.1.tar.gz", hash = "sha256:ec2802e6a37517f09d47d9ba107947589ae1d25ff557b925d83a321fc2aa5d3b"},
 ]
 markupsafe = [
     {file = "MarkupSafe-2.1.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:86b1f75c4e7c2ac2ccdaec2b9022845dbb81880ca318bb7a0a01fbf7813e3812"},
