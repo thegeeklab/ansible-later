@@ -47,7 +47,7 @@ python = "^3.8.0"
 python-json-logger = "2.0.3"
 toolz = "0.12.0"
 unidiff = "0.7.4"
-yamllint = "1.26.3"
+yamllint = "1.27.1"
 
 [tool.poetry.dev-dependencies]
 bandit = "1.7.4"
