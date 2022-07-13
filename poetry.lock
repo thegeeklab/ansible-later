@@ -552,7 +552,7 @@ dev = ["pre-commit", "tox", "pytest-asyncio"]
 
 [[package]]
 name = "python-json-logger"
-version = "2.0.3"
+version = "2.0.4"
 description = "A python library adding a json log formatter"
 category = "main"
 optional = false
@@ -699,7 +699,7 @@ ansible-core = ["ansible-core"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8.0"
-content-hash = "d228a51cd95dd1cf82a060449797148e2dd2094758973627eb7dacaf10637158"
+content-hash = "4155915144febf7b51570b353b905026e5f3d839f97d6469815af9c7d0886075"
 
 [metadata.files]
 ansible = [
@@ -1065,8 +1065,8 @@ pytest-mock = [
     {file = "pytest_mock-3.8.2-py3-none-any.whl", hash = "sha256:8a9e226d6c0ef09fcf20c94eb3405c388af438a90f3e39687f84166da82d5948"},
 ]
 python-json-logger = [
-    {file = "python-json-logger-2.0.3.tar.gz", hash = "sha256:387d0e0bd74df0b47b857c2d13dd2110f98a52bf0e683b2be463d23bc307f285"},
-    {file = "python_json_logger-2.0.3-py3-none-any.whl", hash = "sha256:00cb0cd5f6a7c98470ff56e2bbc790c3a9ece4295408b3da4666cf9557af812c"},
+    {file = "python-json-logger-2.0.4.tar.gz", hash = "sha256:764d762175f99fcc4630bd4853b09632acb60a6224acb27ce08cd70f0b1b81bd"},
+    {file = "python_json_logger-2.0.4-py3-none-any.whl", hash = "sha256:3b03487b14eb9e4f77e4fc2a023358b5394b82fd89cecf5586259baed57d8c6f"},
 ]
 pyyaml = [
     {file = "PyYAML-6.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:d4db7c7aef085872ef65a8fd7d6d09a14ae91f691dec3e87ee5ee0539d516f53"},
