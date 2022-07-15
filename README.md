@@ -31,7 +31,7 @@ You can find the full documentation at [https://ansible-later.geekdocs.de](https
 
 ## Contributors
 
-Special thanks goes to all [contributors](https://github.com/thegeeklab/ansible-later/graphs/contributors). If you would like to contribute,
+Special thanks to all [contributors](https://github.com/thegeeklab/ansible-later/graphs/contributors). If you would like to contribute,
 please see the [instructions](https://github.com/thegeeklab/ansible-later/blob/main/CONTRIBUTING.md).
 
 ansible-later is a fork of Will Thames [ansible-review](https://github.com/willthames/ansible-review). Thanks for your work on ansible-review and ansible-lint.
