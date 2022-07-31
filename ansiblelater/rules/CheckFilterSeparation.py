@@ -23,6 +23,8 @@ class CheckFilterSeparation(StandardBase):
                 match = braces.findall(line)
                 if match:
                     for item in match:
+                        # replace potential regex in filters
+                        item = re.sub(r"\(.+\)", "(dummy)", line)
                         matches.append((i, item))
 
             for i, line in matches:
