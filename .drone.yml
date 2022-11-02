@@ -90,6 +90,20 @@ steps:
     depends_on:
       - fetch
 
+  - name: python311-pytest
+    image: python:3.11
+    commands:
+      - pip install poetry poetry-dynamic-versioning -qq
+      - poetry config experimental.new-installer false
+      - poetry install -E ansible-core
+      - poetry run pytest
+      - poetry version
+      - poetry run ansible-later --help
+    environment:
+      PY_COLORS: 1
+    depends_on:
+      - fetch
+
   - name: codecov
     image: python:3.10
     commands:
@@ -630,6 +644,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: eb4460fabeac6c01164e6c420758f1c0a6f313f0869ebea9e12014e0605c7dea
+hmac: 1248c66961ccf34ce348b02e971d170a7dbcd7d93f278ba0f29b764fd39278fe
 
 ...

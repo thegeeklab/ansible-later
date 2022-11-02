@@ -76,6 +76,7 @@ local PipelineTest = {
     PythonVersion(pyversion='3.8'),
     PythonVersion(pyversion='3.9'),
     PythonVersion(pyversion='3.10'),
+    PythonVersion(pyversion='3.11'),
     {
       name: 'codecov',
       image: 'python:3.10',
