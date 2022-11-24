@@ -48,20 +48,6 @@ steps:
     commands:
       - git fetch -tq
 
-  - name: python38-pytest
-    image: python:3.8
-    commands:
-      - pip install poetry poetry-dynamic-versioning -qq
-      - poetry config experimental.new-installer false
-      - poetry install -E ansible-core
-      - poetry run pytest
-      - poetry version
-      - poetry run ansible-later --help
-    environment:
-      PY_COLORS: 1
-    depends_on:
-      - fetch
-
   - name: python39-pytest
     image: python:3.9
     commands:
@@ -645,6 +631,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 1dc229fab1d997e1fd362421b0531f31f7c39afbce5791062befe0e389368f95
+hmac: e419f9f1cdb34994a5a2aa8d3bd179d0800001586896d79af7b8f4c17d6f1489
 
 ...
