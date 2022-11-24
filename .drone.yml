@@ -8,7 +8,7 @@ platform:
 
 steps:
   - name: yapf
-    image: python:3.10
+    image: python:3.11
     commands:
       - git fetch -tq
       - pip install poetry poetry-dynamic-versioning -qq
@@ -19,7 +19,7 @@ steps:
       PY_COLORS: 1
 
   - name: flake8
-    image: python:3.10
+    image: python:3.11
     commands:
       - git fetch -tq
       - pip install poetry poetry-dynamic-versioning -qq
@@ -44,23 +44,9 @@ platform:
 
 steps:
   - name: fetch
-    image: python:3.10
+    image: python:3.11
     commands:
       - git fetch -tq
-
-  - name: python38-pytest
-    image: python:3.8
-    commands:
-      - pip install poetry poetry-dynamic-versioning -qq
-      - poetry config experimental.new-installer false
-      - poetry install -E ansible-core
-      - poetry run pytest
-      - poetry version
-      - poetry run ansible-later --help
-    environment:
-      PY_COLORS: 1
-    depends_on:
-      - fetch
 
   - name: python39-pytest
     image: python:3.9
@@ -105,7 +91,7 @@ steps:
       - fetch
 
   - name: codecov
-    image: python:3.10
+    image: python:3.11
     commands:
       - pip install codecov -qq
       - codecov --required -X gcov
@@ -114,9 +100,9 @@ steps:
         from_secret: codecov_token
       PY_COLORS: 1
     depends_on:
-      - python38-pytest
       - python39-pytest
       - python310-pytest
+      - python311-pytest
 
 trigger:
   ref:
@@ -137,7 +123,7 @@ platform:
 
 steps:
   - name: bandit
-    image: python:3.10
+    image: python:3.11
     commands:
       - git fetch -tq
       - pip install poetry poetry-dynamic-versioning -qq
@@ -165,7 +151,7 @@ platform:
 
 steps:
   - name: build
-    image: python:3.10
+    image: python:3.11
     commands:
       - git fetch -tq
       - pip install poetry poetry-dynamic-versioning -qq
@@ -204,7 +190,7 @@ steps:
         - refs/tags/**
 
   - name: publish-pypi
-    image: python:3.10
+    image: python:3.11
     commands:
       - git fetch -tq
       - pip install poetry poetry-dynamic-versioning -qq
@@ -237,7 +223,7 @@ platform:
 
 steps:
   - name: build
-    image: python:3.10
+    image: python:3.11
     commands:
       - git fetch -tq
       - pip install poetry poetry-dynamic-versioning -qq
@@ -315,7 +301,7 @@ platform:
 
 steps:
   - name: build
-    image: python:3.10
+    image: python:3.11
     commands:
       - git fetch -tq
       - pip install poetry poetry-dynamic-versioning -qq
@@ -393,7 +379,7 @@ platform:
 
 steps:
   - name: build
-    image: python:3.10-alpine
+    image: python:3.11-alpine
     commands:
       - apk add -Uq --no-cache build-base openssl-dev libffi-dev musl-dev python3-dev git cargo
       - git fetch -tq
@@ -645,6 +631,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 1dc229fab1d997e1fd362421b0531f31f7c39afbce5791062befe0e389368f95
+hmac: 0e0718865f1e14ff4384bbdd577c85d1bcd023b8de6b413f50d13fae02ddc4ee
 
 ...
