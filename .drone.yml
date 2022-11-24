@@ -8,7 +8,7 @@ platform:
 
 steps:
   - name: yapf
-    image: python:3.10
+    image: python:3.11
     commands:
       - git fetch -tq
       - pip install poetry poetry-dynamic-versioning -qq
@@ -19,7 +19,7 @@ steps:
       PY_COLORS: 1
 
   - name: flake8
-    image: python:3.10
+    image: python:3.11
     commands:
       - git fetch -tq
       - pip install poetry poetry-dynamic-versioning -qq
@@ -44,7 +44,7 @@ platform:
 
 steps:
   - name: fetch
-    image: python:3.10
+    image: python:3.11
     commands:
       - git fetch -tq
 
@@ -91,7 +91,7 @@ steps:
       - fetch
 
   - name: codecov
-    image: python:3.10
+    image: python:3.11
     commands:
       - pip install codecov -qq
       - codecov --required -X gcov
@@ -100,9 +100,9 @@ steps:
         from_secret: codecov_token
       PY_COLORS: 1
     depends_on:
-      - python38-pytest
       - python39-pytest
       - python310-pytest
+      - python311-pytest
 
 trigger:
   ref:
@@ -123,7 +123,7 @@ platform:
 
 steps:
   - name: bandit
-    image: python:3.10
+    image: python:3.11
     commands:
       - git fetch -tq
       - pip install poetry poetry-dynamic-versioning -qq
@@ -151,7 +151,7 @@ platform:
 
 steps:
   - name: build
-    image: python:3.10
+    image: python:3.11
     commands:
       - git fetch -tq
       - pip install poetry poetry-dynamic-versioning -qq
@@ -190,7 +190,7 @@ steps:
         - refs/tags/**
 
   - name: publish-pypi
-    image: python:3.10
+    image: python:3.11
     commands:
       - git fetch -tq
       - pip install poetry poetry-dynamic-versioning -qq
@@ -223,7 +223,7 @@ platform:
 
 steps:
   - name: build
-    image: python:3.10
+    image: python:3.11
     commands:
       - git fetch -tq
       - pip install poetry poetry-dynamic-versioning -qq
@@ -301,7 +301,7 @@ platform:
 
 steps:
   - name: build
-    image: python:3.10
+    image: python:3.11
     commands:
       - git fetch -tq
       - pip install poetry poetry-dynamic-versioning -qq
@@ -379,7 +379,7 @@ platform:
 
 steps:
   - name: build
-    image: python:3.10-alpine
+    image: python:3.11-alpine
     commands:
       - apk add -Uq --no-cache build-base openssl-dev libffi-dev musl-dev python3-dev git cargo
       - git fetch -tq
@@ -631,6 +631,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: e419f9f1cdb34994a5a2aa8d3bd179d0800001586896d79af7b8f4c17d6f1489
+hmac: 0e0718865f1e14ff4384bbdd577c85d1bcd023b8de6b413f50d13fae02ddc4ee
 
 ...
