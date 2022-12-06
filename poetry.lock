@@ -11,7 +11,7 @@ ansible-core = ">=2.14.0,<2.15.0"
 
 [[package]]
 name = "ansible-core"
-version = "2.14.0"
+version = "2.14.1"
 description = "Radically simple IT automation"
 category = "main"
 optional = true
@@ -679,7 +679,7 @@ ansible-core = ["ansible-core"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9.0"
-content-hash = "f3da35a402635fd46cc2f69da9a059481944636bfca8d375c136c69546e587f4"
+content-hash = "2fd0a31227c62e78f6f570affb50d9ba543d1d873b0d6c9243a63c9d75d036ab"
 
 [metadata.files]
 ansible = [
@@ -687,8 +687,8 @@ ansible = [
     {file = "ansible-7.0.0.tar.gz", hash = "sha256:73144e7e602715fab623005d2e71e503dddae86185e061fed861b2449c5618ea"},
 ]
 ansible-core = [
-    {file = "ansible-core-2.14.0.tar.gz", hash = "sha256:fa48b481cb623bf79bb903f223097681a0c13e1b4ec7e78e7dd7d858d36a34b2"},
-    {file = "ansible_core-2.14.0-py3-none-any.whl", hash = "sha256:b191d397c81514bd1922e00e16f0b8ec52e0bcb19b61cc4500085f5f92470cf2"},
+    {file = "ansible-core-2.14.1.tar.gz", hash = "sha256:589257f2560fffd5d4465352cd4504e2cbfc418ba49e0c4265cd54e16070c938"},
+    {file = "ansible_core-2.14.1-py3-none-any.whl", hash = "sha256:06e136c8eda4d8695251995d3c3efa612ebb3ac66948bf42492d4c7b46a75ff2"},
 ]
 anyconfig = [
     {file = "anyconfig-0.13.0-py2.py3-none-any.whl", hash = "sha256:17cb189938d6cda4d21a2dabcd63db86658d2556e767dfd4835b1011544a1f8e"},
