@@ -16,7 +16,7 @@ class CheckFilterSeparation(StandardBase):
 
         matches = []
         braces = re.compile("{{(.*?)}}")
-        filters = re.compile(r"(?<=\|)([\s]{2,}[^\s}]+|[^\s]+)|([^\s{]+[\s]{2,}|[^\s]+)(?=\|)")
+        filters = re.compile(r"(?<=\|)((\s{2,})*\S+)|(\S+(\s{2,})*)(?=\|)")
 
         if not errors:
             for i, line in yamllines:
@@ -24,7 +24,7 @@ class CheckFilterSeparation(StandardBase):
                 if match:
                     for item in match:
                         # replace potential regex in filters
-                        item = re.sub(r"\(.+\)", "(dummy)", line)
+                        item = re.sub(r"\(.+\)", "(dummy)", item)
                         matches.append((i, item))
 
             for i, line in matches:
