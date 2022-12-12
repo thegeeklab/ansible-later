@@ -27,7 +27,7 @@ class CheckFilterSeparation(StandardBase):
                         item = re.sub(r"\(.+\)", "(dummy)", item)
                         matches.append((i, item))
 
-            for i, line in matches:
-                if filters.findall(line):
+            for i, item in matches:
+                if filters.findall(item):
                     errors.append(self.Error(i, self.helptext))
         return self.Result(candidate.path, errors)
