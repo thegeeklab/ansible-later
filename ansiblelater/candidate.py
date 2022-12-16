@@ -184,6 +184,7 @@ class Candidate(object):
     def classify(filename, settings={}, standards=[]):
         parentdir = os.path.basename(os.path.dirname(filename))
         basename = os.path.basename(filename)
+        ext = os.path.splitext(filename)[1][1:]
 
         if parentdir in ["tasks"]:
             return Task(filename, settings, standards)
@@ -206,7 +207,7 @@ class Candidate(object):
             return Code(filename, settings, standards)
         if basename == "inventory" or basename == "hosts" or parentdir in ["inventories"]:
             return Inventory(filename, settings, standards)
-        if "rolesfile" in basename or "requirements" in basename:
+        if ("rolesfile" in basename or ("requirements" in basename and ext in ["yaml", "yml"])):
             return Rolesfile(filename, settings, standards)
         if "Makefile" in basename:
             return Makefile(filename, settings, standards)
