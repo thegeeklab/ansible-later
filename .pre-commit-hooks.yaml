@@ -1,0 +1,10 @@
+---
+- id: ansible-later
+  name: ansible-later
+  description: Run ansible-later, a best-practice scanner for Ansible.
+  entry: ansible-later
+  language: python
+  pass_filenames: True
+  always_run: True
+  additional_dependencies:
+    - ansible
