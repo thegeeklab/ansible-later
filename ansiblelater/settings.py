@@ -190,9 +190,13 @@ class Settings(object):
         except jsonschema.exceptions.ValidationError as e:
             schema_error = (
                 "Error while loading configuration:\n"
-                "Failed validating '{validator}' in schema{schema}"
+                "Failed validating '{validator}' at {path}"
             ).format(
-                validator=e.validator, schema=format_as_index(list(e.relative_schema_path)[:-1])
+                validator=e.validator,
+                path=format_as_index(
+                    list(e.absolute_path)[0],
+                    list(e.absolute_path)[1:],
+                )
             )
             utils.sysexit_with_message(
                 "{schema}: {msg}".format(schema=schema_error, msg=e.message)
