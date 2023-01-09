@@ -6,7 +6,7 @@ class CheckVersion(StandardBase):
     sid = "ANSIBLE9998"
     description = "Standards version should be pinned"
     helptext = "Standards version not set. Using latest standards version {version}"
-    types = ["playbook", "task", "handler"]
+    types = ["task", "handler", "rolevars", "meta", "template", "file", "playbook"]
 
     def check(self, candidate, settings):
         errors = []

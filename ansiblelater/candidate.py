@@ -245,15 +245,7 @@ class Vars(Candidate):
     pass
 
 
-class Unversioned(Candidate):
-    """Object classified as unversioned file."""
-
-    def __init__(self, filename, settings={}, standards=[]):
-        super(Unversioned, self).__init__(filename, settings, standards)
-        self.expected_version = False
-
-
-class InventoryVars(Unversioned):
+class InventoryVars(Candidate):
     """Object classified as Ansible inventory vars."""
 
     pass
@@ -289,13 +281,13 @@ class ArgumentSpecs(RoleFile):
     pass
 
 
-class Inventory(Unversioned):
+class Inventory(Candidate):
     """Object classified as Ansible inventory file."""
 
     pass
 
 
-class Code(Unversioned):
+class Code(Candidate):
     """Object classified as code file."""
 
     pass
@@ -307,13 +299,13 @@ class Template(RoleFile):
     pass
 
 
-class Doc(Unversioned):
+class Doc(Candidate):
     """Object classified as documentation file."""
 
     pass
 
 
-class Makefile(Unversioned):
+class Makefile(Candidate):
     """Object classified as makefile."""
 
     pass
@@ -325,7 +317,7 @@ class File(RoleFile):
     pass
 
 
-class Rolesfile(Unversioned):
+class Rolesfile(Candidate):
     """Object classified as Ansible roles file."""
 
     pass
