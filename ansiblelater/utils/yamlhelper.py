@@ -317,7 +317,7 @@ def _roles_children(basedir, k, v, parent_type, main="main"):
                         )
                     )
             else:
-                raise SystemExit("role dict {role} does not contain a 'role' or 'name' key")
+                raise SystemExit(f"role dict {role} does not contain a 'role' or 'name' key")
         else:
             results.extend(_look_for_role_files(basedir, role, main=main))
     return results

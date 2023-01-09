@@ -56,7 +56,7 @@ class StandardBase(object, metaclass=StandardExtendedMeta):
         pass
 
     def __repr__(self):  # noqa
-        return "Standard: {self.description} (version: {self.version}, types: {self.types})"
+        return f"Standard: {self.description} (version: {self.version}, types: {self.types})"
 
     @staticmethod
     def get_tasks(candidate, settings):
