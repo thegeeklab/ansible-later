@@ -24,7 +24,7 @@ class CheckMetaChangeFromDefault(StandardBase):
 
         if not errors:
             for field, default in field_defaults:
-                pair = "{field}: {default}".format(field=field, default=default)
+                pair = f"{field}: {default}"
                 lookup = nested_lookup(field, content)
                 if lookup and default in nested_lookup(field, content):
                     errors.append(self.Error(None, self.helptext.format(field=pair)))

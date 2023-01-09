@@ -26,7 +26,7 @@ class CheckRelativeRolePaths(StandardBase):
                 path_to_check = None
 
                 if module in module_to_path_folder and "src" in task["action"]:
-                    path_to_check = "../{}".format(module_to_path_folder[module])
+                    path_to_check = f"../{module_to_path_folder[module]}"
 
                 if path_to_check and path_to_check in task["action"]["src"]:
                     errors.append(self.Error(task["__line__"], self.helptext))

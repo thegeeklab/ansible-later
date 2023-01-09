@@ -41,7 +41,7 @@ def get_property(prop):
     currentdir = os.path.dirname(os.path.realpath(__file__))
     parentdir = os.path.dirname(currentdir)
     result = re.search(
-        r'{}\s*=\s*[\'"]([^\'"]*)[\'"]'.format(prop),
+        rf'{prop}\s*=\s*[\'"]([^\'"]*)[\'"]',
         open(os.path.join(parentdir, "__init__.py")).read()
     )
     return result.group(1)

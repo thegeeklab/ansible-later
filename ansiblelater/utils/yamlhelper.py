@@ -248,7 +248,7 @@ def play_children(basedir, item, parent_type, playbook_dir):
 
 def _include_children(basedir, k, v, parent_type):
     # handle include: filename.yml tags=blah
-    (command, args, kwargs) = tokenize("{0}: {1}".format(k, v))
+    (command, args, kwargs) = tokenize(f"{k}: {v}")
 
     result = path_dwim(basedir, args[0])
     if not os.path.exists(result) and not basedir.endswith("tasks"):
@@ -317,10 +317,7 @@ def _roles_children(basedir, k, v, parent_type, main="main"):
                         )
                     )
             else:
-                raise SystemExit(
-                    "role dict {0} does not contain a 'role' "
-                    "or 'name' key".format(role)
-                )
+                raise SystemExit("role dict {role} does not contain a 'role' or 'name' key")
         else:
             results.extend(_look_for_role_files(basedir, role, main=main))
     return results
@@ -497,9 +494,7 @@ def extract_from_list(blocks, candidates):
                     results.extend(add_action_type(block[candidate], candidate, meta_data))
                 elif block[candidate] is not None:
                     raise RuntimeError(
-                        "Key '{candidate}' defined, but bad value: '{block}'".format(
-                            candidate=candidate, block=str(block[candidate])
-                        )
+                        f"Key '{candidate}' defined, but bad value: '{str(block[candidate])}'"
                     )
     return results
 
@@ -551,7 +546,7 @@ def parse_yaml_linenumbers(data, filename):
     except (yaml.parser.ParserError, yaml.scanner.ScannerError) as e:
         raise LaterError("syntax error", e)
     except (yaml.composer.ComposerError) as e:
-        e.problem = "{} {}".format(e.context, e.problem)
+        e.problem = f"{e.context} {e.problem}"
         raise LaterError("syntax error", e)
     return data
 

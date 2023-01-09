@@ -9,7 +9,7 @@ class CheckYamlColons(StandardBase):
     types = ["playbook", "task", "handler", "rolevars", "hostvars", "groupvars", "meta"]
 
     def check(self, candidate, settings):
-        options = "rules: {{colons: {conf}}}".format(conf=settings["yamllint"]["colons"])
+        options = f"rules: {{colons: {settings['yamllint']['colons']}}}"
         errors = self.run_yamllint(candidate, options)
 
         return self.Result(candidate.path, errors)

@@ -188,18 +188,16 @@ class Settings(object):
             anyconfig.validate(config, self.schema, ac_schema_safe=False)
             return True
         except jsonschema.exceptions.ValidationError as e:
-            schema_error = (
-                "Error while loading configuration:\n"
-                "Failed validating '{validator}' at {path}"
-            ).format(
-                validator=e.validator,
-                path=format_as_index(
-                    list(e.absolute_path)[0],
-                    list(e.absolute_path)[1:],
-                )
+            validator = e.validator
+            path = format_as_index(
+                list(e.absolute_path)[0],
+                list(e.absolute_path)[1:],
             )
+            msg = e.message
+
             utils.sysexit_with_message(
-                "{schema}: {msg}".format(schema=schema_error, msg=e.message)
+                "Error while loading configuration:\n"
+                f"Failed validating '{validator}' at {path}: {msg}"
             )
 
     def _update_filelist(self):
