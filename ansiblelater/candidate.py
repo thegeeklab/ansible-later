@@ -28,7 +28,6 @@ class Candidate(object):
         self.binary = False
         self.vault = False
         self.filetype = type(self).__name__.lower()
-        self.expected_version = True
         self.faulty = False
         self.config = settings.config
         self.settings = settings
@@ -69,21 +68,7 @@ class Candidate(object):
                     if match:
                         version = match.group(1)
 
-        if not version:
-            version = utils.standards_latest(self.standards)
-            if self.expected_version:
-                if isinstance(self, RoleFile):
-                    LOG.warning(
-                        f"{name} {path} is in a role that contains a "
-                        "meta/main.yml without a declared standards version. "
-                        f"Using latest standards version {version}"
-                    )
-                else:
-                    LOG.warning(
-                        f"{name} {path} does not present standards version. "
-                        f"Using latest standards version {version}"
-                    )
-        else:
+        if version:
             LOG.info(f"{name} {path} declares standards version {version}")
 
         return version
@@ -105,7 +90,8 @@ class Candidate(object):
     def review(self, lines=None):
         errors = 0
         self.standards = SingleStandards(self.config["rules"]["standards"]).rules
-        self.version = self._get_version()
+        self.version_config = self._get_version()
+        self.version = self.version_config or utils.standards_latest(self.standards)
 
         for standard in self._filter_standards():
             if type(self).__name__.lower() not in standard.types:

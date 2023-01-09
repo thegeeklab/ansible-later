@@ -79,6 +79,7 @@ rules:
   # This list allows to degrade errors to warnings for each rule.
   warning_filter:
     - "ANSIBLE9999"
+    - "ANSIBLE9998"
 
   # All dotfiles (including hidden folders) are excluded by default.
   # You can disable this setting and handle dotfiles by yourself with `exclude_files`.
