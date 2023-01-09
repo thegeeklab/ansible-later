@@ -120,7 +120,10 @@ class Settings(object):
                 "standards": [],
                 "filter": [],
                 "exclude_filter": [],
-                "warning_filter": ["ANSIBLE9999"],
+                "warning_filter": [
+                    "ANSIBLE9999",
+                    "ANSIBLE9998",
+                ],
                 "ignore_dotfiles": True,
                 "exclude_files": [],
                 "version": ""
