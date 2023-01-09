@@ -56,9 +56,7 @@ class StandardBase(object, metaclass=StandardExtendedMeta):
         pass
 
     def __repr__(self):  # noqa
-        return "Standard: {description} (version: {version}, types: {types})".format(
-            description=self.description, version=self.version, types=self.types
-        )
+        return f"Standard: {self.description} (version: {self.version}, types: {self.types})"
 
     @staticmethod
     def get_tasks(candidate, settings):
@@ -72,15 +70,11 @@ class StandardBase(object, metaclass=StandardExtendedMeta):
             except LaterError as ex:
                 e = ex.original
                 errors.append(
-                    StandardBase.Error(
-                        e.problem_mark.line + 1, "syntax error: {msg}".format(msg=e.problem)
-                    )
+                    StandardBase.Error(e.problem_mark.line + 1, f"syntax error: {e.problem}")
                 )
                 candidate.faulty = True
             except LaterAnsibleError as e:
-                errors.append(
-                    StandardBase.Error(e.line, "syntax error: {msg}".format(msg=e.message))
-                )
+                errors.append(StandardBase.Error(e.line, f"syntax error: {e.message}"))
                 candidate.faulty = True
 
         return yamllines, errors
@@ -100,13 +94,11 @@ class StandardBase(object, metaclass=StandardExtendedMeta):
             except LaterError as ex:
                 e = ex.original
                 errors.append(
-                    StandardBase.Error(
-                        e.problem_mark.line + 1, "syntax error: {msg}".format(msg=e.problem)
-                    )
+                    StandardBase.Error(e.problem_mark.line + 1, f"syntax error: {e.problem}")
                 )
                 candidate.faulty = True
             except LaterAnsibleError as e:
-                errors.append(StandardBase.Error(e.line, "syntax error: {}".format(e.message)))
+                errors.append(StandardBase.Error(e.line, f"syntax error: {e.message}"))
                 candidate.faulty = True
 
         return tasks, errors
@@ -124,15 +116,11 @@ class StandardBase(object, metaclass=StandardExtendedMeta):
             except LaterError as ex:
                 e = ex.original
                 errors.append(
-                    StandardBase.Error(
-                        e.problem_mark.line + 1, "syntax error: {msg}".format(msg=e.problem)
-                    )
+                    StandardBase.Error(e.problem_mark.line + 1, f"syntax error: {e.problem}")
                 )
                 candidate.faulty = True
             except LaterAnsibleError as e:
-                errors.append(
-                    StandardBase.Error(e.line, "syntax error: {msg}".format(msg=e.message))
-                )
+                errors.append(StandardBase.Error(e.line, f"syntax error: {e.message}"))
                 candidate.faulty = True
 
         return normalized, errors
@@ -172,15 +160,11 @@ class StandardBase(object, metaclass=StandardExtendedMeta):
             except LaterError as ex:
                 e = ex.original
                 errors.append(
-                    StandardBase.Error(
-                        e.problem_mark.line + 1, "syntax error: {msg}".format(msg=e.problem)
-                    )
+                    StandardBase.Error(e.problem_mark.line + 1, f"syntax error: {e.problem}")
                 )
                 candidate.faulty = True
             except LaterAnsibleError as e:
-                errors.append(
-                    StandardBase.Error(e.line, "syntax error: {msg}".format(msg=e.message))
-                )
+                errors.append(StandardBase.Error(e.line, f"syntax error: {e.message}"))
                 candidate.faulty = True
 
         return normalized, errors
@@ -201,15 +185,11 @@ class StandardBase(object, metaclass=StandardExtendedMeta):
             except LaterError as ex:
                 e = ex.original
                 errors.append(
-                    StandardBase.Error(
-                        e.problem_mark.line + 1, "syntax error: {msg}".format(msg=e.problem)
-                    )
+                    StandardBase.Error(e.problem_mark.line + 1, f"syntax error: {e.problem}")
                 )
                 candidate.faulty = True
             except LaterAnsibleError as e:
-                errors.append(
-                    StandardBase.Error(e.line, "syntax error: {msg}".format(msg=e.message))
-                )
+                errors.append(StandardBase.Error(e.line, f"syntax error: {e.message}"))
                 candidate.faulty = True
 
         return yamllines, errors
@@ -231,9 +211,7 @@ class StandardBase(object, metaclass=StandardExtendedMeta):
                     content = yaml.safe_load(f)
             except yaml.YAMLError as e:
                 errors.append(
-                    StandardBase.Error(
-                        e.problem_mark.line + 1, "syntax error: {msg}".format(msg=e.problem)
-                    )
+                    StandardBase.Error(e.problem_mark.line + 1, f"syntax error: {e.problem}")
                 )
                 candidate.faulty = True
 
@@ -250,9 +228,7 @@ class StandardBase(object, metaclass=StandardExtendedMeta):
                         errors.append(StandardBase.Error(problem.line, problem.desc))
             except yaml.YAMLError as e:
                 errors.append(
-                    StandardBase.Error(
-                        e.problem_mark.line + 1, "syntax error: {msg}".format(msg=e.problem)
-                    )
+                    StandardBase.Error(e.problem_mark.line + 1, f"syntax error: {e.problem}")
                 )
                 candidate.faulty = True
 
@@ -288,9 +264,9 @@ class StandardBase(object, metaclass=StandardExtendedMeta):
 
         def __repr__(self):  # noqa
             if self.lineno:
-                return "{no}: {msg}".format(no=self.lineno, msg=self.message)
+                return f"{self.lineno}: {self.message}"
             else:
-                return " {msg}".format(msg=self.message)
+                return f" {self.message}"
 
         def to_dict(self):
             result = dict(lineno=self.lineno, message=self.message)
@@ -306,7 +282,7 @@ class StandardBase(object, metaclass=StandardExtendedMeta):
             self.errors = errors or []
 
         def message(self):
-            return "\n".join(["{0}:{1}".format(self.candidate, error) for error in self.errors])
+            return "\n".join([f"{self.candidate}:{error}" for error in self.errors])
 
 
 class StandardLoader():
@@ -326,18 +302,14 @@ class StandardLoader():
                 try:
                     spec.loader.exec_module(module)
                 except (ImportError, NameError) as e:
-                    sysexit_with_message(
-                        "Failed to load roles file {module}: \n {msg}".format(
-                            msg=str(e), module=filename
-                        )
-                    )
+                    sysexit_with_message(f"Failed to load roles file {filename}: \n {str(e)}")
 
                 try:
                     for name, obj in inspect.getmembers(module):
                         if self._is_plugin(obj):
                             self.rules.append(obj())
                 except TypeError as e:
-                    sysexit_with_message("Failed to load roles file: \n {msg}".format(msg=str(e)))
+                    sysexit_with_message(f"Failed to load roles file: \n {str(e)}")
 
         self.validate()
 

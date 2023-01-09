@@ -59,9 +59,7 @@ def main():
         "-q", dest="logging.level", action="append_const", const=1, help="decrease log level"
     )
     parser.add_argument("rules.files", nargs="*")
-    parser.add_argument(
-        "-V", "--version", action="version", version="%(prog)s {}".format(__version__)
-    )
+    parser.add_argument("-V", "--version", action="version", version=f"%(prog)s {__version__}")
 
     args = parser.parse_args().__dict__
 
@@ -78,16 +76,16 @@ def main():
         candidate = Candidate.classify(filename, settings)
         if candidate:
             if candidate.binary:
-                LOG.info("Not reviewing binary file {name}".format(name=filename))
+                LOG.info(f"Not reviewing binary file {filename}")
                 continue
             if candidate.vault:
-                LOG.info("Not reviewing vault file {name}".format(name=filename))
+                LOG.info(f"Not reviewing vault file {filename}")
                 continue
             else:
-                LOG.info("Reviewing all of {candidate}".format(candidate=candidate))
+                LOG.info(f"Reviewing all of {candidate}")
                 tasks.append(candidate)
         else:
-            LOG.info("Couldn't classify file {name}".format(name=filename))
+            LOG.info(f"Couldn't classify file {filename}")
 
     errors = (sum(p.map(_review_wrapper, tasks)))
     p.close()

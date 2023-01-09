@@ -9,9 +9,7 @@ class CheckYamlDocumentStart(StandardBase):
     types = ["playbook", "task", "handler", "rolevars", "hostvars", "groupvars", "meta"]
 
     def check(self, candidate, settings):
-        options = "rules: {{document-start: {conf}}}".format(
-            conf=settings["yamllint"]["document-start"]
-        )
+        options = f"rules: {{document-start: {settings['yamllint']['document-start']}}}"
         errors = self.run_yamllint(candidate, options)
 
         return self.Result(candidate.path, errors)

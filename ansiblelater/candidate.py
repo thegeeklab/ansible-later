@@ -41,6 +41,7 @@ class Candidate(object):
             self.binary = True
 
     def _get_version(self):
+        name = type(self).__name__
         path = self.path
         version = None
         config_version = self.config["rules"]["version"].strip()
@@ -73,25 +74,17 @@ class Candidate(object):
             if self.expected_version:
                 if isinstance(self, RoleFile):
                     LOG.warning(
-                        "{name} {path} is in a role that contains a meta/main.yml without a "
-                        "declared standards version. "
-                        "Using latest standards version {version}".format(
-                            name=type(self).__name__, path=self.path, version=version
-                        )
+                        f"{name} {path} is in a role that contains a "
+                        "meta/main.yml without a declared standards version. "
+                        f"Using latest standards version {version}"
                     )
                 else:
                     LOG.warning(
-                        "{name} {path} does not present standards version. "
-                        "Using latest standards version {version}".format(
-                            name=type(self).__name__, path=self.path, version=version
-                        )
+                        f"{name} {path} does not present standards version. "
+                        f"Using latest standards version {version}"
                     )
         else:
-            LOG.info(
-                "{name} {path} declares standards version {version}".format(
-                    name=type(self).__name__, path=self.path, version=version
-                )
-            )
+            LOG.info(f"{name} {path} declares standards version {version}")
 
         return version
 
@@ -122,9 +115,7 @@ class Candidate(object):
 
             if not result:
                 LOG.error(
-                    "Standard '{id}' returns an empty result object. Check failed!".format(
-                        id=standard.sid
-                    )
+                    f"Standard '{standard.sid}' returns an empty result object. Check failed!"
                 )
                 continue
 
@@ -141,36 +132,26 @@ class Candidate(object):
             for err in result.errors:
                 err_labels = copy.copy(labels)
                 err_labels["passed"] = False
+
+                sid = self._format_id(standard.sid)
+                path = self.path
+                description = standard.description
+
                 if isinstance(err, StandardBase.Error):
                     err_labels.update(err.to_dict())
 
                 if not standard.version:
                     LOG.warning(
-                        "{sid}Best practice '{description}' not met:\n{path}:{error}".format(
-                            sid=self._format_id(standard.sid),
-                            description=standard.description,
-                            path=self.path,
-                            error=err
-                        ),
+                        f"{sid}Best practice '{description}' not met:\n{path}:{err}",
                         extra=flag_extra(err_labels)
                     )
                 elif LooseVersion(standard.version) > LooseVersion(self.version):
                     LOG.warning(
-                        "{sid}Future standard '{description}' not met:\n{path}:{error}".format(
-                            sid=self._format_id(standard.sid),
-                            description=standard.description,
-                            path=self.path,
-                            error=err
-                        ),
+                        f"{sid}Future standard '{description}' not met:\n{path}:{err}",
                         extra=flag_extra(err_labels)
                     )
                 else:
-                    msg = "{sid}Standard '{description}' not met:\n{path}:{error}".format(
-                        sid=self._format_id(standard.sid),
-                        description=standard.description,
-                        path=self.path,
-                        error=err
-                    )
+                    msg = f"{sid}Standard '{description}' not met:\n{path}:{err}"
 
                     if standard.sid not in self.config["rules"]["warning_filter"]:
                         LOG.error(msg, extra=flag_extra(err_labels))
@@ -222,13 +203,14 @@ class Candidate(object):
         return None
 
     def _format_id(self, standard_id):
-        if standard_id and standard_id.strip():
-            standard_id = "[{id}] ".format(id=standard_id.strip())
+        sid = standard_id.strip()
+        if sid:
+            standard_id = f"[{sid}] "
 
         return standard_id
 
     def __repr__(self):  # noqa
-        return "{name} ({path})".format(name=type(self).__name__, path=self.path)
+        return f"{type(self).__name__} ({self.path})"
 
     def __getitem__(self, item):  # noqa
         return self.__dict__.get(item)

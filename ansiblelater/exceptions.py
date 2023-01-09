@@ -8,7 +8,7 @@ class LaterError(Exception):
 
     def __init__(self, msg, original):
         """Initialize new exception."""
-        super(LaterError, self).__init__("{msg}: {org}".format(msg=msg, org=original))
+        super(LaterError, self).__init__(f"{msg}: {original}")
         self.original = original
 
 
