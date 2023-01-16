@@ -231,8 +231,8 @@ class StandardBase(object, metaclass=StandardExtendedMeta):
                     StandardBase.Error(e.problem_mark.line + 1, f"syntax error: {e.problem}")
                 )
                 candidate.faulty = True
-            except TypeError as e:
-                errors.append(StandardBase.Error(None, e))
+            except (TypeError, ValueError) as e:
+                errors.append(StandardBase.Error(None, f"yamllint error: {e}"))
                 candidate.faulty = True
 
         return errors
