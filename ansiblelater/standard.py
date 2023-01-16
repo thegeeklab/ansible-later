@@ -1,9 +1,9 @@
 """Standard definition."""
 
-import codecs
 import copy
 import importlib
 import inspect
+import io
 import os
 import pathlib
 import re
@@ -65,7 +65,7 @@ class StandardBase(object, metaclass=StandardExtendedMeta):
 
         if not candidate.faulty:
             try:
-                with codecs.open(candidate.path, mode="rb", encoding="utf-8") as f:
+                with io.open(candidate.path, mode="r", encoding="utf-8") as f:
                     yamllines = parse_yaml_linenumbers(f, candidate.path)
             except LaterError as ex:
                 e = ex.original
@@ -86,7 +86,7 @@ class StandardBase(object, metaclass=StandardExtendedMeta):
 
         if not candidate.faulty:
             try:
-                with codecs.open(candidate.path, mode="rb", encoding="utf-8") as f:
+                with io.open(candidate.path, mode="r", encoding="utf-8") as f:
                     yamllines = parse_yaml_linenumbers(f, candidate.path)
 
                 if yamllines:
@@ -132,7 +132,7 @@ class StandardBase(object, metaclass=StandardExtendedMeta):
 
         if not candidate.faulty:
             try:
-                with codecs.open(candidate.path, mode="rb", encoding="utf-8") as f:
+                with io.open(candidate.path, mode="r", encoding="utf-8") as f:
                     yamllines = parse_yaml_linenumbers(f, candidate.path)
 
                 if yamllines:
@@ -201,7 +201,7 @@ class StandardBase(object, metaclass=StandardExtendedMeta):
 
         if not candidate.faulty:
             try:
-                with codecs.open(candidate.path, mode="rb", encoding="utf-8") as f:
+                with io.open(candidate.path, mode="r", encoding="utf-8") as f:
                     yaml.add_constructor(
                         UnsafeTag.yaml_tag, UnsafeTag.yaml_constructor, Loader=yaml.SafeLoader
                     )
@@ -223,13 +223,16 @@ class StandardBase(object, metaclass=StandardExtendedMeta):
 
         if not candidate.faulty:
             try:
-                with codecs.open(candidate.path, mode="rb", encoding="utf-8") as f:
+                with io.open(candidate.path, mode="r", encoding="utf-8") as f:
                     for problem in linter.run(f, YamlLintConfig(options)):
                         errors.append(StandardBase.Error(problem.line, problem.desc))
             except yaml.YAMLError as e:
                 errors.append(
                     StandardBase.Error(e.problem_mark.line + 1, f"syntax error: {e.problem}")
                 )
+                candidate.faulty = True
+            except (TypeError, ValueError) as e:
+                errors.append(StandardBase.Error(None, f"yamllint error: {e}"))
                 candidate.faulty = True
 
         return errors
