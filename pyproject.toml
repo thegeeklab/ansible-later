@@ -69,6 +69,14 @@ enable = true
 style = "semver"
 vcs = "git"
 
+[tool.pytest.ini_options]
+addopts = "ansiblelater --cov=ansiblelater --cov-report=xml:coverage.xml --cov-report=term --cov-append --no-cov-on-fail"
+filterwarnings = [
+  "ignore::FutureWarning",
+  "ignore::DeprecationWarning",
+  "ignore:.*pep8.*:FutureWarning",
+]
+
 [tool.coverage.run]
 omit = ["**/test/*"]
 
