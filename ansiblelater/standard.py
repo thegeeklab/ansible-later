@@ -3,12 +3,10 @@
 import copy
 import importlib
 import inspect
-import io
 import os
 import pathlib
 import re
-from abc import ABCMeta
-from abc import abstractmethod
+from abc import ABCMeta, abstractmethod
 from collections import defaultdict
 
 import toolz
@@ -16,27 +14,27 @@ import yaml
 from yamllint import linter
 from yamllint.config import YamlLintConfig
 
-from ansiblelater.exceptions import LaterAnsibleError
-from ansiblelater.exceptions import LaterError
-from ansiblelater.utils import Singleton
-from ansiblelater.utils import sysexit_with_message
-from ansiblelater.utils.yamlhelper import UnsafeTag
-from ansiblelater.utils.yamlhelper import VaultTag
-from ansiblelater.utils.yamlhelper import action_tasks
-from ansiblelater.utils.yamlhelper import normalize_task
-from ansiblelater.utils.yamlhelper import normalized_yaml
-from ansiblelater.utils.yamlhelper import parse_yaml_linenumbers
+from ansiblelater.exceptions import LaterAnsibleError, LaterError
+from ansiblelater.utils import Singleton, sysexit_with_message
+from ansiblelater.utils.yamlhelper import (
+    UnsafeTag,
+    VaultTag,
+    action_tasks,
+    normalize_task,
+    normalized_yaml,
+    parse_yaml_linenumbers,
+)
 
 
 class StandardMeta(type):
 
-    def __call__(cls, *args, **kwargs):
+    def __call__(cls, *args):
         mcls = type.__call__(cls, *args)
-        setattr(mcls, "sid", cls.sid)
-        setattr(mcls, "description", getattr(cls, "description", "__unknown__"))
-        setattr(mcls, "helptext", getattr(cls, "helptext", ""))
-        setattr(mcls, "version", getattr(cls, "version", None))
-        setattr(mcls, "types", getattr(cls, "types", []))
+        mcls.sid = cls.sid
+        mcls.description = getattr(cls, "description", "__unknown__")
+        mcls.helptext = getattr(cls, "helptext", "")
+        mcls.version = getattr(cls, "version", None)
+        mcls.types = getattr(cls, "types", [])
         return mcls
 
 
@@ -44,7 +42,7 @@ class StandardExtendedMeta(StandardMeta, ABCMeta):
     pass
 
 
-class StandardBase(object, metaclass=StandardExtendedMeta):
+class StandardBase(metaclass=StandardExtendedMeta):
 
     @property
     @abstractmethod
@@ -55,17 +53,17 @@ class StandardBase(object, metaclass=StandardExtendedMeta):
     def check(self, candidate, settings):
         pass
 
-    def __repr__(self):  # noqa
+    def __repr__(self):
         return f"Standard: {self.description} (version: {self.version}, types: {self.types})"
 
     @staticmethod
-    def get_tasks(candidate, settings):
+    def get_tasks(candidate, settings):  # noqa
         errors = []
         yamllines = []
 
         if not candidate.faulty:
             try:
-                with io.open(candidate.path, mode="r", encoding="utf-8") as f:
+                with open(candidate.path, encoding="utf-8") as f:
                     yamllines = parse_yaml_linenumbers(f, candidate.path)
             except LaterError as ex:
                 e = ex.original
@@ -80,13 +78,13 @@ class StandardBase(object, metaclass=StandardExtendedMeta):
         return yamllines, errors
 
     @staticmethod
-    def get_action_tasks(candidate, settings):
+    def get_action_tasks(candidate, settings):  # noqa
         tasks = []
         errors = []
 
         if not candidate.faulty:
             try:
-                with io.open(candidate.path, mode="r", encoding="utf-8") as f:
+                with open(candidate.path, encoding="utf-8") as f:
                     yamllines = parse_yaml_linenumbers(f, candidate.path)
 
                 if yamllines:
@@ -132,7 +130,7 @@ class StandardBase(object, metaclass=StandardExtendedMeta):
 
         if not candidate.faulty:
             try:
-                with io.open(candidate.path, mode="r", encoding="utf-8") as f:
+                with open(candidate.path, encoding="utf-8") as f:
                     yamllines = parse_yaml_linenumbers(f, candidate.path)
 
                 if yamllines:
@@ -170,7 +168,7 @@ class StandardBase(object, metaclass=StandardExtendedMeta):
         return normalized, errors
 
     @staticmethod
-    def get_normalized_yaml(candidate, settings, options=None):
+    def get_normalized_yaml(candidate, settings, options=None):  # noqa
         errors = []
         yamllines = []
 
@@ -195,13 +193,13 @@ class StandardBase(object, metaclass=StandardExtendedMeta):
         return yamllines, errors
 
     @staticmethod
-    def get_raw_yaml(candidate, settings):
+    def get_raw_yaml(candidate, settings):  # noqa
         content = None
         errors = []
 
         if not candidate.faulty:
             try:
-                with io.open(candidate.path, mode="r", encoding="utf-8") as f:
+                with open(candidate.path, encoding="utf-8") as f:
                     yaml.add_constructor(
                         UnsafeTag.yaml_tag, UnsafeTag.yaml_constructor, Loader=yaml.SafeLoader
                     )
@@ -223,7 +221,7 @@ class StandardBase(object, metaclass=StandardExtendedMeta):
 
         if not candidate.faulty:
             try:
-                with io.open(candidate.path, mode="r", encoding="utf-8") as f:
+                with open(candidate.path, encoding="utf-8") as f:
                     for problem in linter.run(f, YamlLintConfig(options)):
                         errors.append(StandardBase.Error(problem.line, problem.desc))
             except yaml.YAMLError as e:
@@ -246,12 +244,12 @@ class StandardBase(object, metaclass=StandardExtendedMeta):
         else:
             first_cmd_arg = task["action"]["__ansible_arguments__"][0]
 
-        return first_cmd_arg
+        return first_cmd_arg  # noqa
 
-    class Error(object):
+    class Error:
         """Default error object created if a rule failed."""
 
-        def __init__(self, lineno, message, error_type=None, **kwargs):
+        def __init__(self, lineno, message, **kwargs):
             """
             Initialize a new error object and returns None.
 
@@ -265,19 +263,18 @@ class StandardBase(object, metaclass=StandardExtendedMeta):
             for (key, value) in kwargs.items():
                 setattr(self, key, value)
 
-        def __repr__(self):  # noqa
+        def __repr__(self):
             if self.lineno:
                 return f"{self.lineno}: {self.message}"
-            else:
-                return f" {self.message}"
+            return f" {self.message}"
 
         def to_dict(self):
-            result = dict(lineno=self.lineno, message=self.message)
+            result = {"lineno": self.lineno, "message": self.message}
             for (key, value) in self.kwargs.items():
                 result[key] = value
             return result
 
-    class Result(object):
+    class Result:
         """Generic result object."""
 
         def __init__(self, candidate, errors=None):
@@ -308,7 +305,7 @@ class StandardLoader():
                     sysexit_with_message(f"Failed to load roles file {filename}: \n {str(e)}")
 
                 try:
-                    for name, obj in inspect.getmembers(module):
+                    for _name, obj in inspect.getmembers(module):
                         if self._is_plugin(obj):
                             self.rules.append(obj())
                 except TypeError as e:
@@ -325,7 +322,7 @@ class StandardLoader():
         normalized_std = (list(toolz.remove(lambda x: x.sid == "", self.rules)))
         unique_std = len(list(toolz.unique(normalized_std, key=lambda x: x.sid)))
         all_std = len(normalized_std)
-        if not all_std == unique_std:
+        if all_std != unique_std:
             sysexit_with_message(
                 "Detect duplicate ID's in standards definition. Please use unique ID's only."
             )

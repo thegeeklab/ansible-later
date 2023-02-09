@@ -8,14 +8,14 @@ class LaterError(Exception):
 
     def __init__(self, msg, original):
         """Initialize new exception."""
-        super(LaterError, self).__init__(f"{msg}: {original}")
+        super().__init__(f"{msg}: {original}")
         self.original = original
 
 
 class LaterAnsibleError(Exception):
     """Wrapper for ansible syntax errors."""
 
-    def __init__(self, msg, original):
+    def __init__(self, original):
         lines = original.message.splitlines()
 
         line_no = re.search("line(.*?),", lines[2])

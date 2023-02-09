@@ -40,9 +40,8 @@ class CheckFilePermissionOctal(StandardBase):
                 if task["action"]["__ansible_module__"] in modules:
                     mode = task["action"].get("mode", None)
 
-                    if isinstance(mode, int):
-                        if self._is_invalid_permission(mode):
-                            errors.append(self.Error(task["__line__"], self.helptext))
+                    if isinstance(mode, int) and self._is_invalid_permission(mode):
+                        errors.append(self.Error(task["__line__"], self.helptext))
 
         return self.Result(candidate.path, errors)
 
@@ -55,7 +54,7 @@ class CheckFilePermissionOctal(StandardBase):
         group_write_without_read = ((mode >> 3) % 8 and (mode >> 3) % 8 < 4
                                     and not ((mode >> 3) % 8 == 1 and (mode >> 6) % 2 == 1))
         user_write_without_read = ((mode >> 6) % 8 and (mode >> 6) % 8 < 4
-                                   and not (mode >> 6) % 8 == 1)
+                                   and (mode >> 6) % 8 != 1)
         other_more_generous_than_group = mode % 8 > (mode >> 3) % 8
         other_more_generous_than_user = mode % 8 > (mode >> 6) % 8
         group_more_generous_than_user = (mode >> 3) % 8 > (mode >> 6) % 8

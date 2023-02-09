@@ -1,11 +1,8 @@
 """Global utils collection."""
 
-from __future__ import print_function
-
 import contextlib
-import os
-import re
 import sys
+from contextlib import suppress
 from distutils.version import LooseVersion
 
 import yaml
@@ -24,27 +21,17 @@ def count_spaces(c_string):
     leading_spaces = 0
     trailing_spaces = 0
 
-    for i, e in enumerate(c_string):
+    for _i, e in enumerate(c_string):
         if not e.isspace():
             break
         leading_spaces += 1
 
-    for i, e in reversed(list(enumerate(c_string))):
+    for _i, e in reversed(list(enumerate(c_string))):
         if not e.isspace():
             break
         trailing_spaces += 1
 
     return ((leading_spaces, trailing_spaces))
-
-
-def get_property(prop):
-    currentdir = os.path.dirname(os.path.realpath(__file__))
-    parentdir = os.path.dirname(currentdir)
-    result = re.search(
-        rf'{prop}\s*=\s*[\'"]([^\'"]*)[\'"]',
-        open(os.path.join(parentdir, "__init__.py")).read()
-    )
-    return result.group(1)
 
 
 def standards_latest(standards):
@@ -74,10 +61,8 @@ def safe_load(string):
     :returns: dict
 
     """
-    try:
+    with suppress(yaml.scanner.ScannerError):
         return yaml.safe_load(string) or {}
-    except yaml.scanner.ScannerError as e:
-        print(str(e))
 
 
 @contextlib.contextmanager
@@ -120,5 +105,5 @@ class Singleton(type):
 
     def __call__(cls, *args, **kwargs):
         if cls not in cls._instances:
-            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+            cls._instances[cls] = super().__call__(*args, **kwargs)
         return cls._instances[cls]

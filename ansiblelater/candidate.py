@@ -8,14 +8,12 @@ from distutils.version import LooseVersion
 
 from ansible.plugins.loader import module_loader
 
-from ansiblelater import LOG
-from ansiblelater import utils
+from ansiblelater import LOG, utils
 from ansiblelater.logger import flag_extra
-from ansiblelater.standard import SingleStandards
-from ansiblelater.standard import StandardBase
+from ansiblelater.standard import SingleStandards, StandardBase
 
 
-class Candidate(object):
+class Candidate:
     """
     Meta object for all files which later has to process.
 
@@ -23,7 +21,7 @@ class Candidate(object):
     bundled with necessary meta informations for rule processing.
     """
 
-    def __init__(self, filename, settings={}, standards=[]):
+    def __init__(self, filename, settings={}, standards=[]):  # noqa
         self.path = filename
         self.binary = False
         self.vault = False
@@ -87,7 +85,7 @@ class Candidate(object):
 
         return target_standards
 
-    def review(self, lines=None):
+    def review(self):
         errors = 0
         self.standards = SingleStandards(self.config["rules"]["standards"]).rules
         self.version_config = self._get_version()
@@ -148,7 +146,7 @@ class Candidate(object):
         return errors
 
     @staticmethod
-    def classify(filename, settings={}, standards=[]):
+    def classify(filename, settings={}, standards=[]):  # noqa
         parentdir = os.path.basename(os.path.dirname(filename))
         basename = os.path.basename(filename)
         ext = os.path.splitext(filename)[1][1:]
@@ -193,20 +191,20 @@ class Candidate(object):
         if sid:
             standard_id = f"[{sid}] "
 
-        return standard_id
+        return standard_id  # noqa
 
-    def __repr__(self):  # noqa
+    def __repr__(self):
         return f"{type(self).__name__} ({self.path})"
 
-    def __getitem__(self, item):  # noqa
+    def __getitem__(self, item):
         return self.__dict__.get(item)
 
 
 class RoleFile(Candidate):
     """Object classified as Ansible role file."""
 
-    def __init__(self, filename, settings={}, standards=[]):
-        super(RoleFile, self).__init__(filename, settings, standards)
+    def __init__(self, filename, settings={}, standards=[]):  # noqa
+        super().__init__(filename, settings, standards)
 
         parentdir = os.path.dirname(os.path.abspath(filename))
         while parentdir != os.path.dirname(parentdir):
@@ -226,16 +224,16 @@ class Playbook(Candidate):
 class Task(RoleFile):
     """Object classified as Ansible task file."""
 
-    def __init__(self, filename, settings={}, standards=[]):
-        super(Task, self).__init__(filename, settings, standards)
+    def __init__(self, filename, settings={}, standards=[]):  # noqa
+        super().__init__(filename, settings, standards)
         self.filetype = "tasks"
 
 
 class Handler(RoleFile):
     """Object classified as Ansible handler file."""
 
-    def __init__(self, filename, settings={}, standards=[]):
-        super(Handler, self).__init__(filename, settings, standards)
+    def __init__(self, filename, settings={}, standards=[]):  # noqa
+        super().__init__(filename, settings, standards)
         self.filetype = "handlers"
 
 

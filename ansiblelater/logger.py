@@ -30,7 +30,7 @@ colorama.init(autoreset=True, strip=(not _should_do_markup()))
 
 def flag_extra(extra):
     """Ensure extra args are prefixed."""
-    flagged = dict()
+    flagged = {}
 
     if isinstance(extra, dict):
         for key, value in extra.items():
@@ -39,7 +39,7 @@ def flag_extra(extra):
     return flagged
 
 
-class LogFilter(object):
+class LogFilter:
     """A custom log filter which excludes log messages above the logged level."""
 
     def __init__(self, level):

@@ -15,7 +15,7 @@ config_dir = AppDirs("ansible-later").user_config_dir
 default_config_file = os.path.join(config_dir, "config.yml")
 
 
-class Settings(object):
+class Settings:
     """
     Create an object with all necessary settings.
 
@@ -25,14 +25,13 @@ class Settings(object):
     - provides cli parameters
     """
 
-    def __init__(self, args={}, config_file=default_config_file):
+    def __init__(self, args, config_file=default_config_file):
         """
         Initialize a new settings class.
 
         :param args: An optional dict of options, arguments and commands from the CLI.
         :param config_file: An optional path to a yaml config file.
         :returns: None
-
         """
         self.config_file = config_file
         self.schema = None
@@ -42,6 +41,9 @@ class Settings(object):
         self._update_filelist()
 
     def _set_args(self, args):
+        if args is None:
+            args = {}
+
         defaults = self._get_defaults()
         self.config_file = args.get("config_file") or default_config_file
 
@@ -214,7 +216,7 @@ class Settings(object):
             del excludes[:]
 
         filelist = []
-        for root, dirs, files in os.walk("."):
+        for root, _dirs, files in os.walk("."):
             for filename in files:
                 filelist.append(os.path.relpath(os.path.normpath(os.path.join(root, filename))))
 
