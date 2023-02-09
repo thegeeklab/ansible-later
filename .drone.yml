@@ -7,7 +7,7 @@ platform:
   arch: amd64
 
 steps:
-  - name: yapf
+  - name: check-format
     image: python:3.11
     commands:
       - git fetch -tq
@@ -18,13 +18,13 @@ steps:
     environment:
       PY_COLORS: 1
 
-  - name: flake8
+  - name: check-coding
     image: python:3.11
     commands:
       - git fetch -tq
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry install -E ansible-core
-      - poetry run flake8 ./ansiblelater
+      - poetry run ruff ./ansiblelater
     environment:
       PY_COLORS: 1
 
@@ -115,34 +115,6 @@ depends_on:
 
 ---
 kind: pipeline
-name: security
-
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-  - name: bandit
-    image: python:3.11
-    commands:
-      - git fetch -tq
-      - pip install poetry poetry-dynamic-versioning -qq
-      - poetry install -E ansible-core
-      - poetry run bandit -r ./ansiblelater -x ./ansiblelater/test
-    environment:
-      PY_COLORS: 1
-
-trigger:
-  ref:
-    - refs/heads/main
-    - refs/tags/**
-    - refs/pull/**
-
-depends_on:
-  - test
-
----
-kind: pipeline
 name: build-package
 
 platform:
@@ -211,7 +183,7 @@ trigger:
     - refs/pull/**
 
 depends_on:
-  - security
+  - test
 
 ---
 kind: pipeline
@@ -295,7 +267,7 @@ trigger:
     - refs/pull/**
 
 depends_on:
-  - security
+  - test
 
 ---
 kind: pipeline
@@ -446,6 +418,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 58eb57b7a150a51796fafff42c5f4aa7773c2ebaf57e180479f4278adf452574
+hmac: 1bc7f62d74ce0afa031770f617ffda20b9719ed4489061c470476ca707d1275f
 
 ...
