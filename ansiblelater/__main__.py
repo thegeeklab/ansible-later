@@ -5,9 +5,7 @@ import argparse
 import multiprocessing
 import sys
 
-from ansiblelater import LOG
-from ansiblelater import __version__
-from ansiblelater import logger
+from ansiblelater import LOG, __version__, logger
 from ansiblelater.candidate import Candidate
 from ansiblelater.settings import Settings
 from ansiblelater.standard import SingleStandards
@@ -81,9 +79,9 @@ def main():
             if candidate.vault:
                 LOG.info(f"Not reviewing vault file {filename}")
                 continue
-            else:
-                LOG.info(f"Reviewing all of {candidate}")
-                tasks.append(candidate)
+
+            LOG.info(f"Reviewing all of {candidate}")
+            tasks.append(candidate)
         else:
             LOG.info(f"Couldn't classify file {filename}")
 
@@ -91,10 +89,7 @@ def main():
     p.close()
     p.join()
 
-    if not errors == 0:
-        return_code = 1
-    else:
-        return_code = 0
+    return_code = 1 if errors != 0 else 0
 
     sys.exit(return_code)
 

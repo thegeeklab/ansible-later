@@ -8,7 +8,7 @@ class CheckVersion(StandardBase):
     helptext = "Standards version not set. Using latest standards version {version}"
     types = ["task", "handler", "rolevars", "meta", "template", "file", "playbook"]
 
-    def check(self, candidate, settings):
+    def check(self, candidate, settings):  # noqa
         errors = []
 
         if not candidate.version_config:

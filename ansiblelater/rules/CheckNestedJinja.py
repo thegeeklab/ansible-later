@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Author: Adrián Tóth <adtoth@redhat.com>
 #
 # Copyright (c) 2020, Red Hat, Inc.
@@ -51,7 +50,7 @@ class CheckNestedJinja(StandardBase):
                     for item in match:
                         matches.append((i, item))
 
-            for i, line in matches:
+            for i, _ in matches:
                 errors.append(self.Error(i, self.helptext))
 
         return self.Result(candidate.path, errors)

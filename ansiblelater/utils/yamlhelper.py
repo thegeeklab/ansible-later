@@ -24,12 +24,12 @@ import codecs
 import glob
 import imp
 import os
+from contextlib import suppress
 
 import ansible.parsing.mod_args
 import yaml
 from ansible import constants
-from ansible.errors import AnsibleError
-from ansible.errors import AnsibleParserError
+from ansible.errors import AnsibleError, AnsibleParserError
 from ansible.parsing.dataloader import DataLoader
 from ansible.parsing.mod_args import ModuleArgsParser
 from ansible.parsing.yaml.constructor import AnsibleConstructor
@@ -37,8 +37,7 @@ from ansible.parsing.yaml.loader import AnsibleLoader
 from ansible.template import Templar
 from yaml.composer import Composer
 
-from ansiblelater.exceptions import LaterAnsibleError
-from ansiblelater.exceptions import LaterError
+from ansiblelater.exceptions import LaterAnsibleError, LaterError
 
 try:
     # Try to import the Ansible 2 module first, it's the future-proof one
@@ -155,8 +154,8 @@ def tokenize(line):
         tokens = tokens[1:]
     command = tokens[0].replace(":", "")
 
-    args = list()
-    kwargs = dict()
+    args = []
+    kwargs = {}
     nonkvfound = False
     for arg in tokens[1:]:
         if "=" in arg and not nonkvfound:
@@ -171,10 +170,11 @@ def tokenize(line):
 def _playbook_items(pb_data):
     if isinstance(pb_data, dict):
         return pb_data.items()
-    elif not pb_data:
+
+    if not pb_data:
         return []
-    else:
-        return [item for play in pb_data for item in play.items()]
+
+    return [item for play in pb_data for item in play.items()]
 
 
 def find_children(playbook, playbook_dir):
@@ -186,7 +186,7 @@ def find_children(playbook, playbook_dir):
         try:
             playbook_ds = parse_yaml_from_file(playbook[0])
         except AnsibleError as e:
-            raise SystemExit(str(e))
+            raise SystemExit(str(e)) from e
     results = []
     basedir = os.path.dirname(playbook[0])
     items = _playbook_items(playbook_ds)
@@ -194,7 +194,7 @@ def find_children(playbook, playbook_dir):
         for child in play_children(basedir, item, playbook[1], playbook_dir):
             if "$" in child["path"] or "{{" in child["path"]:
                 continue
-            valid_tokens = list()
+            valid_tokens = []
             for token in split_args(child["path"]):
                 if "=" in token:
                     break
@@ -205,20 +205,17 @@ def find_children(playbook, playbook_dir):
 
 
 def template(basedir, value, variables, fail_on_undefined=False, **kwargs):
-    try:
+    # Hack to skip the following exception when using to_json filter on a variable.
+    # I guess the filter doesn't like empty vars...
+    with suppress(AnsibleError, ValueError):
         value = ansible_template(
             os.path.abspath(basedir), value, variables,
             **dict(kwargs, fail_on_undefined=fail_on_undefined)
         )
-        # Hack to skip the following exception when using to_json filter on a variable.
-        # I guess the filter doesn't like empty vars...
-    except (AnsibleError, ValueError):
-        # templating failed, so just keep value as is.
-        pass
     return value
 
 
-def play_children(basedir, item, parent_type, playbook_dir):
+def play_children(basedir, item, parent_type):
     delegate_map = {
         "tasks": _taskshandlers_children,
         "pre_tasks": _taskshandlers_children,
@@ -234,15 +231,13 @@ def play_children(basedir, item, parent_type, playbook_dir):
     play_library = os.path.join(os.path.abspath(basedir), "library")
     _load_library_if_exists(play_library)
 
-    if k in delegate_map:
-        if v:
-            v = template(
-                os.path.abspath(basedir),
-                v,
-                dict(playbook_dir=os.path.abspath(basedir)),
-                fail_on_undefined=False
-            )
-            return delegate_map[k](basedir, k, v, parent_type)
+    if k in delegate_map and v:
+        v = template(
+            os.path.abspath(basedir),
+            v, {"playbook_dir": os.path.abspath(basedir)},
+            fail_on_undefined=False
+        )
+        return delegate_map[k](basedir, k, v, parent_type)
     return []
 
 
@@ -298,14 +293,11 @@ def append_children(taskhandler, basedir, k, parent_type, results):
     # when taskshandlers_children is called for playbooks, the
     # actual type of the included tasks is the section containing the
     # include, e.g. tasks, pre_tasks, or handlers.
-    if parent_type == "playbook":
-        playbook_section = k
-    else:
-        playbook_section = parent_type
+    playbook_section = k if parent_type == "playbook" else parent_type
     results.append({"path": path_dwim(basedir, taskhandler), "type": playbook_section})
 
 
-def _roles_children(basedir, k, v, parent_type, main="main"):
+def _roles_children(basedir, k, v, parent_type, main="main"):  # noqa
     results = []
     for role in v:
         if isinstance(role, dict):
@@ -381,7 +373,7 @@ def rolename(filepath):
         return ""
     role = filepath[idx + 6:]
     role = role[:role.find("/")]
-    return role
+    return role  # noqa
 
 
 def _kv_to_dict(v):
@@ -389,23 +381,27 @@ def _kv_to_dict(v):
     return (dict(__ansible_module__=command, __ansible_arguments__=args, **kwargs))
 
 
-def normalize_task(task, filename, custom_modules=[]):
+def normalize_task(task, filename, custom_modules=None):
     """Ensure tasks have an action key and strings are converted to python objects."""
+
+    if custom_modules is None:
+        custom_modules = []
+
     ansible_action_type = task.get("__ansible_action_type__", "task")
     if "__ansible_action_type__" in task:
         del (task["__ansible_action_type__"])
 
     # temp. extract metadata
-    ansible_meta = dict()
+    ansible_meta = {}
     for key in ["__line__", "__file__", "__ansible_action_meta__"]:
         default = None
 
         if key == "__ansible_action_meta__":
-            default = dict()
+            default = {}
 
         ansible_meta[key] = task.pop(key, default)
 
-    normalized = dict()
+    normalized = {}
 
     builtin = list(ansible.parsing.mod_args.BUILTIN_TASKS)
     builtin = list(set(builtin + custom_modules))
@@ -415,7 +411,7 @@ def normalize_task(task, filename, custom_modules=[]):
     try:
         action, arguments, normalized["delegate_to"] = mod_arg_parser.parse()
     except AnsibleParserError as e:
-        raise LaterAnsibleError("syntax error", e)
+        raise LaterAnsibleError("syntax error", e) from e
 
     # denormalize shell -> command conversion
     if "_uses_shell" in arguments:
@@ -427,16 +423,16 @@ def normalize_task(task, filename, custom_modules=[]):
             # we don"t want to re-assign these values, which were
             # determined by the ModuleArgsParser() above
             continue
-        else:
-            normalized[k] = v
 
-    normalized["action"] = dict(__ansible_module__=action)
+        normalized[k] = v
+
+    normalized["action"] = {"__ansible_module__": action}
 
     if "_raw_params" in arguments:
         normalized["action"]["__ansible_arguments__"] = arguments["_raw_params"].strip().split()
         del (arguments["_raw_params"])
     else:
-        normalized["action"]["__ansible_arguments__"] = list()
+        normalized["action"]["__ansible_arguments__"] = []
     normalized["action"].update(arguments)
 
     normalized[FILENAME_KEY] = filename
@@ -451,7 +447,7 @@ def normalize_task(task, filename, custom_modules=[]):
 
 
 def action_tasks(yaml, file):
-    tasks = list()
+    tasks = []
     if file["filetype"] in ["tasks", "handlers"]:
         tasks = add_action_type(yaml, file["filetype"])
     else:
@@ -474,15 +470,14 @@ def task_to_str(task):
         return name
     action = task.get("action")
     args = " ".join([
-        u"{0}={1}".format(k, v)
-        for (k, v) in action.items()
+        f"{k}={v}" for (k, v) in action.items()
         if k not in ["__ansible_module__", "__ansible_arguments__"]
     ] + action.get("__ansible_arguments__"))
-    return u"{0} {1}".format(action["__ansible_module__"], args)
+    return "{} {}".format(action["__ansible_module__"], args)
 
 
 def extract_from_list(blocks, candidates):
-    results = list()
+    results = []
     for block in blocks:
         for candidate in candidates:
             delete_meta_keys = [candidate, "__line__", "__file__", "__ansible_action_type__"]
@@ -500,7 +495,7 @@ def extract_from_list(blocks, candidates):
 
 
 def add_action_type(actions, action_type, action_meta=None):
-    results = list()
+    results = []
     for action in actions:
         action["__ansible_action_type__"] = BLOCK_NAME_TO_ACTION_TYPE_MAP[action_type]
         if action_meta:
@@ -528,7 +523,7 @@ def parse_yaml_linenumbers(data, filename):
         try:
             mapping = AnsibleConstructor.construct_mapping(loader, node, deep=deep)
         except yaml.constructor.ConstructorError as e:
-            raise LaterError("syntax error", e)
+            raise LaterError("syntax error", e) from e
 
         if hasattr(node, "__line__"):
             mapping[LINE_NUMBER_KEY] = node.__line__
@@ -544,10 +539,10 @@ def parse_yaml_linenumbers(data, filename):
         loader.construct_mapping = construct_mapping
         data = loader.get_single_data() or []
     except (yaml.parser.ParserError, yaml.scanner.ScannerError) as e:
-        raise LaterError("syntax error", e)
+        raise LaterError("syntax error", e) from e
     except (yaml.composer.ComposerError) as e:
         e.problem = f"{e.context} {e.problem}"
-        raise LaterError("syntax error", e)
+        raise LaterError("syntax error", e) from e
     return data
 
 
@@ -572,14 +567,14 @@ def normalized_yaml(file, options):
         for line in removes:
             lines.remove(line)
     except (yaml.parser.ParserError, yaml.scanner.ScannerError) as e:
-        raise LaterError("syntax error", e)
+        raise LaterError("syntax error", e) from e
     return lines
 
 
 class UnsafeTag:
     """Handle custom yaml unsafe tag."""
 
-    yaml_tag = u"!unsafe"
+    yaml_tag = "!unsafe"
 
     def __init__(self, value):
         self.unsafe = value
@@ -592,7 +587,7 @@ class UnsafeTag:
 class VaultTag:
     """Handle custom yaml vault tag."""
 
-    yaml_tag = u"!vault"
+    yaml_tag = "!vault"
 
     def __init__(self, value):
         self.unsafe = value
