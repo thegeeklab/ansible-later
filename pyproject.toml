@@ -39,7 +39,6 @@ ansible-core = {version = "2.14.2", optional = true}
 anyconfig = "0.13.0"
 appdirs = "1.4.4"
 colorama = "0.4.6"
-flake8 = "5.0.4"
 jsonschema = "4.17.3"
 nested-lookup = "0.2.25"
 pathspec = "0.11.0"
