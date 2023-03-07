@@ -56,7 +56,7 @@ ansible-core = ["ansible-core"]
 ansible-later = "ansiblelater.__main__:main"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "0.0.252"
+ruff = "0.0.254"
 pytest = "7.2.1"
 pytest-mock = "3.10.0"
 pytest-cov = "4.0.0"
@@ -117,6 +117,7 @@ ignore = [
     "D202",
     "D203",
     "D212",
+    "UP038",
 ]
 line-length = 99
 select = [
