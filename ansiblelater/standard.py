@@ -244,7 +244,7 @@ class StandardBase(metaclass=StandardExtendedMeta):
         else:
             first_cmd_arg = task["action"]["__ansible_arguments__"][0]
 
-        return first_cmd_arg  # noqa
+        return first_cmd_arg
 
     class Error:
         """Default error object created if a rule failed."""
