@@ -373,7 +373,7 @@ def rolename(filepath):
         return ""
     role = filepath[idx + 6:]
     role = role[:role.find("/")]
-    return role  # noqa
+    return role
 
 
 def _kv_to_dict(v):
