@@ -46,7 +46,7 @@ python = "^3.9.0"
 python-json-logger = "2.0.7"
 toolz = "0.12.0"
 unidiff = "0.7.5"
-yamllint = "1.29.0"
+yamllint = "1.30.0"
 
 [tool.poetry.extras]
 ansible = ["ansible"]
