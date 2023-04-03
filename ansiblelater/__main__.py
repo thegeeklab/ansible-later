@@ -65,7 +65,7 @@ def main():
     config = settings.config
 
     logger.update_logger(LOG, config["logging"]["level"], config["logging"]["json"])
-    SingleStandards(config["rules"]["standards"]).rules
+    SingleStandards(config["rules"]["standards"])
 
     workers = max(multiprocessing.cpu_count() - 2, 2)
     p = multiprocessing.Pool(workers)
