@@ -54,7 +54,7 @@ steps:
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry config experimental.new-installer false
       - poetry install -E ansible-core
-      - poetry run pytest
+      - poetry run pytest --cov-append
       - poetry version
       - poetry run ansible-later --help
     environment:
@@ -68,7 +68,7 @@ steps:
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry config experimental.new-installer false
       - poetry install -E ansible-core
-      - poetry run pytest
+      - poetry run pytest --cov-append
       - poetry version
       - poetry run ansible-later --help
     environment:
@@ -82,7 +82,7 @@ steps:
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry config experimental.new-installer false
       - poetry install -E ansible-core
-      - poetry run pytest
+      - poetry run pytest --cov-append
       - poetry version
       - poetry run ansible-later --help
     environment:
@@ -91,14 +91,12 @@ steps:
       - fetch
 
   - name: codecov
-    image: python:3.11
+    image: thegeeklab/codecov
     commands:
-      - pip install codecov -qq
-      - codecov --required -X gcov
+      - codecov --nonZero
     environment:
       CODECOV_TOKEN:
         from_secret: codecov_token
-      PY_COLORS: 1
     depends_on:
       - python39-pytest
       - python310-pytest
@@ -418,6 +416,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 1bc7f62d74ce0afa031770f617ffda20b9719ed4489061c470476ca707d1275f
+hmac: 4fa3e44f6e23e8ef4ee2c7c7fba9609c1b337f30584db1db35fc7f2dd66d76a8
 
 ...
