@@ -1,5 +1,3 @@
-import re
-
 from ansiblelater.standard import StandardBase
 
 
@@ -22,13 +20,8 @@ class CheckShellInsteadCommand(StandardBase):
                     if "executable" in task["action"]:
                         continue
 
-                    if "cmd" in task["action"]:
-                        cmd = task["action"].get("cmd", [])
-                    else:
-                        cmd = " ".join(task["action"].get("__ansible_arguments__", []))
-
-                    unjinja = re.sub(r"\{\{[^\}]*\}\}", "JINJA_VAR", cmd)
-                    if not any(ch in unjinja for ch in "&|<>;$\n*[]{}?"):
+                    cmd = self.get_safe_cmd(task)
+                    if not any(ch in cmd for ch in self.SHELL_PIPE_CHARS):
                         errors.append(self.Error(task["__line__"], self.helptext))
 
         return self.Result(candidate.path, errors)
