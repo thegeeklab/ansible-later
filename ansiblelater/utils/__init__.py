@@ -1,6 +1,7 @@
 """Global utils collection."""
 
 import contextlib
+import re
 import sys
 from contextlib import suppress
 from distutils.version import LooseVersion
@@ -87,6 +88,18 @@ def add_dict_branch(tree, vector, value):
                              vector[1:],
                              value)
     return tree
+
+
+def has_jinja(value):
+    """Return true if a string seems to contain jinja templating."""
+    re_has_jinja = re.compile(r"{[{%#].*[%#}]}", re.DOTALL)
+    return bool(isinstance(value, str) and re_has_jinja.search(value))
+
+
+def has_glob(value):
+    """Return true if a string looks like having a glob pattern."""
+    re_has_glob = re.compile("[][*?]")
+    return bool(isinstance(value, str) and re_has_glob.search(value))
 
 
 def sysexit(code=1):
