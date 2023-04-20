@@ -8,6 +8,7 @@ import pathlib
 import re
 from abc import ABCMeta, abstractmethod
 from collections import defaultdict
+from urllib.parse import urlparse
 
 import toolz
 import yaml
@@ -43,6 +44,8 @@ class StandardExtendedMeta(StandardMeta, ABCMeta):
 
 
 class StandardBase(metaclass=StandardExtendedMeta):
+
+    SHELL_PIPE_CHARS = "&|<>;$\n*[]{}?"
 
     @property
     @abstractmethod
@@ -245,6 +248,22 @@ class StandardBase(metaclass=StandardExtendedMeta):
             first_cmd_arg = task["action"]["__ansible_arguments__"][0]
 
         return first_cmd_arg
+
+    @staticmethod
+    def get_safe_cmd(task):
+        if "cmd" in task["action"]:
+            cmd = task["action"].get("cmd", "")
+        else:
+            cmd = " ".join(task["action"].get("__ansible_arguments__", []))
+
+        cmd = re.sub(r"{{.+?}}", "JINJA_EXPRESSION", cmd)
+        cmd = re.sub(r"{%.+?%}", "JINJA_STATEMENT", cmd)
+        cmd = re.sub(r"{#.+?#}", "JINJA_COMMENT", cmd)
+
+        parts = cmd.split()
+        parts = [p if not urlparse(p.strip('"').strip("'")).scheme else "URL" for p in parts]
+
+        return " ".join(parts)
 
     class Error:
         """Default error object created if a rule failed."""
