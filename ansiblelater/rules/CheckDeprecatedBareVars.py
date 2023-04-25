@@ -27,9 +27,9 @@ from ansiblelater.utils import has_glob, has_jinja
 class CheckDeprecatedBareVars(StandardBase):
 
     sid = "ANSIBLE0027"
-    description = "Bare variables in loops are deprecated"
+    description = "Deprecated bare variables in loops must not be used"
     helptext = (
-        "bare var '{barevar}' in '{loop_type}' should use full var syntax ('{{{{ {barevar} }}}}') "
+        "bare var '{barevar}' in '{loop_type}' must use full var syntax ('{{{{ {barevar} }}}}') "
         "or be converted to a list"
     )
     version = "0.3"
