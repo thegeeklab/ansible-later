@@ -41,5 +41,6 @@ Reviews are useless without some rules or standards to check against. ansible-la
 | CheckLocalAction              | ANSIBLE0024 | Don't use local_action.                                           |                                                                        |
 | CheckRelativeRolePaths        | ANSIBLE0025 | Don't use a relative path in a role.                              |                                                                        |
 | CheckChangedInWhen            | ANSIBLE0026 | Use handlers instead of `when: changed`.                          |                                                                        |
+| CheckChangedInWhen            | ANSIBLE0027 | Deprecated bare variables in loops must not be used.              |                                                                        |
 | CheckVersion                  | ANSIBLE9998 | Standards version should be pinned.                               |                                                                        |
 | CheckDeprecated               | ANSIBLE9999 | Deprecated features of `ansible-later` should not be used.        |                                                                        |
