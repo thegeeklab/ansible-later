@@ -42,6 +42,9 @@ class CheckDeprecatedBareVars(StandardBase):
             for task in tasks:
                 loop_type = next((key for key in task if key.startswith("with_")), None)
 
+                if not loop_type:
+                    continue
+
                 if loop_type in [
                     "with_items",
                     "with_nested",
