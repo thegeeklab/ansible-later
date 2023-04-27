@@ -29,7 +29,7 @@ class CheckDeprecatedBareVars(StandardBase):
     sid = "ANSIBLE0027"
     description = "Deprecated bare variables in loops must not be used"
     helptext = (
-        "bare var '{barevar}' in '{loop_type}' must use full var syntax ('{{{{ {barevar} }}}}') "
+        "bare var '{barevar}' in '{loop_type}' must use full var syntax '{{{{ {barevar} }}}}' "
         "or be converted to a list"
     )
     version = "0.3"
@@ -46,7 +46,6 @@ class CheckDeprecatedBareVars(StandardBase):
                     continue
 
                 if loop_type in [
-                    "with_items",
                     "with_nested",
                     "with_together",
                     "with_flattened",
@@ -85,6 +84,6 @@ class CheckDeprecatedBareVars(StandardBase):
                 self.errors.append(
                     self.Error(
                         task["__line__"],
-                        self.helptext.format(barevar=task[loop_type], loop_type=loop_type)
+                        self.helptext.format(barevar=varstring, loop_type=loop_type)
                     )
                 )
