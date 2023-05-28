@@ -12,7 +12,6 @@ steps:
     commands:
       - git fetch -tq
       - pip install poetry poetry-dynamic-versioning -qq
-      - poetry config experimental.new-installer false
       - poetry install
       - poetry run yapf -dr ./ansiblelater
     environment:
@@ -52,7 +51,6 @@ steps:
     image: python:3.9
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
-      - poetry config experimental.new-installer false
       - poetry install -E ansible-core
       - poetry run pytest --cov-append
       - poetry version
@@ -66,7 +64,6 @@ steps:
     image: python:3.10
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
-      - poetry config experimental.new-installer false
       - poetry install -E ansible-core
       - poetry run pytest --cov-append
       - poetry version
@@ -80,7 +77,6 @@ steps:
     image: python:3.11
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
-      - poetry config experimental.new-installer false
       - poetry install -E ansible-core
       - poetry run pytest --cov-append
       - poetry version
@@ -416,6 +412,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 4fa3e44f6e23e8ef4ee2c7c7fba9609c1b337f30584db1db35fc7f2dd66d76a8
+hmac: 61adfbb4000f513b9c48979a489bc9556c5257566af038285ba1a12c9421f359
 
 ...
