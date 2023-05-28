@@ -328,7 +328,7 @@ class StandardLoader():
                         if self._is_plugin(obj):
                             self.rules.append(obj())
                 except TypeError as e:
-                    sysexit_with_message(f"Failed to load roles file: \n {str(e)}")
+                    sysexit_with_message(f"Failed to load roles file: \n {e!s}")
 
         self.validate()
 
