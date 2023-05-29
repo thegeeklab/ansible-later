@@ -16,8 +16,10 @@ class CheckScmInSrc(StandardBase):
 
         if not errors:
             for role in roles:
-                src = role.get("src")
-                if isinstance(role, AnsibleMapping) and bool(src) and "+" in src:
+                if (
+                    isinstance(role, AnsibleMapping) and bool(role.get("src"))
+                    and "+" in role.get("src")
+                ):
                     errors.append(self.Error(role["__line__"], self.helptext))
 
         return self.Result(candidate.path, errors)
