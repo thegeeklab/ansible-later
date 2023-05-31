@@ -69,7 +69,8 @@ def ansible_template(basedir, varname, templatevars, **kwargs):
 try:
     from ansible.plugins import module_loader
 except ImportError:
-    from ansible.plugins.loader import module_loader
+    from ansible.plugins.loader import init_plugin_loader, module_loader
+    init_plugin_loader()
 
 LINE_NUMBER_KEY = "__line__"
 FILENAME_KEY = "__file__"
@@ -411,7 +412,7 @@ def normalize_task(task, filename, custom_modules=None):
     try:
         action, arguments, normalized["delegate_to"] = mod_arg_parser.parse()
     except AnsibleParserError as e:
-        raise LaterAnsibleError("syntax error", e) from e
+        raise LaterAnsibleError(e) from e
 
     # denormalize shell -> command conversion
     if "_uses_shell" in arguments:
