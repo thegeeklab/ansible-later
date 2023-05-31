@@ -2,37 +2,38 @@
 
 [[package]]
 name = "ansible"
-version = "7.6.0"
+version = "8.0.0"
 description = "Radically simple IT automation"
 category = "main"
 optional = true
 python-versions = ">=3.9"
 files = [
-    {file = "ansible-7.6.0-py3-none-any.whl", hash = "sha256:e7b1ea64ac2af00f18df3f20d69651f119b1bc3c68d57f8f8a16b045b430dc56"},
-    {file = "ansible-7.6.0.tar.gz", hash = "sha256:4159a266f2caf91adf16daca6a23d132b987ce3acde9c0f2f3089e80d8048f2e"},
+    {file = "ansible-8.0.0-py3-none-any.whl", hash = "sha256:831bd24e4c312f71fe63efc3f993bea2fa04e257ddf5d1181192ea808d2fe77d"},
+    {file = "ansible-8.0.0.tar.gz", hash = "sha256:8670c7c46021c188cac235e9fde7adadbb3c380c2436a3b0c1c493c4ba10bcab"},
 ]
 
 [package.dependencies]
-ansible-core = ">=2.14.6,<2.15.0"
+ansible-core = ">=2.15.0,<2.16.0"
 
 [[package]]
 name = "ansible-core"
-version = "2.14.6"
+version = "2.15.0"
 description = "Radically simple IT automation"
 category = "main"
 optional = true
 python-versions = ">=3.9"
 files = [
-    {file = "ansible-core-2.14.6.tar.gz", hash = "sha256:0cddb0df454561981f1c541db7ac5398d5e9de452ea1f01847acbd031fd7d2b2"},
-    {file = "ansible_core-2.14.6-py3-none-any.whl", hash = "sha256:08963309f44cd98862aba8d887ac5c2b4159cd1c2e31ac9cf47d661e985e6bb9"},
+    {file = "ansible-core-2.15.0.tar.gz", hash = "sha256:cf690fd4ebb40590e00c5acdc0624758ca4c58d1e4b2b02ec026a034070ebf4d"},
+    {file = "ansible_core-2.15.0-py3-none-any.whl", hash = "sha256:723ef347b55ac48bb70951124d0b1e71d799cf7488924d484c3e88aaf9a8c14c"},
 ]
 
 [package.dependencies]
 cryptography = "*"
+importlib-resources = {version = ">=5.0,<5.1", markers = "python_version < \"3.10\""}
 jinja2 = ">=3.0.0"
 packaging = "*"
 PyYAML = ">=5.1"
-resolvelib = ">=0.5.3,<0.9.0"
+resolvelib = ">=0.5.3,<1.1.0"
 
 [[package]]
 name = "anyconfig"
@@ -299,6 +300,22 @@ files = [
 
 [package.extras]
 test = ["pytest (>=6)"]
+
+[[package]]
+name = "importlib-resources"
+version = "5.0.7"
+description = "Read resources from Python packages"
+category = "main"
+optional = true
+python-versions = ">=3.6"
+files = [
+    {file = "importlib_resources-5.0.7-py3-none-any.whl", hash = "sha256:2238159eb743bd85304a16e0536048b3e991c531d1cd51c4a834d1ccf2829057"},
+    {file = "importlib_resources-5.0.7.tar.gz", hash = "sha256:4df460394562b4581bb4e4087ad9447bd433148fba44241754ec3152499f1d1b"},
+]
+
+[package.extras]
+docs = ["jaraco.packaging (>=8.2)", "rst.linker (>=1.9)", "sphinx"]
+testing = ["pytest (>=3.5,!=3.7.3)", "pytest-black (>=0.3.7)", "pytest-checkdocs (>=1.2.3)", "pytest-cov", "pytest-enabler", "pytest-flake8", "pytest-mypy"]
 
 [[package]]
 name = "iniconfig"
@@ -798,4 +815,4 @@ ansible-core = ["ansible-core"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9.0"
-content-hash = "c264e099e73c428b7099445720ab3e3c95eb2287ce2500ef5605106ec35aca1e"
+content-hash = "69c0f7b798410a135b4d685ce1223347abff73d9e311d18f6f75a20ae2fc4bc2"
