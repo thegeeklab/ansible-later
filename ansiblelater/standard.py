@@ -321,7 +321,7 @@ class StandardLoader():
                 try:
                     spec.loader.exec_module(module)
                 except (ImportError, NameError) as e:
-                    sysexit_with_message(f"Failed to load roles file {filename}: \n {str(e)}")
+                    sysexit_with_message(f"Failed to load roles file {filename}: \n {e!s}")
 
                 try:
                     for _name, obj in inspect.getmembers(module):
