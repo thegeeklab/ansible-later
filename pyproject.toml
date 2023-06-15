@@ -56,12 +56,12 @@ ansible-core = ["ansible-core"]
 ansible-later = "ansiblelater.__main__:main"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "0.0.270"
-pytest = "7.3.1"
+ruff = "0.0.272"
+pytest = "7.3.2"
 pytest-mock = "3.10.0"
 pytest-cov = "4.1.0"
 toml = "0.10.2"
-yapf = "0.33.0"
+yapf = "0.40.0"
 
 [tool.poetry-dynamic-versioning]
 enable = true
