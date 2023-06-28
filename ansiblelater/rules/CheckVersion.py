@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 from ansiblelater.standard import StandardBase
 
 
@@ -6,7 +8,8 @@ class CheckVersion(StandardBase):
     sid = "ANSIBLE9998"
     description = "Standards version should be pinned"
     helptext = "Standards version not set. Using latest standards version {version}"
-    types = ["task", "handler", "rolevars", "meta", "template", "file", "playbook"]
+    types: ClassVar[list[str]
+                   ] = ["task", "handler", "rolevars", "meta", "template", "file", "playbook"]
 
     def check(self, candidate, settings):  # noqa
         errors = []

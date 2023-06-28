@@ -209,11 +209,10 @@ def template(basedir, value, variables, fail_on_undefined=False, **kwargs):
     # Hack to skip the following exception when using to_json filter on a variable.
     # I guess the filter doesn't like empty vars...
     with suppress(AnsibleError, ValueError):
-        value = ansible_template(
+        return ansible_template(
             os.path.abspath(basedir), value, variables,
             **dict(kwargs, fail_on_undefined=fail_on_undefined)
         )
-    return value
 
 
 def play_children(basedir, item, parent_type):
@@ -373,8 +372,7 @@ def rolename(filepath):
     if idx < 0:
         return ""
     role = filepath[idx + 6:]
-    role = role[:role.find("/")]
-    return role
+    return role[:role.find("/")]
 
 
 def _kv_to_dict(v):

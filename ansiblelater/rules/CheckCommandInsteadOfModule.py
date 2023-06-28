@@ -1,4 +1,5 @@
 import os
+from typing import ClassVar
 
 from ansiblelater.standard import StandardBase
 
@@ -9,7 +10,7 @@ class CheckCommandInsteadOfModule(StandardBase):
     description = "Commands should not be used in place of modules"
     helptext = "{exec} command used in place of {module} module"
     version = "0.1"
-    types = ["playbook", "task", "handler"]
+    types: ClassVar[list[str]] = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):
         tasks, errors = self.get_normalized_tasks(candidate, settings)

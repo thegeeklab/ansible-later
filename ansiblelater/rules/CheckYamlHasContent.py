@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 from ansiblelater.standard import StandardBase
 
 
@@ -7,7 +9,7 @@ class CheckYamlHasContent(StandardBase):
     description = "Files should contain useful content"
     helptext = "the file appears to have no useful content"
     version = "0.1"
-    types = ["playbook", "task", "handler", "rolevars", "defaults", "meta"]
+    types: ClassVar[list[str]] = ["playbook", "task", "handler", "rolevars", "defaults", "meta"]
 
     def check(self, candidate, settings):
         yamllines, errors = self.get_normalized_yaml(candidate, settings)

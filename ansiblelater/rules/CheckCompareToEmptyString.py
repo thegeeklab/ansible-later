@@ -1,4 +1,5 @@
 import re
+from typing import ClassVar
 
 from ansiblelater.candidate import Template
 from ansiblelater.standard import StandardBase
@@ -10,7 +11,7 @@ class CheckCompareToEmptyString(StandardBase):
     description = "Don't compare to empty string \"\""
     helptext = ("use `when: var` rather than `when: var !=` (or conversely `when: not var`)")
     version = "0.1"
-    types = ["playbook", "task", "handler", "template"]
+    types: ClassVar[list[str]] = ["playbook", "task", "handler", "template"]
 
     def check(self, candidate, settings):
         yamllines, errors = self.get_normalized_yaml(candidate, settings)

@@ -5,6 +5,7 @@ import re
 import sys
 from contextlib import suppress
 from distutils.version import LooseVersion
+from typing import ClassVar
 
 import yaml
 
@@ -114,7 +115,7 @@ def sysexit_with_message(msg, code=1):
 class Singleton(type):
     """Meta singleton class."""
 
-    _instances = {}
+    _instances: ClassVar[dict] = {}
 
     def __call__(cls, *args, **kwargs):
         if cls not in cls._instances:

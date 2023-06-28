@@ -1,4 +1,5 @@
 import re
+from typing import ClassVar
 
 from ansiblelater.standard import StandardBase
 from ansiblelater.utils import count_spaces
@@ -10,7 +11,9 @@ class CheckBracesSpaces(StandardBase):
     description = "YAML should use consistent number of spaces around variables"
     helptext = "no suitable numbers of spaces (min: {min} max: {max})"
     version = "0.1"
-    types = ["playbook", "task", "handler", "rolevars", "hostvars", "groupvars", "meta"]
+    types: ClassVar[list[str]] = [
+        "playbook", "task", "handler", "rolevars", "hostvars", "groupvars", "meta"
+    ]
 
     def check(self, candidate, settings):
         yamllines, errors = self.get_normalized_yaml(candidate, settings)

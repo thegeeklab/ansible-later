@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 from ansiblelater.standard import StandardBase
 
 
@@ -7,7 +9,7 @@ class CheckBecomeUser(StandardBase):
     description = "Become should be combined with become_user"
     helptext = "the task has `become` enabled but `become_user` is missing"
     version = "0.1"
-    types = ["playbook", "task", "handler"]
+    types: ClassVar[list[str]] = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):
         tasks, errors = self.get_normalized_tasks(candidate, settings)

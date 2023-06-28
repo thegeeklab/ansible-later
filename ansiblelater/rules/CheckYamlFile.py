@@ -1,4 +1,5 @@
 import os
+from typing import ClassVar
 
 from ansiblelater.standard import StandardBase
 
@@ -9,7 +10,7 @@ class CheckYamlFile(StandardBase):
     description = "Roles file should be in yaml format"
     helptext = "file does not have a .yml extension"
     version = "0.1"
-    types = ["playbook", "task", "handler"]
+    types: ClassVar[list[str]] = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):
         errors = []

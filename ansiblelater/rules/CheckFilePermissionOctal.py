@@ -18,6 +18,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from typing import ClassVar
+
 from ansiblelater.standard import StandardBase
 
 
@@ -27,7 +29,7 @@ class CheckFilePermissionOctal(StandardBase):
     description = "Octal file permissions must contain leading zero or be a string"
     helptext = "numeric file permissions without leading zero can behave in unexpected ways"
     version = "0.2"
-    types = ["playbook", "task", "handler"]
+    types: ClassVar[list[str]] = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):
         tasks, errors = self.get_normalized_tasks(candidate, settings)

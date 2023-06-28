@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 from ansiblelater.standard import StandardBase
 
 
@@ -10,7 +12,7 @@ class CheckWhenFormat(StandardBase):
         "should be removed from variable(s)"
     )
     version = "0.2"
-    types = ["playbook", "task", "handler"]
+    types: ClassVar[list[str]] = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):
         tasks, errors = self.get_normalized_tasks(candidate, settings)

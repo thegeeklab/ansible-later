@@ -1,4 +1,6 @@
 # Copyright (c) 2018, Ansible Project
+from typing import ClassVar
+
 from nested_lookup import nested_lookup
 
 from ansiblelater.standard import StandardBase
@@ -10,7 +12,7 @@ class CheckMetaChangeFromDefault(StandardBase):
     description = "Roles meta/main.yml default values should be changed"
     helptext = "meta/main.yml default values should be changed for: `{field}`"
     version = "0.2"
-    types = ["meta"]
+    types: ClassVar[list[str]] = ["meta"]
 
     def check(self, candidate, settings):
         content, errors = self.get_raw_yaml(candidate, settings)

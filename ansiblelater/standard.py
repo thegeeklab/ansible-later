@@ -304,7 +304,7 @@ class StandardBase(metaclass=StandardExtendedMeta):
             return "\n".join([f"{self.candidate}:{error}" for error in self.errors])
 
 
-class StandardLoader():
+class StandardLoader:
 
     def __init__(self, source):
         self.rules = []

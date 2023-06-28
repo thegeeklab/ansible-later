@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 from ansiblelater.standard import StandardBase
 
 
@@ -7,7 +9,7 @@ class CheckShellInsteadCommand(StandardBase):
     description = "Shell should only be used when essential"
     helptext = "shell should only be used when piping, redirecting or chaining commands"
     version = "0.1"
-    types = ["playbook", "task", "handler"]
+    types: ClassVar[list[str]] = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):
         tasks, errors = self.get_normalized_tasks(candidate, settings)

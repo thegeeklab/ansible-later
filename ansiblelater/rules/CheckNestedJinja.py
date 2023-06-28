@@ -20,6 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 import re
+from typing import ClassVar
 
 from ansiblelater.standard import StandardBase
 
@@ -33,7 +34,8 @@ class CheckNestedJinja(StandardBase):
         "like `{{ list_one + {{ list_two | max }} }}`"
     )
     version = "0.2"
-    types = ["playbook", "task", "handler", "rolevars", "hostvars", "groupvars"]
+    types: ClassVar[list[str]
+                   ] = ["playbook", "task", "handler", "rolevars", "hostvars", "groupvars"]
 
     def check(self, candidate, settings):
         yamllines, errors = self.get_normalized_yaml(candidate, settings)

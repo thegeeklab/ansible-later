@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 from ansible.parsing.yaml.objects import AnsibleMapping
 
 from ansiblelater.standard import StandardBase
@@ -9,7 +11,7 @@ class CheckScmInSrc(StandardBase):
     description = "Use `scm:` key rather than `src: scm+url`"
     helptext = "usage of `src: scm+url` not recommended"
     version = "0.1"
-    types = ["rolesfile"]
+    types: ClassVar[list[str]] = ["rolesfile"]
 
     def check(self, candidate, settings):
         roles, errors = self.get_tasks(candidate, settings)

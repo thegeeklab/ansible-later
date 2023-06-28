@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 from ansiblelater.standard import StandardBase
 
 
@@ -10,7 +12,7 @@ class CheckCommandHasChanges(StandardBase):
         "idempotent while using controls like `creates`, `removes` or `when`"
     )
     version = "0.1"
-    types = ["playbook", "task"]
+    types: ClassVar[list[str]] = ["playbook", "task"]
 
     def check(self, candidate, settings):
         tasks, errors = self.get_normalized_tasks(candidate, settings)
