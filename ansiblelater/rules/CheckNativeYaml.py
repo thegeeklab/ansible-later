@@ -1,5 +1,3 @@
-from typing import ClassVar
-
 from ansiblelater.standard import StandardBase
 
 
@@ -9,7 +7,7 @@ class CheckNativeYaml(StandardBase):
     description = "Use YAML format for tasks and handlers rather than key=value"
     helptext = "task arguments appear to be in key value rather than YAML format"
     version = "0.1"
-    types: ClassVar[list[str]] = ["playbook", "task", "handler"]
+    types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):
         tasks, errors = self.get_action_tasks(candidate, settings)

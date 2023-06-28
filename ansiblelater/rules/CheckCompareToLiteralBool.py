@@ -1,5 +1,4 @@
 import re
-from typing import ClassVar
 
 from ansiblelater.candidate import Template
 from ansiblelater.standard import StandardBase
@@ -11,7 +10,7 @@ class CheckCompareToLiteralBool(StandardBase):
     description = "Don't compare to True or False"
     helptext = ("use `when: var` rather than `when: var == True` (or conversely `when: not var`)")
     version = "0.1"
-    types: ClassVar[list[str]] = ["playbook", "task", "handler"]
+    types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):
         yamllines, errors = self.get_normalized_yaml(candidate, settings)

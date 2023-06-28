@@ -19,7 +19,6 @@
 # THE SOFTWARE.
 
 import os
-from typing import ClassVar
 
 from ansiblelater.standard import StandardBase
 from ansiblelater.utils import has_glob, has_jinja
@@ -34,7 +33,7 @@ class CheckDeprecatedBareVars(StandardBase):
         "or be converted to a list"
     )
     version = "0.3"
-    types: ClassVar[list[str]] = ["playbook", "task", "handler"]
+    types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):
         tasks, self.errors = self.get_normalized_tasks(candidate, settings)

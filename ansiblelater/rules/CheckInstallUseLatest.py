@@ -1,5 +1,3 @@
-from typing import ClassVar
-
 from ansiblelater.standard import StandardBase
 
 
@@ -9,7 +7,7 @@ class CheckInstallUseLatest(StandardBase):
     description = "Package installs should use present, not latest"
     helptext = "package installs should use `state=present` with or without a version"
     version = "0.1"
-    types: ClassVar[list[str]] = ["playbook", "task", "handler"]
+    types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):
         tasks, errors = self.get_normalized_tasks(candidate, settings)

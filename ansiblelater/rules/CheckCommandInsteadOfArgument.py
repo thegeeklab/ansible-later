@@ -19,7 +19,6 @@
 # THE SOFTWARE.
 
 import os
-from typing import ClassVar
 
 from ansiblelater.standard import StandardBase
 
@@ -30,7 +29,7 @@ class CheckCommandInsteadOfArgument(StandardBase):
     description = "Commands should not be used in place of module arguments"
     helptext = "{exec} used in place of file modules argument {arg}"
     version = "0.2"
-    types: ClassVar[list[str]] = ["playbook", "task", "handler"]
+    types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):
         tasks, errors = self.get_normalized_tasks(candidate, settings)

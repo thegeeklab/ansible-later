@@ -1,7 +1,5 @@
 # Copyright (c) 2016, Tsukinowa Inc. <info@tsukinowa.jp>
 # Copyright (c) 2018, Ansible Project
-from typing import ClassVar
-
 from ansiblelater.standard import StandardBase
 
 
@@ -11,7 +9,7 @@ class CheckLocalAction(StandardBase):
     description = "Don't use local_action"
     helptext = ("`delegate_to: localhost` should be used instead of `local_action`")
     version = "0.2"
-    types: ClassVar[list[str]] = ["playbook", "task", "handler"]
+    types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):
         yamllines, errors = self.get_normalized_yaml(candidate, settings)

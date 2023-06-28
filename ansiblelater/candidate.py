@@ -191,7 +191,7 @@ class Candidate:
         if sid:
             standard_id = f"[{sid}] "
 
-        return standard_id
+        return standard_id  # noqa
 
     def __repr__(self):
         return f"{type(self).__name__} ({self.path})"

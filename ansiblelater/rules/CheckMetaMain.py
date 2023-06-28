@@ -1,5 +1,3 @@
-from typing import ClassVar
-
 from nested_lookup import nested_lookup
 
 from ansiblelater.standard import StandardBase
@@ -11,7 +9,7 @@ class CheckMetaMain(StandardBase):
     description = "Roles must contain suitable meta/main.yml"
     helptext = "file should contain `{key}` key"
     version = "0.1"
-    types: ClassVar[list[str]] = ["meta"]
+    types = ["meta"]
 
     def check(self, candidate, settings):
         content, errors = self.get_raw_yaml(candidate, settings)

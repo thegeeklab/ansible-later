@@ -18,7 +18,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 import re
-from typing import ClassVar
 
 from ansiblelater.standard import StandardBase
 
@@ -32,9 +31,9 @@ class CheckFilePermissionMissing(StandardBase):
         "to avoid unexpected file permissions"
     )
     version = "0.2"
-    types: ClassVar[list[str]] = ["playbook", "task", "handler"]
+    types = ["playbook", "task", "handler"]
 
-    _modules: ClassVar[dict] = {
+    _modules = {
         "archive",
         "assemble",
         "copy",
@@ -42,7 +41,7 @@ class CheckFilePermissionMissing(StandardBase):
         "replace",
         "template",
     }
-    _create_modules: ClassVar[dict[str, bool]] = {
+    _create_modules = {
         "blockinfile": False,
         "htpasswd": True,
         "ini_file": True,

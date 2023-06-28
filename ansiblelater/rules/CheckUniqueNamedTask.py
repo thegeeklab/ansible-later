@@ -1,5 +1,4 @@
 from collections import defaultdict
-from typing import ClassVar
 
 from ansiblelater.standard import StandardBase
 
@@ -10,7 +9,7 @@ class CheckUniqueNamedTask(StandardBase):
     description = "Tasks and handlers must be uniquely named within a single file"
     helptext = "name '{name}' appears multiple times"
     version = "0.1"
-    types: ClassVar[list[str]] = ["playbook", "task", "handler"]
+    types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):
         tasks, errors = self.get_normalized_tasks(candidate, settings)

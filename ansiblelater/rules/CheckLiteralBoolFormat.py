@@ -1,5 +1,4 @@
 import re
-from typing import ClassVar
 
 from ansiblelater.standard import StandardBase
 
@@ -10,8 +9,7 @@ class CheckLiteralBoolFormat(StandardBase):
     description = "Literal bools should be consistent"
     helptext = "literal bools should be written as `{bools}`"
     version = "0.1"
-    types: ClassVar[list[str]
-                   ] = ["playbook", "task", "handler", "rolevars", "hostvars", "groupvars"]
+    types = ["playbook", "task", "handler", "rolevars", "hostvars", "groupvars"]
 
     def check(self, candidate, settings):
         yamllines, errors = self.get_normalized_yaml(candidate, settings)

@@ -1,7 +1,5 @@
 # Copyright (c) 2016, Tsukinowa Inc. <info@tsukinowa.jp>
 # Copyright (c) 2018, Ansible Project
-from typing import ClassVar
-
 from ansiblelater.standard import StandardBase
 
 
@@ -11,7 +9,7 @@ class CheckRelativeRolePaths(StandardBase):
     description = "Don't use a relative path in a role"
     helptext = "`copy` and `template` modules don't need relative path for `src`"
     version = "0.2"
-    types: ClassVar[list[str]] = ["playbook", "task", "handler"]
+    types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):
         tasks, errors = self.get_normalized_tasks(candidate, settings)

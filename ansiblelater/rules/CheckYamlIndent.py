@@ -1,5 +1,3 @@
-from typing import ClassVar
-
 from ansiblelater.standard import StandardBase
 
 
@@ -8,9 +6,7 @@ class CheckYamlIndent(StandardBase):
     sid = "LINT0002"
     description = "YAML should not contain unnecessarily empty lines"
     version = "0.1"
-    types: ClassVar[list[str]] = [
-        "playbook", "task", "handler", "rolevars", "hostvars", "groupvars", "meta"
-    ]
+    types = ["playbook", "task", "handler", "rolevars", "hostvars", "groupvars", "meta"]
 
     def check(self, candidate, settings):
         options = f"rules: {{document-start: {settings['yamllint']['document-start']}}}"

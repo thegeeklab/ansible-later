@@ -18,8 +18,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from typing import ClassVar
-
 from ansiblelater.standard import StandardBase
 
 
@@ -29,7 +27,7 @@ class CheckGitHasVersion(StandardBase):
     description = "Git checkouts should use explicit version"
     helptext = "git checkouts should point to an explicit commit or tag, not `latest`"
     version = "0.2"
-    types: ClassVar[list[str]] = ["playbook", "task", "handler"]
+    types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):
         tasks, errors = self.get_normalized_tasks(candidate, settings)

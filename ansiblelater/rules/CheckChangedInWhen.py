@@ -18,8 +18,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from typing import ClassVar
-
 from ansiblelater.standard import StandardBase
 
 
@@ -29,7 +27,7 @@ class CheckChangedInWhen(StandardBase):
     description = "Use handlers instead of `when: changed`"
     helptext = "tasks using `when: result.changed` setting are effectively acting as a handler"
     version = "0.2"
-    types: ClassVar[list[str]] = ["playbook", "task", "handler"]
+    types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):
         tasks, errors = self.get_normalized_tasks(candidate, settings)
