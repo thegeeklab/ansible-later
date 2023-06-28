@@ -36,7 +36,7 @@ class CheckChangedInWhen(StandardBase):
             for task in tasks:
                 when = None
 
-                if task["__ansible_action_type__"] == "task":
+                if task["__ansible_action_type__"] in ["task", "meta"]:
                     when = task.get("when")
 
                 if isinstance(when, str):
@@ -54,6 +54,15 @@ class CheckChangedInWhen(StandardBase):
         if not isinstance(item, str):
             return False
 
+        if not {"and", "or", "not"}.isdisjoint(item.split()):
+            return False
+
         return any(
-            changed in item for changed in [".changed", "|changed", '["changed"]', "['changed']"]
+            changed in item for changed in [
+                ".changed",
+                "|changed",
+                '["changed"]',
+                "['changed']",
+                "is changed",
+            ]
         )
