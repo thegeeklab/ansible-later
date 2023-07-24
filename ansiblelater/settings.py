@@ -195,7 +195,7 @@ class Settings:
         except jsonschema.exceptions.ValidationError as e:
             validator = e.validator
             path = format_as_index(
-                list(e.absolute_path)[0],
+                next(iter(e.absolute_path)),
                 list(e.absolute_path)[1:],
             )
             msg = e.message
