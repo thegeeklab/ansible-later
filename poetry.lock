@@ -382,14 +382,14 @@ i18n = ["Babel (>=2.7)"]
 
 [[package]]
 name = "jsonschema"
-version = "4.18.5"
+version = "4.18.6"
 description = "An implementation of JSON Schema validation for Python"
 category = "main"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "jsonschema-4.18.5-py3-none-any.whl", hash = "sha256:c6b4c2b83389e504717f2392adbc74bc9ed07341ae0ced18dde132f3a7f70a5b"},
-    {file = "jsonschema-4.18.5.tar.gz", hash = "sha256:4c10200b4b184a348dc92beb554a30280db17ad69b00a2de250d4a842fe3f0b0"},
+    {file = "jsonschema-4.18.6-py3-none-any.whl", hash = "sha256:dc274409c36175aad949c68e5ead0853aaffbe8e88c830ae66bb3c7a1728ad2d"},
+    {file = "jsonschema-4.18.6.tar.gz", hash = "sha256:ce71d2f8c7983ef75a756e568317bf54bc531dc3ad7e66a128eae0d51623d8a3"},
 ]
 
 [package.dependencies]
@@ -985,4 +985,4 @@ ansible-core = ["ansible-core"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9.0"
-content-hash = "56740dbe7ed7f67a275a455324a81ad3fd6c8cc375492240063c534482571747"
+content-hash = "88f28f8529d4920ea4d1ac83c04c38e3e9ade022fb6ead644582f4bf55931bcb"
