@@ -16,7 +16,7 @@ class CheckBecomeUser(StandardBase):
         if not errors:
             gen = (task for task in tasks if "become" in task)
             for task in gen:
-                if task["become"] in true_value and "become_user" not in task.keys():
+                if task["become"] in true_value and "become_user" not in task:
                     errors.append(self.Error(task["__line__"], self.helptext))
 
         return self.Result(candidate.path, errors)
