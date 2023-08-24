@@ -21,7 +21,8 @@ steps:
     image: ${PYTHON_VERSION}
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
-      - poetry install
+      - poetry install -E ansible-core
+      - poetry run pytest --cov-append
       - poetry version
       - poetry run ${CI_REPO_NAME} --help
     environment:
