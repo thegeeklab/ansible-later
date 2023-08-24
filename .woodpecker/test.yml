@@ -7,7 +7,6 @@ when:
 
 matrix:
   PYTHON_VERSION:
-    - docker.io/library/python:3.8
     - docker.io/library/python:3.9
     - docker.io/library/python:3.10
     - docker.io/library/python:3.11
