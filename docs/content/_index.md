@@ -8,7 +8,6 @@ title: Documentation
 [![Python Version](https://img.shields.io/pypi/pyversions/ansible-later.svg)](https://pypi.org/project/ansible-later/)
 [![PyPI Status](https://img.shields.io/pypi/status/ansible-later.svg)](https://pypi.org/project/ansible-later/)
 [![PyPI Release](https://img.shields.io/pypi/v/ansible-later.svg)](https://pypi.org/project/ansible-later/)
-[![Codecov](https://img.shields.io/codecov/c/github/thegeeklab/ansible-later)](https://codecov.io/gh/thegeeklab/ansible-later)
 [![GitHub contributors](https://img.shields.io/github/contributors/thegeeklab/ansible-later)](https://github.com/thegeeklab/ansible-later/graphs/contributors)
 [![Source: GitHub](https://img.shields.io/badge/source-github-blue.svg?logo=github&logoColor=white)](https://github.com/thegeeklab/ansible-later)
 [![License: MIT](https://img.shields.io/github/license/thegeeklab/ansible-later)](https://github.com/thegeeklab/ansible-later/blob/main/LICENSE)
