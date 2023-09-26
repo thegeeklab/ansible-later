@@ -537,7 +537,11 @@ def parse_yaml_linenumbers(data, filename):
         loader.compose_node = compose_node
         loader.construct_mapping = construct_mapping
         data = loader.get_single_data() or []
-    except (yaml.parser.ParserError, yaml.scanner.ScannerError) as e:
+    except (
+        yaml.parser.ParserError,
+        yaml.scanner.ScannerError,
+        yaml.constructor.ConstructorError,
+    ) as e:
         raise LaterError("syntax error", e) from e
     except (yaml.composer.ComposerError) as e:
         e.problem = f"{e.context} {e.problem}"

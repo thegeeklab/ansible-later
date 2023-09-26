@@ -210,9 +210,10 @@ class Settings:
         excludes = self.config["rules"]["exclude_files"]
         ignore_dotfiles = self.config["rules"]["ignore_dotfiles"]
 
-        if ignore_dotfiles and not self.args_files:
+        if ignore_dotfiles:
             excludes.append(".*")
-        else:
+
+        if self.args_files:
             del excludes[:]
 
         filelist = []
