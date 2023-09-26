@@ -13,4 +13,4 @@ Changes can be made in a YAML configuration file or via CLI options, which are p
 
 Please note that YAML attributes are overwritten while YAML lists are merged in any configuration files.
 
-To simplify single file linting, e.g. for debugging purposes, ansible-later ignores the `exclude_files` and `ignore_dotfiles` options when only one file is passed to the CLI.
+To simplify the linting of individual files, e.g. for debugging purposes, ansible-later ignores the `exclude_files` and `ignore_dotfiles` options when files are passed to the CLI.
