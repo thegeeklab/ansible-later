@@ -2,18 +2,18 @@
 
 [[package]]
 name = "ansible"
-version = "8.4.0"
+version = "8.5.0"
 description = "Radically simple IT automation"
 category = "main"
 optional = true
 python-versions = ">=3.9"
 files = [
-    {file = "ansible-8.4.0-py3-none-any.whl", hash = "sha256:d601d89a4306934e7c0aae05195fd72c0719287fde165982d0ebac282b4280f1"},
-    {file = "ansible-8.4.0.tar.gz", hash = "sha256:f33c492690592fad12684e9897f6de2da15c9f6e1ecb79137703a06470af2ce6"},
+    {file = "ansible-8.5.0-py3-none-any.whl", hash = "sha256:2749032e26b0dbc9a694528b85fd89e7f950b8c7b53606f17dd997f23ac7cc88"},
+    {file = "ansible-8.5.0.tar.gz", hash = "sha256:327c509bdaf5cdb2489d85c09d2c107e9432f9874c8bb5c0702a731160915f2d"},
 ]
 
 [package.dependencies]
-ansible-core = ">=2.15.4,<2.16.0"
+ansible-core = ">=2.15.5,<2.16.0"
 
 [[package]]
 name = "ansible-core"
@@ -987,4 +987,4 @@ ansible-core = ["ansible-core"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9.0"
-content-hash = "cdeeb495b11b49fabebd8d0a27c403287ae04b261c00c1950169113c22b79349"
+content-hash = "6d9c21963e8028a41e810abf55867582cfc8367e1b52e5b630c1f57132108020"
