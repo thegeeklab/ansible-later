@@ -4,9 +4,9 @@ import contextlib
 import re
 import sys
 from contextlib import suppress
-from distutils.version import LooseVersion
 
 import yaml
+from packaging.version import Version
 
 from ansiblelater import logger
 
@@ -37,7 +37,7 @@ def count_spaces(c_string):
 
 def standards_latest(standards):
     return max([standard.version for standard in standards if standard.version] or ["0.1"],
-               key=LooseVersion)
+               key=Version)
 
 
 def lines_ranges(lines_spec):
