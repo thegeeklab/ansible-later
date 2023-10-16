@@ -21,8 +21,6 @@
 # THE SOFTWARE.
 
 import codecs
-import glob
-import imp
 import os
 from contextlib import suppress
 
@@ -127,24 +125,6 @@ BLOCK_NAME_TO_ACTION_TYPE_MAP = {
     "rescue": "meta",
     "always": "meta",
 }
-
-
-def load_plugins(directory):
-    result = []
-    fh = None
-
-    for pluginfile in glob.glob(os.path.join(directory, "[A-Za-z]*.py")):
-
-        pluginname = os.path.basename(pluginfile.replace(".py", ""))
-        try:
-            fh, filename, desc = imp.find_module(pluginname, [directory])
-            mod = imp.load_module(pluginname, fh, filename, desc)
-            obj = getattr(mod, pluginname)()
-            result.append(obj)
-        finally:
-            if fh:
-                fh.close()
-    return result
 
 
 def tokenize(line):
