@@ -4,9 +4,9 @@ import contextlib
 import re
 import sys
 from contextlib import suppress
-from packaging.version import Version
 
 import yaml
+from packaging.version import Version
 
 from ansiblelater import logger
 

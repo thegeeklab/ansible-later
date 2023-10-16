@@ -4,9 +4,9 @@ import codecs
 import copy
 import os
 import re
-from packaging.version import Version
 
 from ansible.plugins.loader import module_loader
+from packaging.version import Version
 
 from ansiblelater import LOG, utils
 from ansiblelater.logger import flag_extra
