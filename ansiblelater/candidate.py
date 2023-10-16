@@ -4,7 +4,7 @@ import codecs
 import copy
 import os
 import re
-from distutils.version import LooseVersion
+from packaging.version import Version
 
 from ansible.plugins.loader import module_loader
 
@@ -129,7 +129,7 @@ class Candidate:
                         f"{sid}Best practice '{description}' not met:\n{path}:{err}",
                         extra=flag_extra(err_labels)
                     )
-                elif LooseVersion(standard.version) > LooseVersion(self.version):
+                elif Version(standard.version) > Version(self.version):
                     LOG.warning(
                         f"{sid}Future standard '{description}' not met:\n{path}:{err}",
                         extra=flag_extra(err_labels)
