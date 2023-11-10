@@ -28,7 +28,6 @@ from ansiblelater.utils.yamlhelper import (
 
 
 class StandardMeta(type):
-
     def __call__(cls, *args):
         mcls = type.__call__(cls, *args)
         mcls.sid = cls.sid
@@ -44,7 +43,6 @@ class StandardExtendedMeta(StandardMeta, ABCMeta):
 
 
 class StandardBase(metaclass=StandardExtendedMeta):
-
     SHELL_PIPE_CHARS = "&|<>;$\n*[]{}?"
 
     @property
@@ -279,7 +277,7 @@ class StandardBase(metaclass=StandardExtendedMeta):
             self.lineno = lineno
             self.message = message
             self.kwargs = kwargs
-            for (key, value) in kwargs.items():
+            for key, value in kwargs.items():
                 setattr(self, key, value)
 
         def __repr__(self):
@@ -289,7 +287,7 @@ class StandardBase(metaclass=StandardExtendedMeta):
 
         def to_dict(self):
             result = {"lineno": self.lineno, "message": self.message}
-            for (key, value) in self.kwargs.items():
+            for key, value in self.kwargs.items():
                 result[key] = value
             return result
 
@@ -305,7 +303,6 @@ class StandardBase(metaclass=StandardExtendedMeta):
 
 
 class StandardLoader:
-
     def __init__(self, source):
         self.rules = []
 
@@ -333,12 +330,15 @@ class StandardLoader:
         self.validate()
 
     def _is_plugin(self, obj):
-        return inspect.isclass(obj) and issubclass(
-            obj, StandardBase
-        ) and obj is not StandardBase and not None
+        return (
+            inspect.isclass(obj)
+            and issubclass(obj, StandardBase)
+            and obj is not StandardBase
+            and not None
+        )
 
     def validate(self):
-        normalized_std = (list(toolz.remove(lambda x: x.sid == "", self.rules)))
+        normalized_std = list(toolz.remove(lambda x: x.sid == "", self.rules))
         unique_std = len(list(toolz.unique(normalized_std, key=lambda x: x.sid)))
         all_std = len(normalized_std)
         if all_std != unique_std:

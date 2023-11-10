@@ -2,7 +2,6 @@ from ansiblelater.standard import StandardBase
 
 
 class CheckYamlHasContent(StandardBase):
-
     sid = "LINT0007"
     description = "Files should contain useful content"
     helptext = "the file appears to have no useful content"

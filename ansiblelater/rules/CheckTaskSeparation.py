@@ -5,7 +5,6 @@ from ansiblelater.standard import StandardBase
 
 
 class CheckTaskSeparation(StandardBase):
-
     sid = "ANSIBLE0001"
     description = "Single tasks should be separated by empty line"
     helptext = "missing task separation (required: 1 empty line)"

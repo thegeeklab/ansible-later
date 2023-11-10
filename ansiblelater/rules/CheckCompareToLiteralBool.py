@@ -5,10 +5,9 @@ from ansiblelater.standard import StandardBase
 
 
 class CheckCompareToLiteralBool(StandardBase):
-
     sid = "ANSIBLE0013"
     description = "Don't compare to True or False"
-    helptext = ("use `when: var` rather than `when: var == True` (or conversely `when: not var`)")
+    helptext = "use `when: var` rather than `when: var == True` (or conversely `when: not var`)"
     version = "0.1"
     types = ["playbook", "task", "handler"]
 

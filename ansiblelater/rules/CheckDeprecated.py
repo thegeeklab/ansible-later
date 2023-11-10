@@ -2,7 +2,6 @@ from ansiblelater.standard import StandardBase
 
 
 class CheckDeprecated(StandardBase):
-
     sid = "ANSIBLE9999"
     description = "Deprecated features should not be used"
     helptext = "'{old}' is deprecated and should not be used anymore. Use '{new}' instead."
@@ -20,7 +19,7 @@ class CheckDeprecated(StandardBase):
                             task["__line__"],
                             self.helptext.format(
                                 old="skip_ansible_lint", new="skip_ansible_later"
-                            )
+                            ),
                         )
                     )
         return self.Result(candidate.path, errors)

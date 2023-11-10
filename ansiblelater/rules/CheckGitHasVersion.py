@@ -22,7 +22,6 @@ from ansiblelater.standard import StandardBase
 
 
 class CheckGitHasVersion(StandardBase):
-
     sid = "ANSIBLE0020"
     description = "Git checkouts should use explicit version"
     helptext = "git checkouts should point to an explicit commit or tag, not `latest`"

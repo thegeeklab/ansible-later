@@ -25,7 +25,6 @@ from ansiblelater.utils import has_glob, has_jinja
 
 
 class CheckDeprecatedBareVars(StandardBase):
-
     sid = "ANSIBLE0027"
     description = "Deprecated bare variables in loops must not be used"
     helptext = (
@@ -84,6 +83,6 @@ class CheckDeprecatedBareVars(StandardBase):
                 self.errors.append(
                     self.Error(
                         task["__line__"],
-                        self.helptext.format(barevar=varstring, loop_type=loop_type)
+                        self.helptext.format(barevar=varstring, loop_type=loop_type),
                     )
                 )

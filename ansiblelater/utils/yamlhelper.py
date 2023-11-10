@@ -68,6 +68,7 @@ try:
     from ansible.plugins import module_loader
 except ImportError:
     from ansible.plugins.loader import init_plugin_loader, module_loader
+
     init_plugin_loader()
 
 LINE_NUMBER_KEY = "__line__"
@@ -190,8 +191,10 @@ def template(basedir, value, variables, fail_on_undefined=False, **kwargs):
     # I guess the filter doesn't like empty vars...
     with suppress(AnsibleError, ValueError):
         return ansible_template(
-            os.path.abspath(basedir), value, variables,
-            **dict(kwargs, fail_on_undefined=fail_on_undefined)
+            os.path.abspath(basedir),
+            value,
+            variables,
+            **dict(kwargs, fail_on_undefined=fail_on_undefined),
         )
 
 
@@ -214,8 +217,9 @@ def play_children(basedir, item, parent_type):
     if k in delegate_map and v:
         v = template(
             os.path.abspath(basedir),
-            v, {"playbook_dir": os.path.abspath(basedir)},
-            fail_on_undefined=False
+            v,
+            {"playbook_dir": os.path.abspath(basedir)},
+            fail_on_undefined=False,
         )
         return delegate_map[k](basedir, k, v, parent_type)
     return []
@@ -246,18 +250,20 @@ def _taskshandlers_children(basedir, k, v, parent_type):
             results.extend(
                 _roles_children(
                     basedir,
-                    k, [th["import_role"].get("name")],
+                    k,
+                    [th["import_role"].get("name")],
                     parent_type,
-                    main=th["import_role"].get("tasks_from", "main")
+                    main=th["import_role"].get("tasks_from", "main"),
                 )
             )
         elif "include_role" in th:
             results.extend(
                 _roles_children(
                     basedir,
-                    k, [th["include_role"].get("name")],
+                    k,
+                    [th["include_role"].get("name")],
                     parent_type,
-                    main=th["include_role"].get("tasks_from", "main")
+                    main=th["include_role"].get("tasks_from", "main"),
                 )
             )
         elif "block" in th:
@@ -309,7 +315,7 @@ def _rolepath(basedir, role):
         path_dwim(basedir, role),
         # if included from roles/[role]/meta/main.yml
         path_dwim(basedir, os.path.join("..", "..", "..", "roles", role)),
-        path_dwim(basedir, os.path.join("..", "..", role))
+        path_dwim(basedir, os.path.join("..", "..", role)),
     ]
 
     if constants.DEFAULT_ROLES_PATH:
@@ -351,13 +357,13 @@ def rolename(filepath):
     idx = filepath.find("roles/")
     if idx < 0:
         return ""
-    role = filepath[idx + 6:]
-    return role[:role.find("/")]
+    role = filepath[idx + 6 :]
+    return role[: role.find("/")]
 
 
 def _kv_to_dict(v):
     (command, args, kwargs) = tokenize(v)
-    return (dict(__ansible_module__=command, __ansible_arguments__=args, **kwargs))
+    return dict(__ansible_module__=command, __ansible_arguments__=args, **kwargs)
 
 
 def normalize_task(task, filename, custom_modules=None):
@@ -368,7 +374,7 @@ def normalize_task(task, filename, custom_modules=None):
 
     ansible_action_type = task.get("__ansible_action_type__", "task")
     if "__ansible_action_type__" in task:
-        del (task["__ansible_action_type__"])
+        del task["__ansible_action_type__"]
 
     # temp. extract metadata
     ansible_meta = {}
@@ -395,9 +401,9 @@ def normalize_task(task, filename, custom_modules=None):
     # denormalize shell -> command conversion
     if "_uses_shell" in arguments:
         action = "shell"
-        del (arguments["_uses_shell"])
+        del arguments["_uses_shell"]
 
-    for (k, v) in list(task.items()):
+    for k, v in list(task.items()):
         if k in ("action", "local_action", "args", "delegate_to") or k == action:
             # we don"t want to re-assign these values, which were
             # determined by the ModuleArgsParser() above
@@ -409,7 +415,7 @@ def normalize_task(task, filename, custom_modules=None):
 
     if "_raw_params" in arguments:
         normalized["action"]["__ansible_arguments__"] = arguments["_raw_params"].strip().split()
-        del (arguments["_raw_params"])
+        del arguments["_raw_params"]
     else:
         normalized["action"]["__ansible_arguments__"] = []
     normalized["action"].update(arguments)
@@ -418,7 +424,7 @@ def normalize_task(task, filename, custom_modules=None):
     normalized["__ansible_action_type__"] = ansible_action_type
 
     # add back extracted metadata
-    for (k, v) in ansible_meta.items():
+    for k, v in ansible_meta.items():
         if v:
             normalized[k] = v
 
@@ -448,10 +454,14 @@ def task_to_str(task):
     if name:
         return name
     action = task.get("action")
-    args = " ".join([
-        f"{k}={v}" for (k, v) in action.items()
-        if k not in ["__ansible_module__", "__ansible_arguments__"]
-    ] + action.get("__ansible_arguments__"))
+    args = " ".join(
+        [
+            f"{k}={v}"
+            for (k, v) in action.items()
+            if k not in ["__ansible_module__", "__ansible_arguments__"]
+        ]
+        + action.get("__ansible_arguments__")
+    )
     return "{} {}".format(action["__ansible_module__"], args)
 
 
@@ -523,7 +533,7 @@ def parse_yaml_linenumbers(data, filename):
         yaml.constructor.ConstructorError,
     ) as e:
         raise LaterError("syntax error", e) from e
-    except (yaml.composer.ComposerError) as e:
+    except yaml.composer.ComposerError as e:
         e.problem = f"{e.context} {e.problem}"
         raise LaterError("syntax error", e) from e
     return data

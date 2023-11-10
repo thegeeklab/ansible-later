@@ -4,7 +4,6 @@ from ansiblelater.standard import StandardBase
 
 
 class CheckFilterSeparation(StandardBase):
-
     sid = "ANSIBLE0016"
     description = "Jinja2 filters should be separated with spaces"
     helptext = "no suitable numbers of spaces (required: 1)"

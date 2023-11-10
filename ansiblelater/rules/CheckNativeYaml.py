@@ -2,7 +2,6 @@ from ansiblelater.standard import StandardBase
 
 
 class CheckNativeYaml(StandardBase):
-
     sid = "LINT0008"
     description = "Use YAML format for tasks and handlers rather than key=value"
     helptext = "task arguments appear to be in key value rather than YAML format"

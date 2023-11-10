@@ -2,7 +2,6 @@ from ansiblelater.standard import StandardBase
 
 
 class CheckYamlDocumentStart(StandardBase):
-
     sid = "LINT0004"
     description = "YAML should contain document start marker"
     version = "0.1"

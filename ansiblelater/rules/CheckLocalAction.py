@@ -4,10 +4,9 @@ from ansiblelater.standard import StandardBase
 
 
 class CheckLocalAction(StandardBase):
-
     sid = "ANSIBLE0024"
     description = "Don't use local_action"
-    helptext = ("`delegate_to: localhost` should be used instead of `local_action`")
+    helptext = "`delegate_to: localhost` should be used instead of `local_action`"
     version = "0.2"
     types = ["playbook", "task", "handler"]
 

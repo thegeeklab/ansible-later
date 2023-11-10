@@ -4,7 +4,6 @@ from ansiblelater.standard import StandardBase
 
 
 class CheckLiteralBoolFormat(StandardBase):
-
     sid = "ANSIBLE0014"
     description = "Literal bools should be consistent"
     helptext = "literal bools should be written as `{bools}`"

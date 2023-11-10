@@ -22,7 +22,6 @@ from ansiblelater.standard import StandardBase
 
 
 class CheckFilePermissionOctal(StandardBase):
-
     sid = "ANSIBLE0019"
     description = "Octal file permissions must contain leading zero or be a string"
     helptext = "numeric file permissions without leading zero can behave in unexpected ways"
@@ -32,8 +31,15 @@ class CheckFilePermissionOctal(StandardBase):
     def check(self, candidate, settings):
         tasks, errors = self.get_normalized_tasks(candidate, settings)
         modules = [
-            "assemble", "copy", "file", "ini_file", "lineinfile", "replace", "synchronize",
-            "template", "unarchive"
+            "assemble",
+            "copy",
+            "file",
+            "ini_file",
+            "lineinfile",
+            "replace",
+            "synchronize",
+            "template",
+            "unarchive",
         ]
 
         if not errors:
@@ -48,20 +54,24 @@ class CheckFilePermissionOctal(StandardBase):
 
     @staticmethod
     def _is_invalid_permission(mode):
-
         other_write_without_read = (
             mode % 8 and mode % 8 < 4 and not (mode % 8 == 1 and (mode >> 6) % 2 == 1)
         )
-        group_write_without_read = ((mode >> 3) % 8 and (mode >> 3) % 8 < 4
-                                    and not ((mode >> 3) % 8 == 1 and (mode >> 6) % 2 == 1))
-        user_write_without_read = ((mode >> 6) % 8 and (mode >> 6) % 8 < 4
-                                   and (mode >> 6) % 8 != 1)
+        group_write_without_read = (
+            (mode >> 3) % 8
+            and (mode >> 3) % 8 < 4
+            and not ((mode >> 3) % 8 == 1 and (mode >> 6) % 2 == 1)
+        )
+        user_write_without_read = (mode >> 6) % 8 and (mode >> 6) % 8 < 4 and (mode >> 6) % 8 != 1
         other_more_generous_than_group = mode % 8 > (mode >> 3) % 8
         other_more_generous_than_user = mode % 8 > (mode >> 6) % 8
         group_more_generous_than_user = (mode >> 3) % 8 > (mode >> 6) % 8
 
         return bool(
-            other_write_without_read or group_write_without_read or user_write_without_read
-            or other_more_generous_than_group or other_more_generous_than_user
+            other_write_without_read
+            or group_write_without_read
+            or user_write_without_read
+            or other_more_generous_than_group
+            or other_more_generous_than_user
             or group_more_generous_than_user
         )
