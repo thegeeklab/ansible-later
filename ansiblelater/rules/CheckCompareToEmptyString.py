@@ -5,10 +5,9 @@ from ansiblelater.standard import StandardBase
 
 
 class CheckCompareToEmptyString(StandardBase):
-
     sid = "ANSIBLE0012"
-    description = "Don't compare to empty string \"\""
-    helptext = ("use `when: var` rather than `when: var !=` (or conversely `when: not var`)")
+    description = 'Don\'t compare to empty string ""'
+    helptext = "use `when: var` rather than `when: var !=` (or conversely `when: not var`)"
     version = "0.1"
     types = ["playbook", "task", "handler", "template"]
 

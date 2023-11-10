@@ -5,7 +5,6 @@ from ansiblelater.utils import count_spaces
 
 
 class CheckBracesSpaces(StandardBase):
-
     sid = "ANSIBLE0004"
     description = "YAML should use consistent number of spaces around variables"
     helptext = "no suitable numbers of spaces (min: {min} max: {max})"
@@ -41,7 +40,7 @@ class CheckBracesSpaces(StandardBase):
                             i,
                             self.helptext.format(
                                 min=conf["min-spaces-inside"], max=conf["max-spaces-inside"]
-                            )
+                            ),
                         )
                     )
         return self.Result(candidate.path, errors)

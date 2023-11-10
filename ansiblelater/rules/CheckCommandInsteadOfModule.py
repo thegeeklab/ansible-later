@@ -4,7 +4,6 @@ from ansiblelater.standard import StandardBase
 
 
 class CheckCommandInsteadOfModule(StandardBase):
-
     sid = "ANSIBLE0008"
     description = "Commands should not be used in place of modules"
     helptext = "{exec} command used in place of {module} module"
@@ -31,7 +30,7 @@ class CheckCommandInsteadOfModule(StandardBase):
             "rsync": "synchronize",
             "supervisorctl": "supervisorctl",
             "systemctl": "systemd",
-            "sed": "template or lineinfile"
+            "sed": "template or lineinfile",
         }
 
         if not errors:
@@ -42,14 +41,16 @@ class CheckCommandInsteadOfModule(StandardBase):
                     cmd = cmd = self.get_safe_cmd(task)
 
                     if (
-                        first_cmd_arg and executable in modules
-                        and task["action"].get("warn", True) and "register" not in task
+                        first_cmd_arg
+                        and executable in modules
+                        and task["action"].get("warn", True)
+                        and "register" not in task
                         and not any(ch in cmd for ch in self.SHELL_PIPE_CHARS)
                     ):
                         errors.append(
                             self.Error(
                                 task["__line__"],
-                                self.helptext.format(exec=executable, module=modules[executable])
+                                self.helptext.format(exec=executable, module=modules[executable]),
                             )
                         )
 

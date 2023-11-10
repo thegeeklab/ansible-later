@@ -23,7 +23,6 @@ from ansiblelater.standard import StandardBase
 
 
 class CheckFilePermissionMissing(StandardBase):
-
     sid = "ANSIBLE0018"
     description = "File permissions unset or incorrect"
     helptext = (
@@ -67,8 +66,7 @@ class CheckFilePermissionMissing(StandardBase):
         mode = task["action"].get("mode", None)
         state = task["action"].get("state", "file")
 
-        if module not in self._modules and \
-                module not in self._create_modules:
+        if module not in self._modules and module not in self._create_modules:
             return False
 
         if mode == "preserve" and module not in self._preserve_modules:

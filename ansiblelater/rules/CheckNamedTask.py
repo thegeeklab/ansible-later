@@ -2,7 +2,6 @@ from ansiblelater.standard import StandardBase
 
 
 class CheckNamedTask(StandardBase):
-
     sid = "ANSIBLE0006"
     description = "Tasks and handlers must be named"
     helptext = "module '{module}' used without or empty `name` attribute"

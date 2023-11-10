@@ -4,7 +4,6 @@ from ansiblelater.standard import StandardBase
 
 
 class CheckYamlFile(StandardBase):
-
     sid = "LINT0006"
     description = "Roles file should be in yaml format"
     helptext = "file does not have a .yml extension"

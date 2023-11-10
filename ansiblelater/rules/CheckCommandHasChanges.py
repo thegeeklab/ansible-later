@@ -2,7 +2,6 @@ from ansiblelater.standard import StandardBase
 
 
 class CheckCommandHasChanges(StandardBase):
-
     sid = "ANSIBLE0011"
     description = "Commands should be idempotent"
     helptext = (
@@ -19,9 +18,11 @@ class CheckCommandHasChanges(StandardBase):
         if not errors:
             for task in tasks:
                 if task["action"]["__ansible_module__"] in commands and (
-                    "changed_when" not in task and "when" not in task
+                    "changed_when" not in task
+                    and "when" not in task
                     and "when" not in task.get("__ansible_action_meta__", [])
-                    and "creates" not in task["action"] and "removes" not in task["action"]
+                    and "creates" not in task["action"]
+                    and "removes" not in task["action"]
                 ):
                     errors.append(self.Error(task["__line__"], self.helptext))
 

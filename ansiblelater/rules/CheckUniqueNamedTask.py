@@ -4,7 +4,6 @@ from ansiblelater.standard import StandardBase
 
 
 class CheckUniqueNamedTask(StandardBase):
-
     sid = "ANSIBLE0003"
     description = "Tasks and handlers must be uniquely named within a single file"
     helptext = "name '{name}' appears multiple times"
@@ -20,7 +19,7 @@ class CheckUniqueNamedTask(StandardBase):
             for task in tasks:
                 if "name" in task:
                     namelines[task["name"]].append(task["__line__"])
-            for (name, lines) in namelines.items():
+            for name, lines in namelines.items():
                 if name and len(lines) > 1:
                     errors.append(self.Error(lines[-1], self.helptext.format(name=name)))
 

@@ -107,7 +107,7 @@ class Candidate:
                 "tag": "review",
                 "standard": standard.description,
                 "file": self.path,
-                "passed": True
+                "passed": True,
             }
 
             if standard.sid and standard.sid.strip():
@@ -127,12 +127,12 @@ class Candidate:
                 if not standard.version:
                     LOG.warning(
                         f"{sid}Best practice '{description}' not met:\n{path}:{err}",
-                        extra=flag_extra(err_labels)
+                        extra=flag_extra(err_labels),
                     )
                 elif Version(standard.version) > Version(self.version):
                     LOG.warning(
                         f"{sid}Future standard '{description}' not met:\n{path}:{err}",
-                        extra=flag_extra(err_labels)
+                        extra=flag_extra(err_labels),
                     )
                 else:
                     msg = f"{sid}Standard '{description}' not met:\n{path}:{err}"
@@ -165,14 +165,16 @@ class Candidate:
             return Meta(filename, settings, standards)
         if parentdir in ["meta"] and "argument_specs" in basename:
             return ArgumentSpecs(filename, settings, standards)
-        if (
-            parentdir in ["library", "lookup_plugins", "callback_plugins", "filter_plugins"]
-            or filename.endswith(".py")
-        ):
+        if parentdir in [
+            "library",
+            "lookup_plugins",
+            "callback_plugins",
+            "filter_plugins",
+        ] or filename.endswith(".py"):
             return Code(filename, settings, standards)
         if basename == "inventory" or basename == "hosts" or parentdir in ["inventories"]:
             return Inventory(filename, settings, standards)
-        if ("rolesfile" in basename or ("requirements" in basename and ext in ["yaml", "yml"])):
+        if "rolesfile" in basename or ("requirements" in basename and ext in ["yaml", "yml"]):
             return Rolesfile(filename, settings, standards)
         if "Makefile" in basename:
             return Makefile(filename, settings, standards)

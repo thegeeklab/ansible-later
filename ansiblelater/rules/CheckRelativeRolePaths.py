@@ -4,7 +4,6 @@ from ansiblelater.standard import StandardBase
 
 
 class CheckRelativeRolePaths(StandardBase):
-
     sid = "ANSIBLE0025"
     description = "Don't use a relative path in a role"
     helptext = "`copy` and `template` modules don't need relative path for `src`"

@@ -22,7 +22,6 @@ from ansiblelater.standard import StandardBase
 
 
 class CheckChangedInWhen(StandardBase):
-
     sid = "ANSIBLE0026"
     description = "Use handlers instead of `when: changed`"
     helptext = "tasks using `when: result.changed` setting are effectively acting as a handler"
@@ -58,7 +57,8 @@ class CheckChangedInWhen(StandardBase):
             return False
 
         return any(
-            changed in item for changed in [
+            changed in item
+            for changed in [
                 ".changed",
                 "|changed",
                 '["changed"]',

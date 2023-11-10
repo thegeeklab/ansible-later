@@ -24,7 +24,6 @@ from ansiblelater.standard import StandardBase
 
 
 class CheckCommandInsteadOfArgument(StandardBase):
-
     sid = "ANSIBLE0017"
     description = "Commands should not be used in place of module arguments"
     helptext = "{exec} used in place of file modules argument {arg}"
@@ -41,7 +40,7 @@ class CheckCommandInsteadOfArgument(StandardBase):
             "ln": "state=link",
             "mkdir": "state=directory",
             "rmdir": "state=absent",
-            "rm": "state=absent"
+            "rm": "state=absent",
         }
 
         if not errors:
@@ -51,13 +50,14 @@ class CheckCommandInsteadOfArgument(StandardBase):
                     executable = os.path.basename(first_cmd_arg)
 
                     if (
-                        first_cmd_arg and executable in arguments
+                        first_cmd_arg
+                        and executable in arguments
                         and task["action"].get("warn", True)
                     ):
                         errors.append(
                             self.Error(
                                 task["__line__"],
-                                self.helptext.format(exec=executable, arg=arguments[executable])
+                                self.helptext.format(exec=executable, arg=arguments[executable]),
                             )
                         )
 

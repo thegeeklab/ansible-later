@@ -2,7 +2,6 @@ from ansiblelater.standard import StandardBase
 
 
 class CheckBecomeUser(StandardBase):
-
     sid = "ANSIBLE0015"
     description = "Become should be combined with become_user"
     helptext = "the task has `become` enabled but `become_user` is missing"

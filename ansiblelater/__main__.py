@@ -25,14 +25,14 @@ def main():
         dest="rules.standards",
         metavar="RULES",
         action="append",
-        help="directory of standard rules"
+        help="directory of standard rules",
     )
     parser.add_argument(
         "-B",
         "--no-buildin",
         dest="rules.buildin",
         action="store_false",
-        help="disables build-in standard rules"
+        help="disables build-in standard rules",
     )
     parser.add_argument(
         "-s",
@@ -40,7 +40,7 @@ def main():
         dest="rules.filter",
         metavar="FILTER",
         action="append",
-        help="limit standards to given ID's"
+        help="limit standards to given ID's",
     )
     parser.add_argument(
         "-x",
@@ -48,7 +48,7 @@ def main():
         dest="rules.exclude_filter",
         metavar="EXCLUDE_FILTER",
         action="append",
-        help="exclude standards by given ID's"
+        help="exclude standards by given ID's",
     )
     parser.add_argument(
         "-v", dest="logging.level", action="append_const", const=-1, help="increase log level"
@@ -85,7 +85,7 @@ def main():
         else:
             LOG.info(f"Couldn't classify file {filename}")
 
-    errors = (sum(p.map(_review_wrapper, tasks)))
+    errors = sum(p.map(_review_wrapper, tasks))
     p.close()
     p.join()
 

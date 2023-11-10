@@ -2,7 +2,6 @@ from ansiblelater.standard import StandardBase
 
 
 class CheckInstallUseLatest(StandardBase):
-
     sid = "ANSIBLE0009"
     description = "Package installs should use present, not latest"
     helptext = "package installs should use `state=present` with or without a version"
@@ -12,10 +11,32 @@ class CheckInstallUseLatest(StandardBase):
     def check(self, candidate, settings):
         tasks, errors = self.get_normalized_tasks(candidate, settings)
         package_managers = [
-            "yum", "apt", "dnf", "homebrew", "pacman", "openbsd_package", "pkg5", "portage",
-            "pkgutil", "slackpkg", "swdepot", "zypper", "bundler", "pip", "pear", "npm", "yarn",
-            "gem", "easy_install", "bower", "package", "apk", "openbsd_pkg", "pkgng", "sorcery",
-            "xbps"
+            "yum",
+            "apt",
+            "dnf",
+            "homebrew",
+            "pacman",
+            "openbsd_package",
+            "pkg5",
+            "portage",
+            "pkgutil",
+            "slackpkg",
+            "swdepot",
+            "zypper",
+            "bundler",
+            "pip",
+            "pear",
+            "npm",
+            "yarn",
+            "gem",
+            "easy_install",
+            "bower",
+            "package",
+            "apk",
+            "openbsd_pkg",
+            "pkgng",
+            "sorcery",
+            "xbps",
         ]
 
         if not errors:

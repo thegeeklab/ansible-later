@@ -25,7 +25,6 @@ from ansiblelater.standard import StandardBase
 
 
 class CheckNestedJinja(StandardBase):
-
     sid = "ANSIBLE0023"
     description = "Don't use nested Jinja2 pattern"
     helptext = (

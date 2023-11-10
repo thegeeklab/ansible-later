@@ -26,7 +26,7 @@ def strtobool(value):
         "f": False,
         "false": False,
         "off": False,
-        "0": False
+        "0": False,
     }
 
     try:
@@ -40,7 +40,6 @@ def to_bool(string):
 
 
 def _should_do_markup():
-
     py_colors = os.environ.get("PY_COLORS", None)
     if py_colors is not None:
         return to_bool(py_colors)

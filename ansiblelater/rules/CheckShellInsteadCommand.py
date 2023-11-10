@@ -2,7 +2,6 @@ from ansiblelater.standard import StandardBase
 
 
 class CheckShellInsteadCommand(StandardBase):
-
     sid = "ANSIBLE0010"
     description = "Shell should only be used when essential"
     helptext = "shell should only be used when piping, redirecting or chaining commands"

@@ -4,7 +4,6 @@ from ansiblelater.standard import StandardBase
 
 
 class CheckScmInSrc(StandardBase):
-
     sid = "ANSIBLE0005"
     description = "Use `scm:` key rather than `src: scm+url`"
     helptext = "usage of `src: scm+url` not recommended"
@@ -17,7 +16,8 @@ class CheckScmInSrc(StandardBase):
         if not errors:
             for role in roles:
                 if (
-                    isinstance(role, AnsibleMapping) and bool(role.get("src"))
+                    isinstance(role, AnsibleMapping)
+                    and bool(role.get("src"))
                     and "+" in role.get("src")
                 ):
                     errors.append(self.Error(role["__line__"], self.helptext))

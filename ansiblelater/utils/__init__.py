@@ -32,12 +32,13 @@ def count_spaces(c_string):
             break
         trailing_spaces += 1
 
-    return ((leading_spaces, trailing_spaces))
+    return (leading_spaces, trailing_spaces)
 
 
 def standards_latest(standards):
-    return max([standard.version for standard in standards if standard.version] or ["0.1"],
-               key=Version)
+    return max(
+        [standard.version for standard in standards if standard.version] or ["0.1"], key=Version
+    )
 
 
 def lines_ranges(lines_spec):
@@ -82,11 +83,11 @@ def open_file(filename, mode="r"):
 
 def add_dict_branch(tree, vector, value):
     key = vector[0]
-    tree[key] = value \
-        if len(vector) == 1 \
-        else add_dict_branch(tree[key] if key in tree else {},
-                             vector[1:],
-                             value)
+    tree[key] = (
+        value
+        if len(vector) == 1
+        else add_dict_branch(tree[key] if key in tree else {}, vector[1:], value)
+    )
     return tree
 
 

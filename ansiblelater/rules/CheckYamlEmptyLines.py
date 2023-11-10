@@ -2,7 +2,6 @@ from ansiblelater.standard import StandardBase
 
 
 class CheckYamlEmptyLines(StandardBase):
-
     sid = "LINT0001"
     description = "YAML should not contain unnecessarily empty lines"
     version = "0.1"

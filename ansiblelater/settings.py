@@ -128,11 +128,11 @@ class Settings:
                 ],
                 "ignore_dotfiles": True,
                 "exclude_files": [],
-                "version": ""
+                "version": "",
             },
             "logging": {
                 "level": "WARNING",
-                "json": False
+                "json": False,
             },
             "ansible": {
                 "custom_modules": [],
@@ -169,17 +169,17 @@ class Settings:
                     "indent-sequences": True,
                 },
                 "hyphens": {
-                    "max-spaces-after": 1
+                    "max-spaces-after": 1,
                 },
                 "document-start": {
-                    "present": True
+                    "present": True,
                 },
                 "document-end": {
-                    "present": True
+                    "present": True,
                 },
                 "colons": {
                     "max-spaces-before": 0,
-                    "max-spaces-after": 1
+                    "max-spaces-after": 1,
                 },
             },
         }
