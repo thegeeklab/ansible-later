@@ -11,7 +11,7 @@ The default configuration is used if no other value is specified. Each option ca
 ---
 ansible:
   # Add the name of used custom Ansible modules. Otherwise ansible-later
-  # can't detect unknown modules and will through an error.
+  # can't detect unknown modules and will throw an error.
   # Modules which are bundled with the role and placed in a './library'
   # directory will be auto-detected and don't need to be added to this list.
   custom_modules: []
