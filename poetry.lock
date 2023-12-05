@@ -16,13 +16,13 @@ ansible-core = ">=2.15.6,<2.16.0"
 
 [[package]]
 name = "ansible-core"
-version = "2.15.6"
+version = "2.15.7"
 description = "Radically simple IT automation"
 optional = true
 python-versions = ">=3.9"
 files = [
-    {file = "ansible-core-2.15.6.tar.gz", hash = "sha256:351278fb8685fec1d645e2ddcfdca0c73456ff1db06426b86b6dd53774f7d7ba"},
-    {file = "ansible_core-2.15.6-py3-none-any.whl", hash = "sha256:fab3a5994482991274cae17500ca852007dbd76f564418f172f07cb00edbb293"},
+    {file = "ansible-core-2.15.7.tar.gz", hash = "sha256:bc51d011bdb67538d1ee043e0f8072b3a849b78897caf15b6f294160c5c7c6ba"},
+    {file = "ansible_core-2.15.7-py3-none-any.whl", hash = "sha256:8a7988b8fbd1f4bb5799becae120b828de6248ba9056d83f427235533d655e2b"},
 ]
 
 [package.dependencies]
@@ -87,7 +87,7 @@ tests-no-zope = ["cloudpickle", "hypothesis", "mypy (>=1.1.1)", "pympler", "pyte
 name = "cffi"
 version = "1.16.0"
 description = "Foreign Function Interface for Python calling C code."
-optional = false
+optional = true
 python-versions = ">=3.8"
 files = [
     {file = "cffi-1.16.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:6b3d6606d369fc1da4fd8c357d026317fbb9c9b75d36dc16e90e84c26854b088"},
@@ -229,7 +229,7 @@ toml = ["tomli"]
 name = "cryptography"
 version = "41.0.6"
 description = "cryptography is a package which provides cryptographic recipes and primitives to Python developers."
-optional = false
+optional = true
 python-versions = ">=3.7"
 files = [
     {file = "cryptography-41.0.6-cp37-abi3-macosx_10_12_universal2.whl", hash = "sha256:0f27acb55a4e77b9be8d550d762b0513ef3fc658cd3eb15110ebbcbd626db12c"},
@@ -485,7 +485,7 @@ testing = ["pytest", "pytest-benchmark"]
 name = "pycparser"
 version = "2.21"
 description = "C parser in Python"
-optional = false
+optional = true
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 files = [
     {file = "pycparser-2.21-py2.py3-none-any.whl", hash = "sha256:8ee45429555515e1f6b185e78100aea234072576aa43ab53aefcae078162fca9"},
@@ -881,4 +881,4 @@ ansible-core = ["ansible-core"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9.0"
-content-hash = "efe77c009fa89eee2763be1e689df9569b007b5146862feec1b48fe658e237b4"
+content-hash = "ff6c534987bb3c4b38a55e139e71cad64883bba2226db2380f4bd125ce4dd95d"
