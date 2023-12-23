@@ -6,6 +6,12 @@
       "description": "Ansible base dependencies",
       "matchPackageNames": ["ansible", "ansible-core"],
       "separateMinorPatch": true
+    },
+    {
+      "matchManagers": ["woodpecker"],
+      "matchFileNames": [".woodpecker/test.yml"],
+      "matchPackageNames": ["docker.io/library/python"],
+      "enabled": false
     }
   ]
 }
