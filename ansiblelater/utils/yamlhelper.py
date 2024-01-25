@@ -65,11 +65,11 @@ def ansible_template(basedir, varname, templatevars, **kwargs):
 
 
 try:
-    from ansible.plugins import module_loader
-except ImportError:
     from ansible.plugins.loader import init_plugin_loader, module_loader
 
     init_plugin_loader()
+except ImportError:
+    from ansible.plugins.loader import module_loader
 
 LINE_NUMBER_KEY = "__line__"
 FILENAME_KEY = "__file__"
