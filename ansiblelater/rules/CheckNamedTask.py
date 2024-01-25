@@ -4,7 +4,7 @@ from ansiblelater.rule import RuleBase
 class CheckNamedTask(RuleBase):
     sid = "ANSIBLE0006"
     description = "Tasks and handlers must be named"
-    helptext = "module '{module}' used without or empty `name` attribute"
+    helptext = "module `{module}` used without or empty `name` attribute"
     types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):

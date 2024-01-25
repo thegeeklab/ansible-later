@@ -6,7 +6,7 @@ from ansiblelater.rule import RuleBase
 class CheckNameFormat(RuleBase):
     sid = "ANSIBLE0007"
     description = "Name of tasks and handlers must be formatted"
-    helptext = "name '{name}' should start with uppercase"
+    helptext = "name `{name}` should start with uppercase"
     types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):

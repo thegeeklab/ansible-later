@@ -4,7 +4,7 @@ from ansiblelater.rule import RuleBase
 class CheckDeprecated(RuleBase):
     sid = "ANSIBLE9999"
     description = "Deprecated features should not be used"
-    helptext = "'{old}' is deprecated and should not be used anymore. Use '{new}' instead."
+    helptext = "`{old}` is deprecated and should not be used anymore. Use `{new}` instead."
     types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):
