@@ -1,11 +1,10 @@
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 
 
-class CheckDeprecated(StandardBase):
+class CheckDeprecated(RuleBase):
     sid = "ANSIBLE9999"
     description = "Deprecated features should not be used"
     helptext = "'{old}' is deprecated and should not be used anymore. Use '{new}' instead."
-    version = "0.1"
     types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):

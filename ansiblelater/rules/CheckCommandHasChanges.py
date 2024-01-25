@@ -1,14 +1,13 @@
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 
 
-class CheckCommandHasChanges(StandardBase):
+class CheckCommandHasChanges(RuleBase):
     sid = "ANSIBLE0011"
     description = "Commands should be idempotent"
     helptext = (
         "commands should only read while using `changed_when` or try to be "
         "idempotent while using controls like `creates`, `removes` or `when`"
     )
-    version = "0.1"
     types = ["playbook", "task"]
 
     def check(self, candidate, settings):

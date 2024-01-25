@@ -18,14 +18,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 
 
-class CheckGitHasVersion(StandardBase):
+class CheckGitHasVersion(RuleBase):
     sid = "ANSIBLE0020"
     description = "Git checkouts should use explicit version"
     helptext = "git checkouts should point to an explicit commit or tag, not `latest`"
-    version = "0.2"
     types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):

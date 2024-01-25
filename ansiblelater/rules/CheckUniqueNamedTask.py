@@ -1,13 +1,12 @@
 from collections import defaultdict
 
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 
 
-class CheckUniqueNamedTask(StandardBase):
+class CheckUniqueNamedTask(RuleBase):
     sid = "ANSIBLE0003"
     description = "Tasks and handlers must be uniquely named within a single file"
     helptext = "name '{name}' appears multiple times"
-    version = "0.1"
     types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):

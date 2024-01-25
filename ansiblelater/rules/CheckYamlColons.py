@@ -1,10 +1,9 @@
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 
 
-class CheckYamlColons(StandardBase):
+class CheckYamlColons(RuleBase):
     sid = "LINT0005"
     description = "YAML should use consistent number of spaces around colons"
-    version = "0.1"
     types = ["playbook", "task", "handler", "rolevars", "hostvars", "groupvars", "meta"]
 
     def check(self, candidate, settings):

@@ -1,13 +1,12 @@
 import os
 
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 
 
-class CheckCommandInsteadOfModule(StandardBase):
+class CheckCommandInsteadOfModule(RuleBase):
     sid = "ANSIBLE0008"
     description = "Commands should not be used in place of modules"
     helptext = "{exec} command used in place of {module} module"
-    version = "0.1"
     types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):

@@ -18,14 +18,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 
 
-class CheckChangedInWhen(StandardBase):
+class CheckChangedInWhen(RuleBase):
     sid = "ANSIBLE0026"
     description = "Use handlers instead of `when: changed`"
     helptext = "tasks using `when: result.changed` setting are effectively acting as a handler"
-    version = "0.2"
     types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):

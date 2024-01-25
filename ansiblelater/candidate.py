@@ -3,14 +3,12 @@
 import codecs
 import copy
 import os
-import re
 
 from ansible.plugins.loader import module_loader
-from packaging.version import Version
 
-from ansiblelater import LOG, utils
+from ansiblelater import LOG
 from ansiblelater.logger import flag_extra
-from ansiblelater.standard import SingleStandards, StandardBase
+from ansiblelater.rule import RuleBase, SingleRules
 
 
 class Candidate:
@@ -21,7 +19,7 @@ class Candidate:
     bundled with necessary meta informations for rule processing.
     """
 
-    def __init__(self, filename, settings={}, standards=[]):  # noqa
+    def __init__(self, filename, settings={}, rules=[]):  # noqa
         self.path = filename
         self.binary = False
         self.vault = False
@@ -37,163 +35,114 @@ class Candidate:
         except UnicodeDecodeError:
             self.binary = True
 
-    def _get_version(self):
-        name = type(self).__name__
-        path = self.path
-        version = None
-        config_version = self.config["rules"]["version"].strip()
-
-        if config_version:
-            version_config_re = re.compile(r"([\d.]+)")
-            match = version_config_re.match(config_version)
-            if match:
-                version = match.group(1)
-
-        if not self.binary:
-            if isinstance(self, RoleFile):
-                parentdir = os.path.dirname(os.path.abspath(self.path))
-                while parentdir != os.path.dirname(parentdir):
-                    meta_file = os.path.join(parentdir, "meta", "main.yml")
-                    if os.path.exists(meta_file):
-                        path = meta_file
-                        break
-                    parentdir = os.path.dirname(parentdir)
-
-            version_file_re = re.compile(r"^# Standards:\s*([\d.]+)")
-            with codecs.open(path, mode="rb", encoding="utf-8") as f:
-                for line in f:
-                    match = version_file_re.match(line)
-                    if match:
-                        version = match.group(1)
-
-        if version:
-            LOG.info(f"{name} {path} declares standards version {version}")
-
-        return version
-
-    def _filter_standards(self):
-        target_standards = []
-        includes = self.config["rules"]["filter"]
+    def _filter_rules(self):
+        target_rules = []
+        includes = self.config["rules"]["include_filter"]
         excludes = self.config["rules"]["exclude_filter"]
 
         if len(includes) == 0:
-            includes = [s.sid for s in self.standards]
+            includes = [s.sid for s in self.rules]
 
-        for standard in self.standards:
-            if standard.sid in includes and standard.sid not in excludes:
-                target_standards.append(standard)
+        for rule in self.rules:
+            if rule.sid in includes and rule.sid not in excludes:
+                target_rules.append(rule)
 
-        return target_standards
+        return target_rules
 
     def review(self):
         errors = 0
-        self.standards = SingleStandards(self.config["rules"]["standards"]).rules
-        self.version_config = self._get_version()
-        self.version = self.version_config or utils.standards_latest(self.standards)
+        self.rules = SingleRules(self.config["rules"]["dir"]).rules
 
-        for standard in self._filter_standards():
-            if type(self).__name__.lower() not in standard.types:
+        for rule in self._filter_rules():
+            if type(self).__name__.lower() not in rule.types:
                 continue
 
-            result = standard.check(self, self.config)
+            result = rule.check(self, self.config)
 
             if not result:
-                LOG.error(
-                    f"Standard '{standard.sid}' returns an empty result object. Check failed!"
-                )
+                LOG.error(f"rule '{rule.sid}' returns an empty result object. Check failed!")
                 continue
 
             labels = {
                 "tag": "review",
-                "standard": standard.description,
+                "rule": rule.description,
                 "file": self.path,
                 "passed": True,
             }
 
-            if standard.sid and standard.sid.strip():
-                labels["sid"] = standard.sid
+            if rule.sid and rule.sid.strip():
+                labels["sid"] = rule.sid
 
             for err in result.errors:
                 err_labels = copy.copy(labels)
                 err_labels["passed"] = False
 
-                sid = self._format_id(standard.sid)
+                sid = self._format_id(rule.sid)
                 path = self.path
-                description = standard.description
+                description = rule.description
 
-                if isinstance(err, StandardBase.Error):
+                if isinstance(err, RuleBase.Error):
                     err_labels.update(err.to_dict())
 
-                if not standard.version:
-                    LOG.warning(
-                        f"{sid}Best practice '{description}' not met:\n{path}:{err}",
-                        extra=flag_extra(err_labels),
-                    )
-                elif Version(standard.version) > Version(self.version):
-                    LOG.warning(
-                        f"{sid}Future standard '{description}' not met:\n{path}:{err}",
-                        extra=flag_extra(err_labels),
-                    )
-                else:
-                    msg = f"{sid}Standard '{description}' not met:\n{path}:{err}"
+                msg = f"{sid}rule '{description}' not met:\n{path}:{err}"
 
-                    if standard.sid not in self.config["rules"]["warning_filter"]:
-                        LOG.error(msg, extra=flag_extra(err_labels))
-                        errors = errors + 1
-                    else:
-                        LOG.warning(msg, extra=flag_extra(err_labels))
+                if rule.sid not in self.config["rules"]["warning_filter"]:
+                    LOG.error(msg, extra=flag_extra(err_labels))
+                    errors = errors + 1
+                else:
+                    LOG.warning(msg, extra=flag_extra(err_labels))
 
         return errors
 
     @staticmethod
-    def classify(filename, settings={}, standards=[]):  # noqa
+    def classify(filename, settings={}, rules=[]):  # noqa
         parentdir = os.path.basename(os.path.dirname(filename))
         basename = os.path.basename(filename)
         ext = os.path.splitext(filename)[1][1:]
 
         if parentdir in ["tasks"]:
-            return Task(filename, settings, standards)
+            return Task(filename, settings, rules)
         if parentdir in ["handlers"]:
-            return Handler(filename, settings, standards)
+            return Handler(filename, settings, rules)
         if parentdir in ["vars", "defaults"]:
-            return RoleVars(filename, settings, standards)
+            return RoleVars(filename, settings, rules)
         if "group_vars" in filename.split(os.sep):
-            return GroupVars(filename, settings, standards)
+            return GroupVars(filename, settings, rules)
         if "host_vars" in filename.split(os.sep):
-            return HostVars(filename, settings, standards)
+            return HostVars(filename, settings, rules)
         if parentdir in ["meta"] and "main" in basename:
-            return Meta(filename, settings, standards)
+            return Meta(filename, settings, rules)
         if parentdir in ["meta"] and "argument_specs" in basename:
-            return ArgumentSpecs(filename, settings, standards)
+            return ArgumentSpecs(filename, settings, rules)
         if parentdir in [
             "library",
             "lookup_plugins",
             "callback_plugins",
             "filter_plugins",
         ] or filename.endswith(".py"):
-            return Code(filename, settings, standards)
+            return Code(filename, settings, rules)
         if basename == "inventory" or basename == "hosts" or parentdir in ["inventories"]:
-            return Inventory(filename, settings, standards)
+            return Inventory(filename, settings, rules)
         if "rolesfile" in basename or ("requirements" in basename and ext in ["yaml", "yml"]):
-            return Rolesfile(filename, settings, standards)
+            return Rolesfile(filename, settings, rules)
         if "Makefile" in basename:
-            return Makefile(filename, settings, standards)
+            return Makefile(filename, settings, rules)
         if "templates" in filename.split(os.sep) or basename.endswith(".j2"):
-            return Template(filename, settings, standards)
+            return Template(filename, settings, rules)
         if "files" in filename.split(os.sep):
-            return File(filename, settings, standards)
+            return File(filename, settings, rules)
         if basename.endswith(".yml") or basename.endswith(".yaml"):
-            return Playbook(filename, settings, standards)
+            return Playbook(filename, settings, rules)
         if "README" in basename:
-            return Doc(filename, settings, standards)
+            return Doc(filename, settings, rules)
         return None
 
-    def _format_id(self, standard_id):
-        sid = standard_id.strip()
+    def _format_id(self, rule_id):
+        sid = rule_id.strip()
         if sid:
-            standard_id = f"[{sid}] "
+            rule_id = f"[{sid}] "
 
-        return standard_id
+        return rule_id
 
     def __repr__(self):
         return f"{type(self).__name__} ({self.path})"
@@ -205,8 +154,8 @@ class Candidate:
 class RoleFile(Candidate):
     """Object classified as Ansible role file."""
 
-    def __init__(self, filename, settings={}, standards=[]):  # noqa
-        super().__init__(filename, settings, standards)
+    def __init__(self, filename, settings={}, rules=[]):  # noqa
+        super().__init__(filename, settings, rules)
 
         parentdir = os.path.dirname(os.path.abspath(filename))
         while parentdir != os.path.dirname(parentdir):
@@ -226,16 +175,16 @@ class Playbook(Candidate):
 class Task(RoleFile):
     """Object classified as Ansible task file."""
 
-    def __init__(self, filename, settings={}, standards=[]):  # noqa
-        super().__init__(filename, settings, standards)
+    def __init__(self, filename, settings={}, rules=[]):  # noqa
+        super().__init__(filename, settings, rules)
         self.filetype = "tasks"
 
 
 class Handler(RoleFile):
     """Object classified as Ansible handler file."""
 
-    def __init__(self, filename, settings={}, standards=[]):  # noqa
-        super().__init__(filename, settings, standards)
+    def __init__(self, filename, settings={}, rules=[]):  # noqa
+        super().__init__(filename, settings, rules)
         self.filetype = "handlers"
 
 

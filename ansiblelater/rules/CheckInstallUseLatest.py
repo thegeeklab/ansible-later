@@ -1,11 +1,10 @@
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 
 
-class CheckInstallUseLatest(StandardBase):
+class CheckInstallUseLatest(RuleBase):
     sid = "ANSIBLE0009"
     description = "Package installs should use present, not latest"
     helptext = "package installs should use `state=present` with or without a version"
-    version = "0.1"
     types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):

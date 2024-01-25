@@ -1,14 +1,13 @@
 import re
 
 from ansiblelater.candidate import Template
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 
 
-class CheckCompareToLiteralBool(StandardBase):
+class CheckCompareToLiteralBool(RuleBase):
     sid = "ANSIBLE0013"
     description = "Don't compare to True or False"
     helptext = "use `when: var` rather than `when: var == True` (or conversely `when: not var`)"
-    version = "0.1"
     types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):

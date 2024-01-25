@@ -1,10 +1,9 @@
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 
 
-class CheckYamlDocumentStart(StandardBase):
+class CheckYamlDocumentStart(RuleBase):
     sid = "LINT0004"
     description = "YAML should contain document start marker"
-    version = "0.1"
     types = ["playbook", "task", "handler", "rolevars", "hostvars", "groupvars", "meta"]
 
     def check(self, candidate, settings):

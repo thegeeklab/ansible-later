@@ -1,10 +1,9 @@
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 
 
-class CheckYamlDocumentEnd(StandardBase):
+class CheckYamlDocumentEnd(RuleBase):
     sid = "LINT0009"
     description = "YAML should contain document end marker"
-    version = "0.1"
     types = ["playbook", "task", "handler", "rolevars", "hostvars", "groupvars", "meta"]
 
     def check(self, candidate, settings):

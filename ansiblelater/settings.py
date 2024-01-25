@@ -104,13 +104,13 @@ class Settings:
             if f not in defaults["ansible"]["custom_modules"]:
                 defaults["ansible"]["custom_modules"].append(f)
 
-        if defaults["rules"]["buildin"]:
-            defaults["rules"]["standards"].append(
+        if defaults["rules"]["builtin"]:
+            defaults["rules"]["dir"].append(
                 os.path.join(resource_filename("ansiblelater", "rules"))
             )
 
-        defaults["rules"]["standards"] = [
-            os.path.relpath(os.path.normpath(p)) for p in defaults["rules"]["standards"]
+        defaults["rules"]["dir"] = [
+            os.path.relpath(os.path.normpath(p)) for p in defaults["rules"]["dir"]
         ]
 
         return defaults
@@ -118,9 +118,9 @@ class Settings:
     def _get_defaults(self):
         defaults = {
             "rules": {
-                "buildin": True,
-                "standards": [],
-                "filter": [],
+                "builtin": True,
+                "dir": [],
+                "include_filter": [],
                 "exclude_filter": [],
                 "warning_filter": [
                     "ANSIBLE9999",
@@ -128,7 +128,6 @@ class Settings:
                 ],
                 "ignore_dotfiles": True,
                 "exclude_files": [],
-                "version": "",
             },
             "logging": {
                 "level": "WARNING",

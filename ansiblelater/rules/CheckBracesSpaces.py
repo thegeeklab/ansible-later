@@ -1,14 +1,13 @@
 import re
 
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 from ansiblelater.utils import count_spaces
 
 
-class CheckBracesSpaces(StandardBase):
+class CheckBracesSpaces(RuleBase):
     sid = "ANSIBLE0004"
     description = "YAML should use consistent number of spaces around variables"
     helptext = "no suitable numbers of spaces (min: {min} max: {max})"
-    version = "0.1"
     types = ["playbook", "task", "handler", "rolevars", "hostvars", "groupvars", "meta"]
 
     def check(self, candidate, settings):

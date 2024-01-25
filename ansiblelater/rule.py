@@ -1,4 +1,4 @@
-"""Standard definition."""
+"""Rule definition."""
 
 import copy
 import importlib
@@ -27,22 +27,21 @@ from ansiblelater.utils.yamlhelper import (
 )
 
 
-class StandardMeta(type):
+class RuleMeta(type):
     def __call__(cls, *args):
         mcls = type.__call__(cls, *args)
         mcls.sid = cls.sid
         mcls.description = getattr(cls, "description", "__unknown__")
         mcls.helptext = getattr(cls, "helptext", "")
-        mcls.version = getattr(cls, "version", None)
         mcls.types = getattr(cls, "types", [])
         return mcls
 
 
-class StandardExtendedMeta(StandardMeta, ABCMeta):
+class RuleExtendedMeta(RuleMeta, ABCMeta):
     pass
 
 
-class StandardBase(metaclass=StandardExtendedMeta):
+class RuleBase(metaclass=RuleExtendedMeta):
     SHELL_PIPE_CHARS = "&|<>;$\n*[]{}?"
 
     @property
@@ -55,7 +54,7 @@ class StandardBase(metaclass=StandardExtendedMeta):
         pass
 
     def __repr__(self):
-        return f"Standard: {self.description} (version: {self.version}, types: {self.types})"
+        return f"Rule: {self.description} (types: {self.types})"
 
     @staticmethod
     def get_tasks(candidate, settings):  # noqa
@@ -69,11 +68,11 @@ class StandardBase(metaclass=StandardExtendedMeta):
             except LaterError as ex:
                 e = ex.original
                 errors.append(
-                    StandardBase.Error(e.problem_mark.line + 1, f"syntax error: {e.problem}")
+                    RuleBase.Error(e.problem_mark.line + 1, f"syntax error: {e.problem}")
                 )
                 candidate.faulty = True
             except LaterAnsibleError as e:
-                errors.append(StandardBase.Error(e.line, f"syntax error: {e.message}"))
+                errors.append(RuleBase.Error(e.line, f"syntax error: {e.message}"))
                 candidate.faulty = True
 
         return yamllines, errors
@@ -93,11 +92,11 @@ class StandardBase(metaclass=StandardExtendedMeta):
             except LaterError as ex:
                 e = ex.original
                 errors.append(
-                    StandardBase.Error(e.problem_mark.line + 1, f"syntax error: {e.problem}")
+                    RuleBase.Error(e.problem_mark.line + 1, f"syntax error: {e.problem}")
                 )
                 candidate.faulty = True
             except LaterAnsibleError as e:
-                errors.append(StandardBase.Error(e.line, f"syntax error: {e.message}"))
+                errors.append(RuleBase.Error(e.line, f"syntax error: {e.message}"))
                 candidate.faulty = True
 
         return tasks, errors
@@ -115,11 +114,11 @@ class StandardBase(metaclass=StandardExtendedMeta):
             except LaterError as ex:
                 e = ex.original
                 errors.append(
-                    StandardBase.Error(e.problem_mark.line + 1, f"syntax error: {e.problem}")
+                    RuleBase.Error(e.problem_mark.line + 1, f"syntax error: {e.problem}")
                 )
                 candidate.faulty = True
             except LaterAnsibleError as e:
-                errors.append(StandardBase.Error(e.line, f"syntax error: {e.message}"))
+                errors.append(RuleBase.Error(e.line, f"syntax error: {e.message}"))
                 candidate.faulty = True
 
         return normalized, errors
@@ -159,11 +158,11 @@ class StandardBase(metaclass=StandardExtendedMeta):
             except LaterError as ex:
                 e = ex.original
                 errors.append(
-                    StandardBase.Error(e.problem_mark.line + 1, f"syntax error: {e.problem}")
+                    RuleBase.Error(e.problem_mark.line + 1, f"syntax error: {e.problem}")
                 )
                 candidate.faulty = True
             except LaterAnsibleError as e:
-                errors.append(StandardBase.Error(e.line, f"syntax error: {e.message}"))
+                errors.append(RuleBase.Error(e.line, f"syntax error: {e.message}"))
                 candidate.faulty = True
 
         return normalized, errors
@@ -184,11 +183,11 @@ class StandardBase(metaclass=StandardExtendedMeta):
             except LaterError as ex:
                 e = ex.original
                 errors.append(
-                    StandardBase.Error(e.problem_mark.line + 1, f"syntax error: {e.problem}")
+                    RuleBase.Error(e.problem_mark.line + 1, f"syntax error: {e.problem}")
                 )
                 candidate.faulty = True
             except LaterAnsibleError as e:
-                errors.append(StandardBase.Error(e.line, f"syntax error: {e.message}"))
+                errors.append(RuleBase.Error(e.line, f"syntax error: {e.message}"))
                 candidate.faulty = True
 
         return yamllines, errors
@@ -210,7 +209,7 @@ class StandardBase(metaclass=StandardExtendedMeta):
                     content = yaml.safe_load(f)
             except yaml.YAMLError as e:
                 errors.append(
-                    StandardBase.Error(e.problem_mark.line + 1, f"syntax error: {e.problem}")
+                    RuleBase.Error(e.problem_mark.line + 1, f"syntax error: {e.problem}")
                 )
                 candidate.faulty = True
 
@@ -224,14 +223,14 @@ class StandardBase(metaclass=StandardExtendedMeta):
             try:
                 with open(candidate.path, encoding="utf-8") as f:
                     for problem in linter.run(f, YamlLintConfig(options)):
-                        errors.append(StandardBase.Error(problem.line, problem.desc))
+                        errors.append(RuleBase.Error(problem.line, problem.desc))
             except yaml.YAMLError as e:
                 errors.append(
-                    StandardBase.Error(e.problem_mark.line + 1, f"syntax error: {e.problem}")
+                    RuleBase.Error(e.problem_mark.line + 1, f"syntax error: {e.problem}")
                 )
                 candidate.faulty = True
             except (TypeError, ValueError) as e:
-                errors.append(StandardBase.Error(None, f"yamllint error: {e}"))
+                errors.append(RuleBase.Error(None, f"yamllint error: {e}"))
                 candidate.faulty = True
 
         return errors
@@ -302,7 +301,7 @@ class StandardBase(metaclass=StandardExtendedMeta):
             return "\n".join([f"{self.candidate}:{error}" for error in self.errors])
 
 
-class StandardLoader:
+class RulesLoader:
     def __init__(self, source):
         self.rules = []
 
@@ -331,10 +330,7 @@ class StandardLoader:
 
     def _is_plugin(self, obj):
         return (
-            inspect.isclass(obj)
-            and issubclass(obj, StandardBase)
-            and obj is not StandardBase
-            and not None
+            inspect.isclass(obj) and issubclass(obj, RuleBase) and obj is not RuleBase and not None
         )
 
     def validate(self):
@@ -343,11 +339,11 @@ class StandardLoader:
         all_std = len(normalized_std)
         if all_std != unique_std:
             sysexit_with_message(
-                "Detect duplicate ID's in standards definition. Please use unique ID's only."
+                "Found duplicate tags in rules definition. Please use unique tags only."
             )
 
 
-class SingleStandards(StandardLoader, metaclass=Singleton):
+class SingleRules(RulesLoader, metaclass=Singleton):
     """Singleton config class."""
 
     pass

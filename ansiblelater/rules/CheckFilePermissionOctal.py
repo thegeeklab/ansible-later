@@ -18,14 +18,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 
 
-class CheckFilePermissionOctal(StandardBase):
+class CheckFilePermissionOctal(RuleBase):
     sid = "ANSIBLE0019"
     description = "Octal file permissions must contain leading zero or be a string"
     helptext = "numeric file permissions without leading zero can behave in unexpected ways"
-    version = "0.2"
     types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):

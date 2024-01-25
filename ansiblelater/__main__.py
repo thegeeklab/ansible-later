@@ -7,8 +7,8 @@ import sys
 
 from ansiblelater import LOG, __version__, logger
 from ansiblelater.candidate import Candidate
+from ansiblelater.rule import SingleRules
 from ansiblelater.settings import Settings
-from ansiblelater.standard import SingleStandards
 
 
 def main():
@@ -22,33 +22,33 @@ def main():
     parser.add_argument(
         "-r",
         "--rules-dir",
-        dest="rules.standards",
-        metavar="RULES",
+        dest="rules.dir",
+        metavar="DIR",
         action="append",
-        help="directory of standard rules",
+        help="directory of rules",
     )
     parser.add_argument(
         "-B",
-        "--no-buildin",
-        dest="rules.buildin",
+        "--no-builtin",
+        dest="rules.builtin",
         action="store_false",
-        help="disables build-in standard rules",
+        help="disables built-in rules",
     )
     parser.add_argument(
-        "-s",
-        "--standards",
-        dest="rules.filter",
-        metavar="FILTER",
+        "-i",
+        "--include-rules",
+        dest="rules.include_filter",
+        metavar="TAGS",
         action="append",
-        help="limit standards to given ID's",
+        help="limit rules to given id/tags",
     )
     parser.add_argument(
         "-x",
-        "--exclude-standards",
+        "--exclude-rules",
         dest="rules.exclude_filter",
-        metavar="EXCLUDE_FILTER",
+        metavar="TAGS",
         action="append",
-        help="exclude standards by given ID's",
+        help="exclude rules by given it/tags",
     )
     parser.add_argument(
         "-v", dest="logging.level", action="append_const", const=-1, help="increase log level"
@@ -65,7 +65,7 @@ def main():
     config = settings.config
 
     logger.update_logger(LOG, config["logging"]["level"], config["logging"]["json"])
-    SingleStandards(config["rules"]["standards"])
+    SingleRules(config["rules"]["dir"])
 
     workers = max(multiprocessing.cpu_count() - 2, 2)
     p = multiprocessing.Pool(workers)

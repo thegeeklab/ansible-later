@@ -1,10 +1,9 @@
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 
 
-class CheckYamlIndent(StandardBase):
+class CheckYamlIndent(RuleBase):
     sid = "LINT0002"
     description = "YAML should not contain unnecessarily empty lines"
-    version = "0.1"
     types = ["playbook", "task", "handler", "rolevars", "hostvars", "groupvars", "meta"]
 
     def check(self, candidate, settings):

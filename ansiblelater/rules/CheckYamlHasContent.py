@@ -1,11 +1,10 @@
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 
 
-class CheckYamlHasContent(StandardBase):
+class CheckYamlHasContent(RuleBase):
     sid = "LINT0007"
     description = "Files should contain useful content"
     helptext = "the file appears to have no useful content"
-    version = "0.1"
     types = ["playbook", "task", "handler", "rolevars", "defaults", "meta"]
 
     def check(self, candidate, settings):
