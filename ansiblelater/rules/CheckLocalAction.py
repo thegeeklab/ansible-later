@@ -1,13 +1,12 @@
 # Copyright (c) 2016, Tsukinowa Inc. <info@tsukinowa.jp>
 # Copyright (c) 2018, Ansible Project
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 
 
-class CheckLocalAction(StandardBase):
+class CheckLocalAction(RuleBase):
     sid = "ANSIBLE0024"
     description = "Don't use local_action"
     helptext = "`delegate_to: localhost` should be used instead of `local_action`"
-    version = "0.2"
     types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):

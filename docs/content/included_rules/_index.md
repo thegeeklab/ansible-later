@@ -2,7 +2,7 @@
 title: Included rules
 ---
 
-Reviews are useless without some rules or standards to check against. ansible-later comes with a set of built-in checks, which are explained in the following table.
+Reviews are useless without some rules to check against. `ansible-later` comes with a set of built-in checks, which are explained in the following table.
 
 | Rule                          | ID          | Description                                                       | Parameter                                                              |
 | ----------------------------- | ----------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------- |
@@ -42,5 +42,4 @@ Reviews are useless without some rules or standards to check against. ansible-la
 | CheckRelativeRolePaths        | ANSIBLE0025 | Don't use a relative path in a role.                              |                                                                        |
 | CheckChangedInWhen            | ANSIBLE0026 | Use handlers instead of `when: changed`.                          |                                                                        |
 | CheckChangedInWhen            | ANSIBLE0027 | Deprecated bare variables in loops must not be used.              |                                                                        |
-| CheckVersion                  | ANSIBLE9998 | Standards version should be pinned.                               |                                                                        |
 | CheckDeprecated               | ANSIBLE9999 | Deprecated features of `ansible-later` should not be used.        |                                                                        |

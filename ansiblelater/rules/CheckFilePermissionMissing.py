@@ -19,17 +19,16 @@
 # THE SOFTWARE.
 import re
 
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 
 
-class CheckFilePermissionMissing(StandardBase):
+class CheckFilePermissionMissing(RuleBase):
     sid = "ANSIBLE0018"
     description = "File permissions unset or incorrect"
     helptext = (
         "`mode` parameter should set permissions explicitly (e.g. `mode: 0644`) "
         "to avoid unexpected file permissions"
     )
-    version = "0.2"
     types = ["playbook", "task", "handler"]
 
     _modules = {

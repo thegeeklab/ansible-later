@@ -1,13 +1,12 @@
 import os
 
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 
 
-class CheckYamlFile(StandardBase):
+class CheckYamlFile(RuleBase):
     sid = "LINT0006"
     description = "Roles file should be in yaml format"
     helptext = "file does not have a .yml extension"
-    version = "0.1"
     types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):

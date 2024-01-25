@@ -21,17 +21,16 @@
 # THE SOFTWARE.
 import re
 
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 
 
-class CheckNestedJinja(StandardBase):
+class CheckNestedJinja(RuleBase):
     sid = "ANSIBLE0023"
     description = "Don't use nested Jinja2 pattern"
     helptext = (
         "there should not be any nested jinja pattern "
         "like `{{ list_one + {{ list_two | max }} }}`"
     )
-    version = "0.2"
     types = ["playbook", "task", "handler", "rolevars", "hostvars", "groupvars"]
 
     def check(self, candidate, settings):

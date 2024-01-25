@@ -1,13 +1,12 @@
 from collections import defaultdict
 
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 
 
-class CheckNameFormat(StandardBase):
+class CheckNameFormat(RuleBase):
     sid = "ANSIBLE0007"
     description = "Name of tasks and handlers must be formatted"
-    helptext = "name '{name}' should start with uppercase"
-    version = "0.1"
+    helptext = "name `{name}` should start with uppercase"
     types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):

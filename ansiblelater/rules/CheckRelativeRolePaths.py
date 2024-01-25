@@ -1,13 +1,12 @@
 # Copyright (c) 2016, Tsukinowa Inc. <info@tsukinowa.jp>
 # Copyright (c) 2018, Ansible Project
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 
 
-class CheckRelativeRolePaths(StandardBase):
+class CheckRelativeRolePaths(RuleBase):
     sid = "ANSIBLE0025"
     description = "Don't use a relative path in a role"
     helptext = "`copy` and `template` modules don't need relative path for `src`"
-    version = "0.2"
     types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):

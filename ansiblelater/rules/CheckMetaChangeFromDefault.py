@@ -1,14 +1,13 @@
 # Copyright (c) 2018, Ansible Project
 from nested_lookup import nested_lookup
 
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 
 
-class CheckMetaChangeFromDefault(StandardBase):
+class CheckMetaChangeFromDefault(RuleBase):
     sid = "ANSIBLE0021"
     description = "Roles meta/main.yml default values should be changed"
     helptext = "meta/main.yml default values should be changed for: `{field}`"
-    version = "0.2"
     types = ["meta"]
 
     def check(self, candidate, settings):

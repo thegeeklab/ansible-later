@@ -23,5 +23,5 @@ main:
     sub:
       - name: Candidates
         ref: "/build_rules/candidates"
-      - name: Standards checks
-        ref: "/build_rules/standards_check"
+      - name: Rules
+        ref: "/build_rules/rule"

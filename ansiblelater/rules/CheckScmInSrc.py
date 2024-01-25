@@ -1,13 +1,12 @@
 from ansible.parsing.yaml.objects import AnsibleMapping
 
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 
 
-class CheckScmInSrc(StandardBase):
+class CheckScmInSrc(RuleBase):
     sid = "ANSIBLE0005"
     description = "Use `scm:` key rather than `src: scm+url`"
     helptext = "usage of `src: scm+url` not recommended"
-    version = "0.1"
     types = ["rolesfile"]
 
     def check(self, candidate, settings):

@@ -20,14 +20,13 @@
 
 import os
 
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 
 
-class CheckCommandInsteadOfArgument(StandardBase):
+class CheckCommandInsteadOfArgument(RuleBase):
     sid = "ANSIBLE0017"
     description = "Commands should not be used in place of module arguments"
     helptext = "{exec} used in place of file modules argument {arg}"
-    version = "0.2"
     types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):

@@ -1,11 +1,10 @@
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 
 
-class CheckNativeYaml(StandardBase):
+class CheckNativeYaml(RuleBase):
     sid = "LINT0008"
     description = "Use YAML format for tasks and handlers rather than key=value"
     helptext = "task arguments appear to be in key value rather than YAML format"
-    version = "0.1"
     types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):

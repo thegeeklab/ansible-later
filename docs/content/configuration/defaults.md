@@ -58,8 +58,8 @@ logging:
 
 # Global settings for all defined rules
 rules:
-  # Disable build-in rules if required
-  buildin: True
+  # Disable built-in rules if required
+  builtin: True
 
   # List of files to exclude
   exclude_files: []
@@ -75,8 +75,7 @@ rules:
   exclude_filter: []
 
   # List of rule ID's that should be displayed as a warning instead of an error. By default,
-  # only rules whose version is higher than the current default version are marked as warnings.
-  # This list allows to degrade errors to warnings for each rule.
+  # no rules are marked as warnings. This list allows to degrade errors to warnings for each rule.
   warning_filter:
     - "ANSIBLE9999"
     - "ANSIBLE9998"
@@ -85,12 +84,8 @@ rules:
   # You can disable this setting and handle dotfiles by yourself with `exclude_files`.
   ignore_dotfiles: True
 
-  # List of directories to load standard rules from (defaults to build-in)
-  standards: []
-
-  # Standard version to use. Standard version set in a roles meta file
-  # or playbook will takes precedence.
-  version:
+  # List of directories to load rules from (defaults to built-in)
+  dir: []
 
 # Block to control included yamllint rules.
 # See https://yamllint.readthedocs.io/en/stable/rules.html

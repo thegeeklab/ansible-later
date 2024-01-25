@@ -1,11 +1,10 @@
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 
 
-class CheckShellInsteadCommand(StandardBase):
+class CheckShellInsteadCommand(RuleBase):
     sid = "ANSIBLE0010"
     description = "Shell should only be used when essential"
     helptext = "shell should only be used when piping, redirecting or chaining commands"
-    version = "0.1"
     types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):

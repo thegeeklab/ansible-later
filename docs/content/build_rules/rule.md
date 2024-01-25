@@ -1,18 +1,17 @@
 ---
-title: Minimal standard checks
+title: Write a rule
 ---
 
-A typical standards check will look like:
+A typical rule check will look like:
 
 <!-- prettier-ignore-start -->
 <!-- spellchecker-disable -->
 {{< highlight Python "linenos=table" >}}
-class CheckBecomeUser(StandardBase):
+class CheckBecomeUser(RuleBase):
 
     sid = "ANSIBLE0015"
     description = "Become should be combined with become_user"
     helptext = "the task has `become` enabled but `become_user` is missing"
-    version = "0.1"
     types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):

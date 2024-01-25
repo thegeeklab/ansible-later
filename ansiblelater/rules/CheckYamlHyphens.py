@@ -1,10 +1,9 @@
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 
 
-class CheckYamlHyphens(StandardBase):
+class CheckYamlHyphens(RuleBase):
     sid = "LINT0003"
     description = "YAML should use consistent number of spaces after hyphens"
-    version = "0.1"
     types = ["playbook", "task", "handler", "rolevars", "hostvars", "groupvars", "meta"]
 
     def check(self, candidate, settings):

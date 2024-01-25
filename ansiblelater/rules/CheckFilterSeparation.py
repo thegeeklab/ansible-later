@@ -1,13 +1,12 @@
 import re
 
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 
 
-class CheckFilterSeparation(StandardBase):
+class CheckFilterSeparation(RuleBase):
     sid = "ANSIBLE0016"
     description = "Jinja2 filters should be separated with spaces"
     helptext = "no suitable numbers of spaces (required: 1)"
-    version = "0.1"
     types = ["playbook", "task", "handler", "rolevars", "hostvars", "groupvars"]
 
     def check(self, candidate, settings):

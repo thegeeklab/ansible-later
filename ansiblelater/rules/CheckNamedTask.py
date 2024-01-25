@@ -1,11 +1,10 @@
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 
 
-class CheckNamedTask(StandardBase):
+class CheckNamedTask(RuleBase):
     sid = "ANSIBLE0006"
     description = "Tasks and handlers must be named"
-    helptext = "module '{module}' used without or empty `name` attribute"
-    version = "0.1"
+    helptext = "module `{module}` used without or empty `name` attribute"
     types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):

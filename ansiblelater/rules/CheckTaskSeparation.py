@@ -1,14 +1,13 @@
 import re
 from collections import defaultdict
 
-from ansiblelater.standard import StandardBase
+from ansiblelater.rule import RuleBase
 
 
-class CheckTaskSeparation(StandardBase):
+class CheckTaskSeparation(RuleBase):
     sid = "ANSIBLE0001"
     description = "Single tasks should be separated by empty line"
     helptext = "missing task separation (required: 1 empty line)"
-    version = "0.1"
     types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):
