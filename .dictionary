@@ -18,8 +18,8 @@ HostVars
 Rolesfile
 Makefile
 Jinja2
-ANS([0-9]{4})
-YML([0-9]{4})
+ANS([0-9]{3})
+YML([0-9]{3})
 SCM
 bools
 Check[A-Z].+
