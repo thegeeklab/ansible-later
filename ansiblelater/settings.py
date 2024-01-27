@@ -180,6 +180,10 @@ class Settings:
                     "max-spaces-before": 0,
                     "max-spaces-after": 1,
                 },
+                "octal-values": {
+                    "forbid-implicit-octal": True,
+                    "forbid-explicit-octal": True,
+                },
             },
         }
 
