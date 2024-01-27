@@ -411,7 +411,9 @@ def normalize_task(task, filename, custom_modules=None):
 
         normalized[k] = v
 
-    normalized["action"] = {"__ansible_module__": action}
+    # convert builtin fqn calls to short forms because most rules know only
+    # about short calls
+    normalized["action"] = {"__ansible_module__": action.removeprefix("ansible.builtin.")}
 
     if "_raw_params" in arguments:
         normalized["action"]["__ansible_arguments__"] = arguments["_raw_params"].strip().split()

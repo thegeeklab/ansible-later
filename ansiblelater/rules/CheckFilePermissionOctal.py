@@ -23,8 +23,8 @@ from ansiblelater.rule import RuleBase
 
 class CheckFilePermissionOctal(RuleBase):
     rid = "ANS119"
-    description = "Numeric file permissions without leading zero can behave in unexpected ways"
-    helptext = '`mode: {mode}` should be strings with a leading zero `mode: "0{mode}"'
+    description = "Numeric file permissions without a leading zero can behave unexpectedly"
+    helptext = '`mode: {mode}` should be strings with a leading zero `mode: "0{mode}"`'
     types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):
