@@ -20,23 +20,19 @@ classifiers = [
 description = "Reviews ansible playbooks, roles and inventories and suggests improvements."
 documentation = "https://ansible-later.geekdocs.de/"
 homepage = "https://ansible-later.geekdocs.de/"
-include = [
-  "LICENSE",
-]
+include = ["LICENSE"]
 keywords = ["ansible", "code", "review"]
 license = "MIT"
 name = "ansible-later"
-packages = [
-  {include = "ansiblelater"},
-]
+packages = [{ include = "ansiblelater" }]
 readme = "README.md"
 repository = "https://github.com/thegeeklab/ansible-later/"
 version = "0.0.0"
 
 [tool.poetry.dependencies]
 PyYAML = "6.0.1"
-ansible-core = {version = "2.14.13", optional = true}
-ansible = {version = "7.7.0", optional = true}
+ansible-core = { version = "2.14.13", optional = true }
+ansible = { version = "7.7.0", optional = true }
 anyconfig = "0.13.0"
 appdirs = "1.4.4"
 colorama = "0.4.6"
@@ -85,16 +81,16 @@ requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
 
 [tool.ruff]
 exclude = [
-    ".git",
-    "__pycache__",
-    "build",
-    "dist",
-    "test",
-    "*.pyc",
-    "*.egg-info",
-    ".cache",
-    ".eggs",
-    "env*",
+  ".git",
+  "__pycache__",
+  "build",
+  "dist",
+  "test",
+  "*.pyc",
+  "*.egg-info",
+  ".cache",
+  ".eggs",
+  "env*",
 ]
 
 line-length = 99
@@ -112,38 +108,38 @@ indent-width = 4
 # D203: One blank line required before class docstring
 # D212: Multi-line docstring summary should start at the first line
 ignore = [
-    "D100",
-    "D101",
-    "D102",
-    "D103",
-    "D105",
-    "D107",
-    "D202",
-    "D203",
-    "D212",
-    "UP038",
-    "RUF012",
+  "D100",
+  "D101",
+  "D102",
+  "D103",
+  "D105",
+  "D107",
+  "D202",
+  "D203",
+  "D212",
+  "UP038",
+  "RUF012",
 ]
 select = [
-    "D",
-    "E",
-    "F",
-    "Q",
-    "W",
-    "I",
-    "S",
-    "BLE",
-    "N",
-    "UP",
-    "B",
-    "A",
-    "C4",
-    "T20",
-    "SIM",
-    "RET",
-    "ARG",
-    "ERA",
-    "RUF",
+  "D",
+  "E",
+  "F",
+  "Q",
+  "W",
+  "I",
+  "S",
+  "BLE",
+  "N",
+  "UP",
+  "B",
+  "A",
+  "C4",
+  "T20",
+  "SIM",
+  "RET",
+  "ARG",
+  "ERA",
+  "RUF",
 ]
 
 [tool.ruff.format]
