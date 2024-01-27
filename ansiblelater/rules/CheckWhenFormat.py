@@ -2,7 +2,7 @@ from ansiblelater.rule import RuleBase
 
 
 class CheckWhenFormat(RuleBase):
-    sid = "ANSIBLE0022"
+    rid = "ANS122"
     description = "Don't use Jinja2 in when"
     helptext = (
         "`when` is a raw Jinja2 expression, redundant {{ }} " "should be removed from variable(s)"

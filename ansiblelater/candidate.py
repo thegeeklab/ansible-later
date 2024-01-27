@@ -41,10 +41,10 @@ class Candidate:
         excludes = self.config["rules"]["exclude_filter"]
 
         if len(includes) == 0:
-            includes = [s.sid for s in self.rules]
+            includes = [s.rid for s in self.rules]
 
         for rule in self.rules:
-            if rule.sid in includes and rule.sid not in excludes:
+            if rule.rid in includes and rule.rid not in excludes:
                 target_rules.append(rule)
 
         return target_rules
@@ -60,7 +60,7 @@ class Candidate:
             result = rule.check(self, self.config)
 
             if not result:
-                LOG.error(f"rule '{rule.sid}' returns an empty result object. Check failed!")
+                LOG.error(f"rule '{rule.rid}' returns an empty result object. Check failed!")
                 continue
 
             labels = {
@@ -70,23 +70,23 @@ class Candidate:
                 "passed": True,
             }
 
-            if rule.sid and rule.sid.strip():
-                labels["sid"] = rule.sid
+            if rule.rid and rule.rid.strip():
+                labels["rid"] = rule.rid
 
             for err in result.errors:
                 err_labels = copy.copy(labels)
                 err_labels["passed"] = False
 
-                sid = self._format_id(rule.sid)
+                rid = self._format_id(rule.rid)
                 path = self.path
                 description = rule.description
 
                 if isinstance(err, RuleBase.Error):
                     err_labels.update(err.to_dict())
 
-                msg = f"{sid}rule '{description}' not met:\n{path}:{err}"
+                msg = f"{rid}rule '{description}' not met:\n{path}:{err}"
 
-                if rule.sid not in self.config["rules"]["warning_filter"]:
+                if rule.rid not in self.config["rules"]["warning_filter"]:
                     LOG.error(msg, extra=flag_extra(err_labels))
                     errors = errors + 1
                 else:
@@ -138,9 +138,9 @@ class Candidate:
         return None
 
     def _format_id(self, rule_id):
-        sid = rule_id.strip()
-        if sid:
-            rule_id = f"[{sid}] "
+        rid = rule_id.strip()
+        if rid:
+            rule_id = f"[{rid}] "
 
         return rule_id
 

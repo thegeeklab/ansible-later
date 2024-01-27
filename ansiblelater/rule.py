@@ -30,7 +30,7 @@ from ansiblelater.utils.yamlhelper import (
 class RuleMeta(type):
     def __call__(cls, *args):
         mcls = type.__call__(cls, *args)
-        mcls.sid = cls.sid
+        mcls.rid = cls.rid
         mcls.description = getattr(cls, "description", "__unknown__")
         mcls.helptext = getattr(cls, "helptext", "")
         mcls.types = getattr(cls, "types", [])
@@ -46,7 +46,7 @@ class RuleBase(metaclass=RuleExtendedMeta):
 
     @property
     @abstractmethod
-    def sid(self):
+    def rid(self):
         pass
 
     @abstractmethod
@@ -334,10 +334,10 @@ class RulesLoader:
         )
 
     def validate(self):
-        normalized_std = list(toolz.remove(lambda x: x.sid == "", self.rules))
-        unique_std = len(list(toolz.unique(normalized_std, key=lambda x: x.sid)))
-        all_std = len(normalized_std)
-        if all_std != unique_std:
+        normalize_rule = list(toolz.remove(lambda x: x.rid == "", self.rules))
+        unique_rule = len(list(toolz.unique(normalize_rule, key=lambda x: x.rid)))
+        all_rules = len(normalize_rule)
+        if all_rules != unique_rule:
             sysexit_with_message(
                 "Found duplicate tags in rules definition. Please use unique tags only."
             )

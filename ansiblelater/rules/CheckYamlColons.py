@@ -2,7 +2,7 @@ from ansiblelater.rule import RuleBase
 
 
 class CheckYamlColons(RuleBase):
-    sid = "LINT0005"
+    rid = "YML105"
     description = "YAML should use consistent number of spaces around colons"
     types = ["playbook", "task", "handler", "rolevars", "hostvars", "groupvars", "meta"]
 

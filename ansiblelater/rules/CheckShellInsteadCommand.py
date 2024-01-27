@@ -2,7 +2,7 @@ from ansiblelater.rule import RuleBase
 
 
 class CheckShellInsteadCommand(RuleBase):
-    sid = "ANSIBLE0010"
+    rid = "ANS110"
     description = "Shell should only be used when essential"
     helptext = "shell should only be used when piping, redirecting or chaining commands"
     types = ["playbook", "task", "handler"]

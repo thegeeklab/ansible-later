@@ -2,7 +2,7 @@ from ansiblelater.rule import RuleBase
 
 
 class CheckYamlEmptyLines(RuleBase):
-    sid = "LINT0001"
+    rid = "YML101"
     description = "YAML should not contain unnecessarily empty lines"
     types = ["playbook", "task", "handler", "rolevars", "hostvars", "groupvars", "meta"]
 

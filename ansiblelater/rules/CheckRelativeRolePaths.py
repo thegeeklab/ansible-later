@@ -4,7 +4,7 @@ from ansiblelater.rule import RuleBase
 
 
 class CheckRelativeRolePaths(RuleBase):
-    sid = "ANSIBLE0025"
+    rid = "ANS125"
     description = "Don't use a relative path in a role"
     helptext = "`copy` and `template` modules don't need relative path for `src`"
     types = ["playbook", "task", "handler"]

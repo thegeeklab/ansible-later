@@ -2,7 +2,7 @@ from ansiblelater.rule import RuleBase
 
 
 class CheckYamlHasContent(RuleBase):
-    sid = "LINT0007"
+    rid = "YML107"
     description = "Files should contain useful content"
     helptext = "the file appears to have no useful content"
     types = ["playbook", "task", "handler", "rolevars", "defaults", "meta"]

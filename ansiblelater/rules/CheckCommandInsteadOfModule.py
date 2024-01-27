@@ -4,7 +4,7 @@ from ansiblelater.rule import RuleBase
 
 
 class CheckCommandInsteadOfModule(RuleBase):
-    sid = "ANSIBLE0008"
+    rid = "ANS108"
     description = "Commands should not be used in place of modules"
     helptext = "{exec} command used in place of {module} module"
     types = ["playbook", "task", "handler"]

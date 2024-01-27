@@ -5,7 +5,7 @@ from ansiblelater.rule import RuleBase
 
 
 class CheckCompareToEmptyString(RuleBase):
-    sid = "ANSIBLE0012"
+    rid = "ANS112"
     description = 'Don\'t compare to empty string ""'
     helptext = "use `when: var` rather than `when: var !=` (or conversely `when: not var`)"
     types = ["playbook", "task", "handler", "template"]

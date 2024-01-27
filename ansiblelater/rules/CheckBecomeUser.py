@@ -2,7 +2,7 @@ from ansiblelater.rule import RuleBase
 
 
 class CheckBecomeUser(RuleBase):
-    sid = "ANSIBLE0015"
+    rid = "ANS115"
     description = "Become should be combined with become_user"
     helptext = "the task has `become` enabled but `become_user` is missing"
     types = ["playbook", "task", "handler"]

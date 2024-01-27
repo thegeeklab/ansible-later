@@ -24,7 +24,7 @@ from ansiblelater.rule import RuleBase
 
 
 class CheckCommandInsteadOfArgument(RuleBase):
-    sid = "ANSIBLE0017"
+    rid = "ANS117"
     description = "Commands should not be used in place of module arguments"
     helptext = "{exec} used in place of file modules argument {arg}"
     types = ["playbook", "task", "handler"]

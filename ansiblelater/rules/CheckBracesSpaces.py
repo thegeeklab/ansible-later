@@ -5,7 +5,7 @@ from ansiblelater.utils import count_spaces
 
 
 class CheckBracesSpaces(RuleBase):
-    sid = "ANSIBLE0004"
+    rid = "ANS104"
     description = "YAML should use consistent number of spaces around variables"
     helptext = "no suitable numbers of spaces (min: {min} max: {max})"
     types = ["playbook", "task", "handler", "rolevars", "hostvars", "groupvars", "meta"]

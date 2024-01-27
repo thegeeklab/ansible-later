@@ -123,8 +123,8 @@ class Settings:
                 "include_filter": [],
                 "exclude_filter": [],
                 "warning_filter": [
-                    "ANSIBLE9999",
-                    "ANSIBLE9998",
+                    "ANS999",
+                    "ANS998",
                 ],
                 "ignore_dotfiles": True,
                 "exclude_files": [],

@@ -4,7 +4,7 @@ from ansiblelater.rule import RuleBase
 
 
 class CheckScmInSrc(RuleBase):
-    sid = "ANSIBLE0005"
+    rid = "ANS105"
     description = "Use `scm:` key rather than `src: scm+url`"
     helptext = "usage of `src: scm+url` not recommended"
     types = ["rolesfile"]

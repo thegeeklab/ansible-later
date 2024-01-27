@@ -2,7 +2,7 @@ from ansiblelater.rule import RuleBase
 
 
 class CheckCommandHasChanges(RuleBase):
-    sid = "ANSIBLE0011"
+    rid = "ANS111"
     description = "Commands should be idempotent"
     helptext = (
         "commands should only read while using `changed_when` or try to be "

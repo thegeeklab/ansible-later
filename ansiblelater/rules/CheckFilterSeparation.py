@@ -4,7 +4,7 @@ from ansiblelater.rule import RuleBase
 
 
 class CheckFilterSeparation(RuleBase):
-    sid = "ANSIBLE0016"
+    rid = "ANS116"
     description = "Jinja2 filters should be separated with spaces"
     helptext = "no suitable numbers of spaces (required: 1)"
     types = ["playbook", "task", "handler", "rolevars", "hostvars", "groupvars"]

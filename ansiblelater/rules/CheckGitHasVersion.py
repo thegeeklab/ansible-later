@@ -22,7 +22,7 @@ from ansiblelater.rule import RuleBase
 
 
 class CheckGitHasVersion(RuleBase):
-    sid = "ANSIBLE0020"
+    rid = "ANS120"
     description = "Git checkouts should use explicit version"
     helptext = "git checkouts should point to an explicit commit or tag, not `latest`"
     types = ["playbook", "task", "handler"]
