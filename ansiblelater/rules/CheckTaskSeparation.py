@@ -5,7 +5,7 @@ from ansiblelater.rule import RuleBase
 
 
 class CheckTaskSeparation(RuleBase):
-    sid = "ANSIBLE0001"
+    rid = "ANS101"
     description = "Single tasks should be separated by empty line"
     helptext = "missing task separation (required: 1 empty line)"
     types = ["playbook", "task", "handler"]

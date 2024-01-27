@@ -16,19 +16,19 @@ ansible:
   # directory will be auto-detected and don't need to be added to this list.
   custom_modules: []
 
-  # Settings for variable formatting rule (ANSIBLE0004)
+  # Settings for variable formatting rule (ANS104)
   double-braces:
     max-spaces-inside: 1
     min-spaces-inside: 1
 
-  # List of allowed literal bools (ANSIBLE0014)
+  # List of allowed literal bools (ANS114)
   literal-bools:
     - "True"
     - "False"
     - "yes"
     - "no"
 
-  # List of modules that don't need to be named (ANSIBLE0006).
+  # List of modules that don't need to be named (ANS106).
   # You must specify each individual module name, globs or wildcards do not work!
   named-task:
     exclude:
@@ -41,7 +41,7 @@ ansible:
       - "import_role"
       - "import_tasks"
 
-  # List of modules that are allowed to use the key=value format instead of the native YAML format (LINT0008).
+  # List of modules that are allowed to use the key=value format instead of the native YAML format (YML108).
   # You must specify each individual module name, globs or wildcards do not work!
   native-yaml:
     exclude: []
@@ -77,8 +77,8 @@ rules:
   # List of rule ID's that should be displayed as a warning instead of an error. By default,
   # no rules are marked as warnings. This list allows to degrade errors to warnings for each rule.
   warning_filter:
-    - "ANSIBLE9999"
-    - "ANSIBLE9998"
+    - "ANS999"
+    - "ANS998"
 
   # All dotfiles (including hidden folders) are excluded by default.
   # You can disable this setting and handle dotfiles by yourself with `exclude_files`.

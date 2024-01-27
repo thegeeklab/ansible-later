@@ -2,7 +2,7 @@ from ansiblelater.rule import RuleBase
 
 
 class CheckInstallUseLatest(RuleBase):
-    sid = "ANSIBLE0009"
+    rid = "ANS109"
     description = "Package installs should use present, not latest"
     helptext = "package installs should use `state=present` with or without a version"
     types = ["playbook", "task", "handler"]

@@ -22,7 +22,7 @@ from ansiblelater.rule import RuleBase
 
 
 class CheckFilePermissionOctal(RuleBase):
-    sid = "ANSIBLE0019"
+    rid = "ANS119"
     description = "Octal file permissions must contain leading zero or be a string"
     helptext = "numeric file permissions without leading zero can behave in unexpected ways"
     types = ["playbook", "task", "handler"]

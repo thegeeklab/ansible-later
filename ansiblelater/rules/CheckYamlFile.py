@@ -4,7 +4,7 @@ from ansiblelater.rule import RuleBase
 
 
 class CheckYamlFile(RuleBase):
-    sid = "LINT0006"
+    rid = "YML106"
     description = "Roles file should be in yaml format"
     helptext = "file does not have a .yml extension"
     types = ["playbook", "task", "handler"]

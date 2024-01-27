@@ -25,7 +25,7 @@ from ansiblelater.rule import RuleBase
 
 
 class CheckNestedJinja(RuleBase):
-    sid = "ANSIBLE0023"
+    rid = "ANS123"
     description = "Don't use nested Jinja2 pattern"
     helptext = (
         "there should not be any nested jinja pattern "

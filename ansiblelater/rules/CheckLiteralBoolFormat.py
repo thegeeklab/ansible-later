@@ -4,7 +4,7 @@ from ansiblelater.rule import RuleBase
 
 
 class CheckLiteralBoolFormat(RuleBase):
-    sid = "ANSIBLE0014"
+    rid = "ANS114"
     description = "Literal bools should be consistent"
     helptext = "literal bools should be written as `{bools}`"
     types = ["playbook", "task", "handler", "rolevars", "hostvars", "groupvars"]

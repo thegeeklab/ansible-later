@@ -9,7 +9,7 @@ A typical rule check will look like:
 {{< highlight Python "linenos=table" >}}
 class CheckBecomeUser(RuleBase):
 
-    sid = "ANSIBLE0015"
+    rid = "ANS115"
     description = "Become should be combined with become_user"
     helptext = "the task has `become` enabled but `become_user` is missing"
     types = ["playbook", "task", "handler"]

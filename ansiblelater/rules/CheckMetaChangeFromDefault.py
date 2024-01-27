@@ -5,7 +5,7 @@ from ansiblelater.rule import RuleBase
 
 
 class CheckMetaChangeFromDefault(RuleBase):
-    sid = "ANSIBLE0021"
+    rid = "ANS121"
     description = "Roles meta/main.yml default values should be changed"
     helptext = "meta/main.yml default values should be changed for: `{field}`"
     types = ["meta"]

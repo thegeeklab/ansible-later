@@ -22,7 +22,7 @@ from ansiblelater.rule import RuleBase
 
 
 class CheckChangedInWhen(RuleBase):
-    sid = "ANSIBLE0026"
+    rid = "ANS126"
     description = "Use handlers instead of `when: changed`"
     helptext = "tasks using `when: result.changed` setting are effectively acting as a handler"
     types = ["playbook", "task", "handler"]

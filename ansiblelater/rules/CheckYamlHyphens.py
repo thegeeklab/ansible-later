@@ -2,7 +2,7 @@ from ansiblelater.rule import RuleBase
 
 
 class CheckYamlHyphens(RuleBase):
-    sid = "LINT0003"
+    rid = "YML103"
     description = "YAML should use consistent number of spaces after hyphens"
     types = ["playbook", "task", "handler", "rolevars", "hostvars", "groupvars", "meta"]
 

@@ -4,7 +4,7 @@ from ansiblelater.rule import RuleBase
 
 
 class CheckLocalAction(RuleBase):
-    sid = "ANSIBLE0024"
+    rid = "ANS124"
     description = "Don't use local_action"
     helptext = "`delegate_to: localhost` should be used instead of `local_action`"
     types = ["playbook", "task", "handler"]

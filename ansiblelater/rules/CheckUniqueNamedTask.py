@@ -4,7 +4,7 @@ from ansiblelater.rule import RuleBase
 
 
 class CheckUniqueNamedTask(RuleBase):
-    sid = "ANSIBLE0003"
+    rid = "ANS103"
     description = "Tasks and handlers must be uniquely named within a single file"
     helptext = "name `{name}` appears multiple times"
     types = ["playbook", "task", "handler"]

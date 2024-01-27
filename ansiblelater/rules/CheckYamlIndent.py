@@ -2,7 +2,7 @@ from ansiblelater.rule import RuleBase
 
 
 class CheckYamlIndent(RuleBase):
-    sid = "LINT0002"
+    rid = "YML102"
     description = "YAML should not contain unnecessarily empty lines"
     types = ["playbook", "task", "handler", "rolevars", "hostvars", "groupvars", "meta"]
 

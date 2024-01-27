@@ -4,7 +4,7 @@ from ansiblelater.rule import RuleBase
 
 
 class CheckMetaMain(RuleBase):
-    sid = "ANSIBLE0002"
+    rid = "ANS102"
     description = "Roles must contain suitable meta/main.yml"
     helptext = "file should contain `{key}` key"
     types = ["meta"]

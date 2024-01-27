@@ -5,7 +5,7 @@ from ansiblelater.rule import RuleBase
 
 
 class CheckCompareToLiteralBool(RuleBase):
-    sid = "ANSIBLE0013"
+    rid = "ANS113"
     description = "Don't compare to True or False"
     helptext = "use `when: var` rather than `when: var == True` (or conversely `when: not var`)"
     types = ["playbook", "task", "handler"]

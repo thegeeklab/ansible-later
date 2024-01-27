@@ -23,7 +23,7 @@ from ansiblelater.rule import RuleBase
 
 
 class CheckFilePermissionMissing(RuleBase):
-    sid = "ANSIBLE0018"
+    rid = "ANS118"
     description = "File permissions unset or incorrect"
     helptext = (
         "`mode` parameter should set permissions explicitly (e.g. `mode: 0644`) "
