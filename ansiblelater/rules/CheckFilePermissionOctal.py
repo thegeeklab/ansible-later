@@ -23,8 +23,8 @@ from ansiblelater.rule import RuleBase
 
 class CheckFilePermissionOctal(RuleBase):
     rid = "ANS119"
-    description = "Octal file permissions must contain leading zero or be a string"
-    helptext = "numeric file permissions without leading zero can behave in unexpected ways"
+    description = "Numeric file permissions without leading zero can behave in unexpected ways"
+    helptext = '`mode: {mode}` should be strings with a leading zero `mode: "0{mode}"'
     types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):
@@ -47,7 +47,9 @@ class CheckFilePermissionOctal(RuleBase):
                     mode = task["action"].get("mode", None)
 
                     if isinstance(mode, int) and self._is_invalid_permission(mode):
-                        errors.append(self.Error(task["__line__"], self.helptext))
+                        errors.append(
+                            self.Error(task["__line__"], self.helptext.format(mode=mode))
+                        )
 
         return self.Result(candidate.path, errors)
 
