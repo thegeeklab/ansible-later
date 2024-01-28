@@ -415,6 +415,7 @@ def normalize_task(task, filename, custom_modules=None):
     # about short calls
     normalized["action"] = {
         "__ansible_module__": action.removeprefix("ansible.builtin."),
+        "__ansible_module_original__": action,
     }
 
     if "_raw_params" in arguments:

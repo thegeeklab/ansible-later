@@ -5,7 +5,7 @@ from ansiblelater.utils import load_plugin
 class CheckFQCNBuiltin(RuleBase):
     rid = "ANS128"
     helptext = "use FQCN `{module_alias}` for module action `{module}`"
-    description = "Actions should use full qualified collection names"
+    description = "Module actions should use full qualified collection names"
     types = ["playbook", "task", "handler", "rolevars", "hostvars", "groupvars"]
     module_aliases = {
         "block": "block",
@@ -92,7 +92,6 @@ class CheckFQCNBuiltin(RuleBase):
 
         for task in tasks:
             module = task["action"]["__ansible_module_original__"]
-            print(module)
 
             if module not in self.module_aliases:
                 loaded_module = load_plugin(module)
