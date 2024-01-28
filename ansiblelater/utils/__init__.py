@@ -4,8 +4,10 @@ import contextlib
 import re
 import sys
 from contextlib import suppress
+from functools import lru_cache
 
 import yaml
+from ansible.plugins.loader import module_loader
 
 from ansiblelater import logger
 
@@ -114,3 +116,21 @@ class Singleton(type):
         if cls not in cls._instances:
             cls._instances[cls] = super().__call__(*args, **kwargs)
         return cls._instances[cls]
+
+
+@lru_cache
+def load_plugin(name):
+    """Return loaded ansible plugin/module."""
+    loaded_module = module_loader.find_plugin_with_context(
+        name,
+        ignore_deprecated=True,
+        check_aliases=True,
+    )
+    if not loaded_module.resolved and name.startswith("ansible.builtin."):
+        # fallback to core behavior of using legacy
+        loaded_module = module_loader.find_plugin_with_context(
+            name.replace("ansible.builtin.", "ansible.legacy."),
+            ignore_deprecated=True,
+            check_aliases=True,
+        )
+    return loaded_module
