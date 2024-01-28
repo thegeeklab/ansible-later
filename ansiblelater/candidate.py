@@ -54,7 +54,7 @@ class Candidate:
         self.rules = SingleRules(self.config["rules"]["dir"]).rules
 
         for rule in self._filter_rules():
-            if type(self).__name__.lower() not in rule.types:
+            if self.filetype not in rule.types:
                 continue
 
             result = rule.check(self, self.config)
@@ -145,7 +145,7 @@ class Candidate:
         return rule_id
 
     def __repr__(self):
-        return f"{type(self).__name__} ({self.path})"
+        return f"{self.filetype} ({self.path})"
 
     def __getitem__(self, item):
         return self.__dict__.get(item)
