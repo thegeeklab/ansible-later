@@ -1,3 +1,5 @@
+# Original code written by the authors of ansible-lint
+
 from ansiblelater.rule import RuleBase
 from ansiblelater.utils import load_plugin
 
