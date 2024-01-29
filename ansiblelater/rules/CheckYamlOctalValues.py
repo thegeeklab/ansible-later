@@ -3,7 +3,7 @@ from ansiblelater.rule import RuleBase
 
 class CheckYamlOctalValues(RuleBase):
     rid = "YML110"
-    description = "YAML should not use forbidden implicit or explicit octal value"
+    description = "YAML implicit/explicit octal value should match configuration"
     types = ["playbook", "task", "handler", "rolevars", "hostvars", "groupvars", "meta"]
 
     def check(self, candidate, settings):

@@ -3,7 +3,7 @@ from ansiblelater.rule import RuleBase
 
 class CheckYamlDocumentEnd(RuleBase):
     rid = "YML109"
-    description = "YAML should contain document end marker"
+    description = "YAML document end marker should match configuration"
     types = ["playbook", "task", "handler", "rolevars", "hostvars", "groupvars", "meta"]
 
     def check(self, candidate, settings):
