@@ -3,7 +3,7 @@ from ansiblelater.rule import RuleBase
 
 class CheckYamlDocumentStart(RuleBase):
     rid = "YML104"
-    description = "YAML should contain document start marker"
+    description = "YAML document start marker should match configuration"
     types = ["playbook", "task", "handler", "rolevars", "hostvars", "groupvars", "meta"]
 
     def check(self, candidate, settings):

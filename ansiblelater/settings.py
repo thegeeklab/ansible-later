@@ -174,7 +174,7 @@ class Settings:
                     "present": True,
                 },
                 "document-end": {
-                    "present": True,
+                    "present": False,
                 },
                 "colons": {
                     "max-spaces-before": 0,
