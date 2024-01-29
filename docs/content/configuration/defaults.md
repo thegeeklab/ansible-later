@@ -77,8 +77,8 @@ rules:
   # List of rule ID's that should be displayed as a warning instead of an error. By default,
   # no rules are marked as warnings. This list allows to degrade errors to warnings for each rule.
   warning_filter:
+    - "ANS128"
     - "ANS999"
-    - "ANS998"
 
   # All dotfiles (including hidden folders) are excluded by default.
   # You can disable this setting and handle dotfiles by yourself with `exclude_files`.

@@ -43,4 +43,5 @@ Reviews are useless without some rules to check against. `ansible-later` comes w
 | CheckRelativeRolePaths        | ANS125 | Don't use a relative path in a role.                              |                                                                            |
 | CheckChangedInWhen            | ANS126 | Use handlers instead of `when: changed`.                          |                                                                            |
 | CheckChangedInWhen            | ANS127 | Deprecated bare variables in loops must not be used.              |                                                                            |
+| CheckFQCNBuiltin              | ANS128 | Module actions should use full qualified collection names.        |                                                                            |
 | CheckDeprecated               | ANS999 | Deprecated features of `ansible-later` should not be used.        |                                                                            |
