@@ -21,6 +21,7 @@
 # THE SOFTWARE.
 
 import codecs
+import copy
 import os
 from contextlib import suppress
 
@@ -436,10 +437,10 @@ def normalize_task(task, filename, custom_modules=None):
     return normalized
 
 
-def action_tasks(yaml, file):
+def action_tasks(yaml, candidate):
     tasks = []
-    if file["filetype"] in ["tasks", "handlers"]:
-        tasks = add_action_type(yaml, file["filetype"])
+    if candidate.filemeta in ["tasks", "handlers"]:
+        tasks = add_action_type(yaml, candidate.filemeta)
     else:
         tasks.extend(extract_from_list(yaml, ["tasks", "handlers", "pre_tasks", "post_tasks"]))
 
@@ -480,7 +481,12 @@ def extract_from_list(blocks, candidates):
                     meta_data = dict(block)
                     for key in delete_meta_keys:
                         meta_data.pop(key, None)
-                    results.extend(add_action_type(block[candidate], candidate, meta_data))
+
+                    actions = add_action_type(block[candidate], candidate, meta_data)
+                    for action in actions:
+                        action["__raw_task__"] = copy.copy(block)
+
+                    results.extend(actions)
                 elif block[candidate] is not None:
                     raise RuntimeError(
                         f"Key '{candidate}' defined, but bad value: '{block[candidate]!s}'"

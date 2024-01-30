@@ -23,7 +23,8 @@ class Candidate:
         self.path = filename
         self.binary = False
         self.vault = False
-        self.filetype = type(self).__name__.lower()
+        self.filemeta = type(self).__name__.lower()
+        self.kind = type(self).__name__.lower()
         self.faulty = False
         self.config = settings.config
         self.settings = settings
@@ -54,7 +55,7 @@ class Candidate:
         self.rules = SingleRules(self.config["rules"]["dir"]).rules
 
         for rule in self._filter_rules():
-            if type(self).__name__.lower() not in rule.types:
+            if self.kind not in rule.types:
                 continue
 
             result = rule.check(self, self.config)
@@ -145,7 +146,7 @@ class Candidate:
         return rule_id
 
     def __repr__(self):
-        return f"{type(self).__name__.lower()} ({self.path})"
+        return f"{self.kind} ({self.path})"
 
     def __getitem__(self, item):
         return self.__dict__.get(item)
@@ -177,7 +178,7 @@ class Task(RoleFile):
 
     def __init__(self, filename, settings={}, rules=[]):  # noqa
         super().__init__(filename, settings, rules)
-        self.filetype = "tasks"
+        self.filemeta = "tasks"
 
 
 class Handler(RoleFile):
@@ -185,7 +186,7 @@ class Handler(RoleFile):
 
     def __init__(self, filename, settings={}, rules=[]):  # noqa
         super().__init__(filename, settings, rules)
-        self.filetype = "handlers"
+        self.filemeta = "handlers"
 
 
 class Vars(Candidate):
