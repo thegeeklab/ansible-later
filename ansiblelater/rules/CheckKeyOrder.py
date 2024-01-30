@@ -78,8 +78,7 @@ def _task_property_sorter(property1, property2):
     return (v_1 > v_2) - (v_1 < v_2)
 
 
-@staticmethod
-def _get_property_sort_index(name: str) -> int:
+def _get_property_sort_index(name):
     """Return the index of the property in the sorter."""
     a_index = -1
     for i, v in enumerate(SORTER_TASKS):
