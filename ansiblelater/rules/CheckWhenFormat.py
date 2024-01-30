@@ -5,8 +5,9 @@ class CheckWhenFormat(RuleBase):
     rid = "ANS122"
     description = "Don't use Jinja2 in when"
     helptext = (
-        "`when` is a raw Jinja2 expression, redundant {{ }} " "should be removed from variable(s)"
+        "`when` is a raw Jinja2 expression, redundant `{{ }}` should be removed from variable(s)"
     )
+
     types = ["playbook", "task", "handler"]
 
     def check(self, candidate, settings):
