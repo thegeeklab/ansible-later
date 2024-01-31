@@ -7,7 +7,7 @@ import jsonschema.exceptions
 import pathspec
 from appdirs import AppDirs
 from jsonschema._utils import format_as_index
-from pkg_resources import resource_filename
+import importlib.resources
 
 from ansiblelater import utils
 
@@ -105,9 +105,9 @@ class Settings:
                 defaults["ansible"]["custom_modules"].append(f)
 
         if defaults["rules"]["builtin"]:
-            defaults["rules"]["dir"].append(
-                os.path.join(resource_filename("ansiblelater", "rules"))
-            )
+            ref = importlib.resources.files("ansiblelater") / "rules"
+            with importlib.resources.as_file(ref) as path:
+                defaults["rules"]["dir"].append(path)
 
         defaults["rules"]["dir"] = [
             os.path.relpath(os.path.normpath(p)) for p in defaults["rules"]["dir"]
