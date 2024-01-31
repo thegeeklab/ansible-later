@@ -149,11 +149,12 @@ class RuleBase(metaclass=RuleExtendedMeta):
                             # No need to normalize_task if we are skipping it.
                             continue
 
-                        normalized.append(
-                            normalize_task(
-                                task, candidate.path, settings["ansible"]["custom_modules"]
-                            )
+                        normalized_task = normalize_task(
+                            task, candidate.path, settings["ansible"]["custom_modules"]
                         )
+                        normalized_task["__raw_task__"] = task
+
+                        normalized.append(normalized_task)
 
             except LaterError as ex:
                 e = ex.original

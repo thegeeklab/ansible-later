@@ -34,7 +34,7 @@ ansible:
     exclude:
       - "meta"
       - "debug"
-      - "block"
+      - "block/always/rescue"
       - "include_role"
       - "include_tasks"
       - "include_vars"

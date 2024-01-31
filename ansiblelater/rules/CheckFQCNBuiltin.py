@@ -9,11 +9,7 @@ class CheckFQCNBuiltin(RuleBase):
     helptext = "use FQCN `{module_alias}` for module action `{module}`"
     description = "Module actions should use full qualified collection names"
     types = ["playbook", "task", "handler", "rolevars", "hostvars", "groupvars"]
-    module_aliases = {
-        "block": "block",
-        "always": "always",
-        "rescue": "rescue",
-    }
+    module_aliases = {"block/always/rescue": "block/always/rescue"}
 
     def check(self, candidate, settings):
         tasks, errors = self.get_normalized_tasks(candidate, settings)
