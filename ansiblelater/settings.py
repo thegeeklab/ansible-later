@@ -1,5 +1,6 @@
 """Global settings object definition."""
 
+import importlib.resources
 import os
 
 import anyconfig
@@ -7,7 +8,6 @@ import jsonschema.exceptions
 import pathspec
 from appdirs import AppDirs
 from jsonschema._utils import format_as_index
-import importlib.resources
 
 from ansiblelater import utils
 
