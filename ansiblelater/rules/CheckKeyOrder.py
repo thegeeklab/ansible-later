@@ -21,7 +21,7 @@ SORTER_TASKS = (
 
 class CheckKeyOrder(RuleBase):
     rid = "ANS129"
-    description = "Check optimized key order"
+    description = "Check for recommended key order"
     helptext = "{type} key order can be improved to `{sorted_keys}`"
     types = ["playbook", "task", "handler"]
 

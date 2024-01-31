@@ -144,7 +144,7 @@ class Settings:
                     "exclude": [
                         "meta",
                         "debug",
-                        "block",
+                        "block/always/rescue",
                         "include_role",
                         "import_role",
                         "include_tasks",

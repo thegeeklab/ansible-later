@@ -21,7 +21,6 @@
 # THE SOFTWARE.
 
 import codecs
-import copy
 import os
 from contextlib import suppress
 
@@ -370,12 +369,63 @@ def _kv_to_dict(v):
 def normalize_task(task, filename, custom_modules=None):
     """Ensure tasks have an action key and strings are converted to python objects."""
 
-    if custom_modules is None:
-        custom_modules = []
+    def _normalize(task, custom_modules):
+        if custom_modules is None:
+            custom_modules = []
 
-    ansible_action_type = task.get("__ansible_action_type__", "task")
-    if "__ansible_action_type__" in task:
-        del task["__ansible_action_type__"]
+        normalized = {}
+        ansible_parsed_keys = ("action", "local_action", "args", "delegate_to")
+
+        if is_nested_task(task):
+            _extract_ansible_parsed_keys_from_task(normalized, task, ansible_parsed_keys)
+            # Add dummy action for block/always/rescue statements
+            normalized["action"] = {
+                "__ansible_module__": "block/always/rescue",
+                "__ansible_module_original__": "block/always/rescue",
+                "__ansible_arguments__": "block/always/rescue",
+            }
+            return normalized
+
+        builtin = list(ansible.parsing.mod_args.BUILTIN_TASKS)
+        builtin = list(set(builtin + custom_modules))
+        ansible.parsing.mod_args.BUILTIN_TASKS = frozenset(builtin)
+        mod_arg_parser = ModuleArgsParser(task)
+
+        try:
+            action, arguments, normalized["delegate_to"] = mod_arg_parser.parse()
+        except AnsibleParserError as e:
+            raise LaterAnsibleError(e) from e
+
+        # denormalize shell -> command conversion
+        if "_uses_shell" in arguments:
+            action = "shell"
+            del arguments["_uses_shell"]
+
+        for k, v in list(task.items()):
+            if k in ansible_parsed_keys or k == action:
+                # we don"t want to re-assign these values, which were
+                # determined by the ModuleArgsParser() above
+                continue
+
+            normalized[k] = v
+
+        # convert builtin fqn calls to short forms because most rules know only
+        # about short calls
+        normalized["action"] = {
+            "__ansible_module__": action.removeprefix("ansible.builtin."),
+            "__ansible_module_original__": action,
+        }
+
+        if "_raw_params" in arguments:
+            normalized["action"]["__ansible_arguments__"] = (
+                arguments["_raw_params"].strip().split()
+            )
+            del arguments["_raw_params"]
+        else:
+            normalized["action"]["__ansible_arguments__"] = []
+        normalized["action"].update(arguments)
+
+        return normalized
 
     # temp. extract metadata
     ansible_meta = {}
@@ -387,44 +437,11 @@ def normalize_task(task, filename, custom_modules=None):
 
         ansible_meta[key] = task.pop(key, default)
 
-    normalized = {}
+    ansible_action_type = task.get("__ansible_action_type__", "task")
+    if "__ansible_action_type__" in task:
+        del task["__ansible_action_type__"]
 
-    builtin = list(ansible.parsing.mod_args.BUILTIN_TASKS)
-    builtin = list(set(builtin + custom_modules))
-    ansible.parsing.mod_args.BUILTIN_TASKS = frozenset(builtin)
-    mod_arg_parser = ModuleArgsParser(task)
-
-    try:
-        action, arguments, normalized["delegate_to"] = mod_arg_parser.parse()
-    except AnsibleParserError as e:
-        raise LaterAnsibleError(e) from e
-
-    # denormalize shell -> command conversion
-    if "_uses_shell" in arguments:
-        action = "shell"
-        del arguments["_uses_shell"]
-
-    for k, v in list(task.items()):
-        if k in ("action", "local_action", "args", "delegate_to") or k == action:
-            # we don"t want to re-assign these values, which were
-            # determined by the ModuleArgsParser() above
-            continue
-
-        normalized[k] = v
-
-    # convert builtin fqn calls to short forms because most rules know only
-    # about short calls
-    normalized["action"] = {
-        "__ansible_module__": action.removeprefix("ansible.builtin."),
-        "__ansible_module_original__": action,
-    }
-
-    if "_raw_params" in arguments:
-        normalized["action"]["__ansible_arguments__"] = arguments["_raw_params"].strip().split()
-        del arguments["_raw_params"]
-    else:
-        normalized["action"]["__ansible_arguments__"] = []
-    normalized["action"].update(arguments)
+    normalized = _normalize(task, custom_modules)
 
     normalized[FILENAME_KEY] = filename
     normalized["__ansible_action_type__"] = ansible_action_type
@@ -446,13 +463,8 @@ def action_tasks(yaml, candidate):
 
     # Add sub-elements of block/rescue/always to tasks list
     tasks.extend(extract_from_list(tasks, ["block", "rescue", "always"]))
-    # Remove block/rescue/always elements from tasks list
-    block_rescue_always = ("block", "rescue", "always")
-    tasks[:] = [task for task in tasks if all(k not in task for k in block_rescue_always)]
 
-    allowed = ["include", "include_tasks", "import_playbook", "import_tasks"]
-
-    return [task for task in tasks if set(allowed).isdisjoint(task.keys())]
+    return tasks
 
 
 def task_to_str(task):
@@ -483,8 +495,6 @@ def extract_from_list(blocks, candidates):
                         meta_data.pop(key, None)
 
                     actions = add_action_type(block[candidate], candidate, meta_data)
-                    for action in actions:
-                        action["__raw_task__"] = copy.copy(block)
 
                     results.extend(actions)
                 elif block[candidate] is not None:
@@ -573,6 +583,26 @@ def normalized_yaml(file, options):
     except (yaml.parser.ParserError, yaml.scanner.ScannerError) as e:
         raise LaterError("syntax error", e) from e
     return lines
+
+
+def is_nested_task(task):
+    """Check if task includes block/always/rescue."""
+    # Cannot really trust the input
+    if isinstance(task, str):
+        return False
+
+    return any(task.get(key) for key in ["block", "rescue", "always"])
+
+
+def _extract_ansible_parsed_keys_from_task(result, task, keys):
+    """Return a dict with existing key in task."""
+    for k, v in list(task.items()):
+        if k in keys:
+            # we don't want to re-assign these values, which were
+            # determined by the ModuleArgsParser() above
+            continue
+        result[k] = v
+    return result
 
 
 class UnsafeTag:
