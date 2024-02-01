@@ -18,16 +18,6 @@ ansible-later does **not** ensure that your role will work as expected. For depl
 
 You can find the full documentation at [https://ansible-later.geekdocs.de](https://ansible-later.geekdocs.de/).
 
-## Community
-
-<!-- prettier-ignore-start -->
-<!-- spellchecker-disable -->
-
-- [GitHub Action](https://github.com/patrickjahns/ansible-later-action) by [@patrickjahns](https://github.com/patrickjahns)
-
-<!-- spellchecker-enable -->
-<!-- prettier-ignore-end -->
-
 ## Contributors
 
 Special thanks to all [contributors](https://github.com/thegeeklab/ansible-later/graphs/contributors). If you would like to contribute,
