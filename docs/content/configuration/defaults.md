@@ -95,6 +95,8 @@ yamllint:
     max-spaces-before: 0
   document-start:
     present: True
+  document-end:
+    present: True
   empty-lines:
     max: 1
     max-end: 1
