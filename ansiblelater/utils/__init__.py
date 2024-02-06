@@ -79,9 +79,7 @@ def open_file(filename, mode="r"):
 def add_dict_branch(tree, vector, value):
     key = vector[0]
     tree[key] = (
-        value
-        if len(vector) == 1
-        else add_dict_branch(tree[key] if key in tree else {}, vector[1:], value)
+        value if len(vector) == 1 else add_dict_branch(tree.get(key, {}), vector[1:], value)
     )
     return tree
 
