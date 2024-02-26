@@ -54,7 +54,7 @@ ansible-later = "ansiblelater.__main__:main"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "0.2.2"
-pytest = "8.0.1"
+pytest = "8.0.2"
 pytest-mock = "3.12.0"
 pytest-cov = "4.1.0"
 toml = "0.10.2"
