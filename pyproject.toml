@@ -53,8 +53,8 @@ ansible-core = ["ansible-core"]
 ansible-later = "ansiblelater.__main__:main"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "0.4.7"
-pytest = "8.2.1"
+ruff = "0.4.8"
+pytest = "8.2.2"
 pytest-mock = "3.14.0"
 pytest-cov = "5.0.0"
 toml = "0.10.2"
