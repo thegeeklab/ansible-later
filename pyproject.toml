@@ -36,7 +36,7 @@ ansible = { version = "7.7.0", optional = true }
 anyconfig = "0.14.0"
 appdirs = "1.4.4"
 colorama = "0.4.6"
-jsonschema = "4.22.0"
+jsonschema = "4.23.0"
 nested-lookup = "0.2.25"
 pathspec = "0.12.1"
 python = "^3.9.0"
