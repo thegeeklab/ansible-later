@@ -18,8 +18,6 @@ ansible-later is a best practice scanner and linting tool. In most cases, if you
 
 ansible-later does **not** ensure that your role will work as expected. For deployment tests you can use other tools like [molecule](https://github.com/ansible/molecule).
 
-You can find the full documentation at [https://ansible-later.geekdocs.de](https://ansible-later.geekdocs.de/).
-
 ## Contributors
 
 Special thanks to all [contributors](https://github.com/thegeeklab/ansible-later/graphs/contributors). If you would like to contribute,
